@@ -139,7 +139,8 @@
     "Email": "Email",
     "First Name": "First Name",
     "Number": "Number",
-    "Password": "Password"
+    "Password": "Password",
+    "User":"User"
   },
   "time": {
     "ago": "ago",

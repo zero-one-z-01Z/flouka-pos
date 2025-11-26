@@ -17,7 +17,7 @@ class ListTextFieldWidget extends StatelessWidget {
     this.isGradient,
     this.textColor,
     this.errorStyleColor,
-    this.borderRadius = 20,
+    this.borderRadius = 15,
     this.borderWidth = .7,
   });
   final List<TextFieldModel> inputs;
@@ -75,7 +75,7 @@ class ListTextFieldWidget extends StatelessWidget {
                             style ??
                             TextStyleClass.normalStyle(
                               color: textColor ?? Colors.black,
-                            ).copyWith(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                            ).copyWith(fontSize: 12.sp, fontWeight: FontWeight.bold),
                       ),
                   ],
                 );

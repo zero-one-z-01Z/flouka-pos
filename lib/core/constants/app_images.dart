@@ -3,7 +3,8 @@ abstract class Images {
   static const String floukaLogo = 'assets/images/logo/flouka_logo.png';
 
   // Auth
-  static const String circles = 'assets/images/auth/3circles.png';
+  static const String bottomCircles = 'assets/images/auth/bottom_circles.png';
+  static const String topCircles = 'assets/images/auth/top_circles.png';
 
   // Home
   static const String appBarNotification =

@@ -21,7 +21,7 @@ ThemeData defaultTheme = ThemeData(
 );
 
 AppBarTheme appBarTheme = AppBarTheme(
-  backgroundColor: const Color(0xffeffbff),
+  backgroundColor: Colors.transparent,
   toolbarHeight: 56,
   centerTitle: true,
   foregroundColor: AppColor.primaryColor,

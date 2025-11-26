@@ -132,7 +132,7 @@ class AuthProvider extends ChangeNotifier {
 
   List<TextFieldModel> loginTextFieldList = [
     TextFieldModel(
-      label: LanguageProvider.translate("inputs", "Number"),
+      label: LanguageProvider.translate("inputs", "User"),
       key: "name",
       controller: TextEditingController(),
       textInputType: TextInputType.name,

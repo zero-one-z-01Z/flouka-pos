@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "612261818702",
+    "project_id": "flouka-pos",
+    "storage_bucket": "flouka-pos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612261818702:android:df76b8c28e13425515ae1f",
+        "android_client_info": {
+          "package_name": "com.zeroonez.flouka.pos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAP2QuP_EGF-wvmXyPqKQ69yO__9ZSVfqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

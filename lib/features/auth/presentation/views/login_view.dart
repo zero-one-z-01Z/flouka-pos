@@ -5,6 +5,7 @@ import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
+import '../../../home/presentation/providers/home_provider.dart';
 import '../providers/auth_provider.dart';
 
 class LoginView extends StatelessWidget {
@@ -12,13 +13,14 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthProvider authProvider = Provider.of(context);
+    final HomeProvider homeProvider = Provider.of(context);
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
             actions: [
               Padding(
-                padding: EdgeInsets.only(bottom: 10.h),
+                padding: EdgeInsets.only(bottom: 5.h),
                 child: Row(
                   children: [
                     Text(
@@ -27,7 +29,7 @@ class LoginView extends StatelessWidget {
                         color: const Color(0xff828282),
                       ).copyWith(fontSize: 12.sp),
                     ),
-                    SizedBox(width: 20.w),
+                    SizedBox(width: 10.w),
                   ],
                 ),
               ),
@@ -47,7 +49,12 @@ class LoginView extends StatelessWidget {
                     inputs: authProvider.loginTextFieldList,
                   ),
                   SizedBox(height: 2.h),
-                  ButtonWidget(onTap: () {}, text: "Log in"),
+                  ButtonWidget(
+                    onTap: () {
+                      homeProvider.goToHomeView();
+                    },
+                    text: "Log in",
+                  ),
                   SizedBox(height: 2.h),
                 ],
               ),

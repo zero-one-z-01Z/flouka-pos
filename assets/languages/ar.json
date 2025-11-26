@@ -1,0 +1,82 @@
+{
+ 
+  "on_boarding": {
+  },
+  "global":
+  {
+  },
+
+  "empty": {
+  },
+
+
+
+  "error": {
+    "max_distance": "يجب عليك السماح بالمسافة اقل من ",
+    "wallet": "رصيد المحفظة لا يكفي برجاء الشحن",
+    "error": "حدث خطأ ما حاول مرة أخرى",
+    "error_date": "هناك خطأ بالتاريخ",
+    "error_time": "هناك خطأ بالوقت",
+    "location": "هناك خطأ بتحديد الموقع",
+    "open_gps": "برجاء فتح خدمات الموقع لاكمال العملية" 
+  },
+  
+  
+  "inputs": {
+    },
+ 
+
+  "time": {
+    "ago": "منذ",
+    "year": "عام",
+    "month": "شهر",
+    "day": "يوم",
+    "hour": "ساعه",
+    "min": "دقيقه",
+    "sec": "ثانيه",
+    "today": "اليوم"
+  },
+
+  
+
+  "auth": 
+  {
+    
+  },
+  
+  "buttons": {
+    },
+
+    "settings": {
+    },
+
+  "ticket": {
+    "ticket_number": "رقم التذكرة : *id*",
+    "ticket_category": "التصنيف : *cat*",
+    "ticket_date": "تاريخ التذكرة : *date*",
+    "tickets": "التذاكر",
+    "support_ticket": "تذكرة دعم",
+    "add_ticket": "أضف تذكرة",
+    "low": "قليلة الأهمية",
+    "medium": "متوسطة الأهمية",
+    "high": "عالية الأهمية",
+    "in_progress": "جاري التنفيذ",
+    "wait_for_user": "في انتظار المستخدم",
+    "closed": "مغلقة"
+  },
+
+  "validation": {
+    "incorrect_email":"البريد الالكتروني غير صحيح",
+    "field": "يجب ادخال الحقل", 
+    "please_retype_password":"  اعد ادخال كلمة المرور",
+    "first_name":"يجب ادخال الاسم الاول",
+    "last_name":"يجب ادخال الاسم الاخير",
+    "phone_required":"يجب ادخال رقم الهاتف",
+    "empty_email":"يجب ادخال البريد الالكتروني",
+    "email_required":"يجب ادخال البريد الالكتروني",
+    "password_required":"يجب ادخال كلمة المرور",
+    "confirm_password":"كلمة المرور غير مطابقة",
+    "phone_invalid":"رقم الهاتف غير صحيح",
+    "english_phone":"رقم الهاتف يجب ان يحتوي على احرف"
+  }
+}

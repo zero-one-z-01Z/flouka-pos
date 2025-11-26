@@ -15,15 +15,17 @@ class HomeView extends StatelessWidget {
       backgroundColor: const Color(0xfff8f9fd),
       body: Row(
         children: [
-          Visibility(
-            visible: homeProvider.isDrawerOpen,
-            child: const NavigationRailWidget(),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            width: homeProvider.isDrawerOpen ? 17.w : 0,
+            child: NavigationRailWidget(isOpen: homeProvider.isDrawerOpen),
           ),
           Expanded(
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 3.h, bottom: 1.h, left: 1.w),
+                  padding: EdgeInsets.only(top: 4.h, bottom: 2.h, left: 2.w),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     border: Border(bottom: BorderSide(color: Color(0xfff6f6f6))),

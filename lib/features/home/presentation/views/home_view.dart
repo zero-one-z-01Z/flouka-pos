@@ -15,12 +15,7 @@ class HomeView extends StatelessWidget {
       backgroundColor: const Color(0xfff8f9fd),
       body: Row(
         children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            width: homeProvider.isDrawerOpen ? 17.w : 0,
-            child: NavigationRailWidget(isOpen: homeProvider.isDrawerOpen),
-          ),
+          const NavigationRailWidget(),
           Expanded(
             child: Column(
               children: [

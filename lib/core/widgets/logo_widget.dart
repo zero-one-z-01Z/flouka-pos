@@ -12,7 +12,7 @@ class LogoWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Image.asset(
-          Images.logo,
+          Images.floukaLogo,
           fit: fit ?? BoxFit.contain,
           width: width,
           height: height,

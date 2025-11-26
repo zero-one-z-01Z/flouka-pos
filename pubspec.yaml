@@ -73,21 +73,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
-    # - assets/images/
-    # - assets/images/address/
-    # - assets/images/auth/
-    # - assets/images/categories/
-    # - assets/images/checkout/
-    # - assets/images/home/
-    # - assets/images/navbar/
-    # - assets/images/onboarding/
-    # - assets/images/products/
-    # - assets/images/settings/
-    # - assets/images/test/
-    # - assets/images/wallet/
-    # - assets/languages/
-    # - assets/lottie/
+  assets:
+    - assets/images/auth/
+    - assets/images/home/
+    - assets/images/logo/
+    - assets/images/navigation/
+    - assets/images/test/
+    - assets/languages/
+    - assets/lottie/
 
   fonts:
     - family: Lato

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../features/language/presentation/provider/language_provider.dart';
 import '../config/app_styles.dart';
-import '../constants/app_images.dart';
 import '../helper_function/helper_function.dart';
 
 class DraggableImageButton extends StatefulWidget {
@@ -89,12 +87,7 @@ class _DraggableImageButtonState extends State<DraggableImageButton> {
                           color: Colors.green,
                         ),
                       )
-                    : Image.asset(
-                        Images.arrowRight,
-                        key: const ValueKey("arrow"),
-                        width: 23.sp,
-                        height: 23.sp,
-                      ),
+                    : const Icon(Icons.arrow_forward_ios),
               ),
             ),
           ),

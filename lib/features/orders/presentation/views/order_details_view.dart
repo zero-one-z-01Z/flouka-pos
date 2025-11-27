@@ -64,8 +64,8 @@ class OrderDetailsView extends StatelessWidget {
                         ),
                         SizedBox(height: 2.h),
                         Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
+                          spacing: 12.0,
+                          runSpacing: 12.0,
                           children: List.generate(
                             6,
                             (index) => const OrderDetailsItemWidget(),

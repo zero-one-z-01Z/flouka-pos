@@ -1,4 +1,5 @@
 import 'package:flouka_pos/features/products/presentation/widgets/product_item_widget.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -18,14 +19,14 @@ class ProductsTab extends StatelessWidget {
         children: [
           SizedBox(height: 4.h),
           Text(
-            "Categories",
+            LanguageProvider.translate('global', 'categories'),
             style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 2.h),
           const CategriesListFilterWidget(),
           SizedBox(height: 2.h),
           Text(
-            "Products",
+            LanguageProvider.translate('global', 'products'),
             style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 2.h),

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 
 class OrdersProvider extends ChangeNotifier {
-  final List<String> tabs = ['All', 'New', 'Ongoing', 'Completed'];
+  List<String> get tabs => [
+    LanguageProvider.translate('global', 'all'),
+    LanguageProvider.translate('global', 'new'),
+    LanguageProvider.translate('global', 'ongoing'),
+    LanguageProvider.translate('global', 'completed'),
+  ];
 
   late String selectedTab = tabs.first;
 
@@ -20,10 +26,10 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  final List<String> orederTypes = [
-    'New Orders',
-    'Ongoing Orders',
-    'Completed Orders',
+  List<String> get orederTypes => [
+    LanguageProvider.translate('global', 'new_orders'),
+    LanguageProvider.translate('global', 'ongoing_orders'),
+    LanguageProvider.translate('global', 'completed_orders'),
   ];
   Alignment getAlignment() {
     if (currentIndex == 2) {

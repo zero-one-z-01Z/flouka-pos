@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 
 class CategoryProvider extends ChangeNotifier {
-  final List<String> categories = ["All", "Mobiles", "Headests", "Wearables"];
+  List<String> get categories => [
+    LanguageProvider.translate('global', 'all'),
+    LanguageProvider.translate('global', 'mobiles'),
+    LanguageProvider.translate('global', 'headsets'),
+    LanguageProvider.translate('global', 'wearables'),
+  ];
 
   late String selectedCategory = categories.first;
 

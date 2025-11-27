@@ -1,4 +1,5 @@
 import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/core/widgets/svg_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,24 +22,45 @@ class OrderCardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Order Details
-              _buildDetailRow('Order ID', "56456"),
-              _buildDetailRow('Customer Name', "3omran"),
-              _buildDetailRow('Total Price', "1000"),
-              _buildDetailRow('Payment Method', "Visa"),
-              _buildDetailRow('Order Time', "09/10/2025 - 10:30 AM"),
-              _buildDetailRow('Items Count', "10"),
-              _buildDetailRow('Address', "Smoha,32 ElBulring,20Alex..."),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'Order ID'),
+                "56456",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'customer_name'),
+                "3omran",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'total_price'),
+                "1000",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'payment_method'),
+                "Visa",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'order_time'),
+                "09/10/2025 - 10:30 AM",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'items_count'),
+                "10",
+              ),
+              _buildDetailRow(
+                LanguageProvider.translate('global', 'Address'),
+                "Smoha,32 ElBulring,20Alex...",
+              ),
 
               // Order Status
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Order Status',
+                    LanguageProvider.translate('global', 'order_status'),
                     style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Processing",
+                    LanguageProvider.translate('global', 'processing'),
                     style: TextStyle(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w600,
@@ -53,7 +75,7 @@ class OrderCardWidget extends StatelessWidget {
                 height: 4.h,
                 borderRadius: 8,
                 onTap: () {},
-                text: "More Detils",
+                text: LanguageProvider.translate('global', 'more_details'),
                 textStyle: TextStyle(
                   fontSize: 10.sp,
                   color: Colors.white,

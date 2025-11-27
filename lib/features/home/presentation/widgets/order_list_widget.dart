@@ -79,59 +79,12 @@ class _OrderListWidgetState extends State<OrderListWidget> {
 
           // Order Cards
           Row(
+            spacing: 2.w,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
-                child: OrderCardWidget(
-                  orderId: '37332323',
-                  customerName: 'Moaz mohamed',
-                  totalPrice: '3,000.00 \$',
-                  paymentMethod: 'Visa',
-                  orderTime: '09/10/2025 - 10:30 AM',
-                  itemsCount: '10',
-                  address: 'Smoha,32 ElBulring,20Alex...',
-                  orderStatus: 'Pressing',
-                  statusColor: Color(0xFFFFB74D),
-                  actions: [
-                    {'label': 'Accept', 'color': Color(0xFF4CAF50)},
-                    {'label': 'Cancel', 'color': Color(0xFFF44336)},
-                  ],
-                ),
-              ),
-              SizedBox(width: 2.w),
-              const Expanded(
-                child: OrderCardWidget(
-                  orderId: '37332323',
-                  customerName: 'Moaz mohamed',
-                  totalPrice: '3,000.00 \$',
-                  paymentMethod: 'Visa',
-                  orderTime: '09/10/2025 - 10:30 AM',
-                  itemsCount: '10',
-                  address: 'Smoha,32 ElBulring,20Alex...',
-                  orderStatus: 'Pressing',
-                  statusColor: Color(0xFFFFB74D),
-                  actions: [
-                    {'label': 'Order Prepared', 'color': Color(0xFF4CAF50)},
-                  ],
-                ),
-              ),
-              SizedBox(width: 2.w),
-              const Expanded(
-                child: OrderCardWidget(
-                  orderId: '37332323',
-                  customerName: 'Moaz mohamed',
-                  totalPrice: '3,000.00 \$',
-                  paymentMethod: 'Visa',
-                  orderTime: '09/10/2025 - 10:30 AM',
-                  itemsCount: '10',
-                  address: 'Smoha,32 ElBulring,20Alex...',
-                  orderStatus: 'Done',
-                  statusColor: Color(0xFF4CAF50),
-                  actions: [
-                    {'label': 'More Details', 'color': Color(0xFF2196F3)},
-                  ],
-                ),
-              ),
+              const Expanded(child: OrderCardWidget()),
+              const Expanded(child: OrderCardWidget()),
+              const Expanded(child: OrderCardWidget()),
             ],
           ),
         ],

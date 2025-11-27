@@ -147,22 +147,6 @@
     "wearables": "Wearables",
     "customer_name": "Customer Name",
     "total_price": "Total Price",
-    "payment_method": "Payment Method",
-    "order_time": "Order Time",
-    "items_count": "Items Count",
-    "order_status": "Order Status",
-    "processing": "Processing",
-    "more_details": "More Details",
-    "categories": "Categories",
-    "Delivery Address": "Delivery Address",
-    "Item Summary": "Item Summary",
-    "تسجيل الخروج": "Logout"
-  },
-  "empty": {},
-  "error": {
-    "max_distance": "You must allow a distance less than ",
-    "wallet": "Wallet balance is not enough, please recharge",
-    "error": "An error occurred, please try again",
     "error_date": "There is an error in the date",
     "error_time": "There is an error in the time",
     "location": "There is an error with the location",
@@ -174,7 +158,10 @@
     "First Name": "First Name",
     "Number": "Number",
     "Password": "Password",
-    "User": "User"
+    "User": "User",
+    "pick": "Pick",
+    "camera": "Camera",
+    "photo": "Photo"
   },
   "time": {
     "ago": "ago",
@@ -203,7 +190,8 @@
     "edit": "Edit",
     "charge_wallet": "Wallet Charge",
     "apply": "Apply",
-    "reset": "Reset"
+    "reset": "Reset",
+    "PAY NOW": "PAY NOW"
   },
   "settings": {
     "settings": "Settings",
@@ -254,6 +242,7 @@
     "password_required": "Password is required",
     "confirm_password": "Passwords do not match",
     "phone_invalid": "Invalid phone number",
-    "english_phone": "Phone number must contain digits only"
+    "english_phone": "Phone number must contain digits only",
+    "access_camera": "Please allow access to camera"
   }
 }

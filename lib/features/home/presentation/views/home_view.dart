@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_app_bat.dart';
 import '../providers/home_provider.dart';
 import '../widgets/navigation_rail_widget.dart';
+import 'tabs/order_tab.dart';
 import 'tabs/overview_tab.dart';
 import 'tabs/products_tab.dart';
 
@@ -51,7 +52,7 @@ class HomeView extends StatelessWidget {
       case 'Settings':
         return const Center(child: Text('Settings Tab'));
       case 'Orders':
-        return const Center(child: Text('Orders Tab'));
+        return const OrderTab();
       case 'Messages':
         return const Center(child: Text('Messages Tab'));
       default:

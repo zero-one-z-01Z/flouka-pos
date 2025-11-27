@@ -5,6 +5,7 @@ import 'features/category/presentation/providers/category_provider.dart';
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/home/presentation/providers/overview_provider.dart';
 import 'features/language/presentation/provider/language_provider.dart';
+import 'features/orders/presentation/providers/order_details_provider.dart';
 import 'features/orders/presentation/providers/orders_provider.dart';
 import 'features/splash/provider/splash_provider.dart';
 import 'injection_container.dart';
@@ -23,6 +24,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => OverviewProvider()),
+        ChangeNotifierProvider(create: (_) => OrderDetailsProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider(sl.get())),
       ],
       child: child,

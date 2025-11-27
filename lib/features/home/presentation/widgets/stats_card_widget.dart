@@ -38,7 +38,7 @@ class StatsCardWidget extends StatelessWidget {
               Text(
                 entity.value,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF2196F3),
                 ),

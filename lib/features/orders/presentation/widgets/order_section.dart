@@ -17,17 +17,13 @@ class OrderSection extends StatelessWidget {
           children: [
             Text(
               'Order List',
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
             ),
             // Tabs
             const ListOrderTabsWidget(),
           ],
         ),
-        SizedBox(height: 2.h),
+        SizedBox(height: 4.h),
         // Order Cards
         GridView.builder(
           padding: EdgeInsets.zero,

@@ -10,7 +10,7 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  isSelectedTab(String tab) {
+  isCategoryTab(String tab) {
     return selectedCategory == tab;
   }
 }

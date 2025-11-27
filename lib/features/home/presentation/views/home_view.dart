@@ -4,6 +4,7 @@ import '../../../../core/widgets/custom_app_bat.dart';
 import '../providers/home_provider.dart';
 import '../widgets/navigation_rail_widget.dart';
 import 'tabs/overview_tab.dart';
+import 'tabs/products_tab.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -46,7 +47,7 @@ class HomeView extends StatelessWidget {
       case 'Overview':
         return const OverviewTab();
       case 'Products':
-        return const Center(child: Text('Products Tab'));
+        return const ProductsTab();
       case 'Settings':
         return const Center(child: Text('Settings Tab'));
       case 'Orders':

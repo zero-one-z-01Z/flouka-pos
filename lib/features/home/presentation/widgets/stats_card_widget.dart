@@ -1,22 +1,13 @@
+import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/widgets/svg_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
+import '../../domain/entity/stats_card_entity.dart';
 
 class StatsCardWidget extends StatelessWidget {
-  final String title;
-  final String value;
-  final String icon;
-  final Color iconColor;
-  final List<Map<String, String>> stats;
+  final StatsCardEntity entity;
 
-  const StatsCardWidget({
-    super.key,
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.iconColor,
-    required this.stats,
-  });
+  const StatsCardWidget({super.key, required this.entity});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +16,7 @@ class StatsCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: const Color(0xffe3ebee), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,26 +24,23 @@ class StatsCardWidget extends StatelessWidget {
           // Header with icon and title
           Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(1.h),
-                decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: SvgPicture.asset(
-                  icon,
-                  width: 2.5.h,
-                  height: 2.5.h,
-                  colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+              const SvgWidget(svg: Images.products),
+              SizedBox(width: .5.w),
+              Text(
+                entity.title,
+                style: TextStyle(
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
-              SizedBox(width: 1.5.w),
+              const Spacer(),
               Text(
-                title,
+                entity.value,
                 style: TextStyle(
-                  fontSize: 9.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF2196F3),
                 ),
               ),
             ],
@@ -60,33 +48,21 @@ class StatsCardWidget extends StatelessWidget {
           SizedBox(height: 1.5.h),
 
           // Main value
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF2196F3),
-            ),
-          ),
           SizedBox(height: 2.h),
-
           // Stats
-          ...stats.map(
+          ...entity.stats.map(
             (stat) => Padding(
               padding: EdgeInsets.only(bottom: 1.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(stat.label, style: TextStyle(fontSize: 10.sp)),
                   Text(
-                    stat['label']!,
-                    style: TextStyle(fontSize: 8.sp, color: Colors.black54),
-                  ),
-                  Text(
-                    stat['value']!,
+                    stat.value,
                     style: TextStyle(
-                      fontSize: 8.sp,
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: const Color(0xff737f84),
                     ),
                   ),
                 ],

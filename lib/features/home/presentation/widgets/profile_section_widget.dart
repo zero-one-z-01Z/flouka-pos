@@ -8,7 +8,7 @@ class ProfileSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+      padding: EdgeInsets.only(top: 2.h, left: 2.w, right: 2.w, bottom: 17.5.h),
       decoration: BoxDecoration(
         boxShadow: [
           const BoxShadow(
@@ -49,7 +49,7 @@ class ProfileSectionWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 2.h),
+          SizedBox(height: 4.h),
 
           // Store Status
           Text(

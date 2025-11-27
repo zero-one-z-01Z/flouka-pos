@@ -8,7 +8,8 @@ class ProfileSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 2.h, left: 2.w, right: 2.w, bottom: 17.5.h),
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(top: 4.h, left: 4.w, right: 4.w, bottom: 15.h),
       decoration: BoxDecoration(
         boxShadow: [
           const BoxShadow(
@@ -23,6 +24,7 @@ class ProfileSectionWidget extends StatelessWidget {
         border: Border.all(color: const Color(0xFFF0F0F0)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Profile Image
           CircleAvatar(

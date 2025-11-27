@@ -1,4 +1,5 @@
 import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/core/widgets/svg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -15,7 +16,7 @@ class OrderCardWidget extends StatelessWidget {
       children: [
         Container(
           color: Colors.white,
-          padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,9 +47,19 @@ class OrderCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 2.h),
-
-              // Action Buttons
+              const Divider(color: Colors.grey, thickness: 0.5),
+              SizedBox(height: 1.h),
+              ButtonWidget(
+                height: 4.h,
+                borderRadius: 8,
+                onTap: () {},
+                text: "More Detils",
+                textStyle: TextStyle(
+                  fontSize: 10.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),

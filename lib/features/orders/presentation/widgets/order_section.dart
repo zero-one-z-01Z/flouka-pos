@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../../../orders/presentation/widgets/list_order_tabs_widget.dart';
-import '../../../orders/presentation/widgets/order_card_widget.dart';
+import 'list_order_tabs_widget.dart';
+import 'order_card_widget.dart';
 
-class OrderListWidget extends StatelessWidget {
-  const OrderListWidget({super.key});
+class OrderSection extends StatelessWidget {
+  const OrderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,20 @@ class OrderListWidget extends StatelessWidget {
         ),
         SizedBox(height: 2.h),
         // Order Cards
-        Row(
-          spacing: 2.w,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Expanded(child: OrderCardWidget()),
-            const Expanded(child: OrderCardWidget()),
-            const Expanded(child: OrderCardWidget()),
-          ],
+        GridView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 2.w,
+            mainAxisSpacing: 2.h,
+            childAspectRatio: 1.15,
+          ),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return const OrderCardWidget();
+          },
         ),
       ],
     );

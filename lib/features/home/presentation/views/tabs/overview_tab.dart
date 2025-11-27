@@ -4,7 +4,7 @@ import 'package:sizer/sizer.dart';
 import '../../providers/overview_provider.dart';
 import '../../widgets/info_grid_widget.dart';
 import '../../widgets/profile_section_widget.dart';
-import '../../widgets/order_list_widget.dart';
+import '../../../../orders/presentation/widgets/order_section.dart';
 import '../../widgets/status_row_widget.dart';
 
 class OverviewTab extends StatelessWidget {
@@ -38,12 +38,11 @@ class OverviewTab extends StatelessWidget {
                     const ProfileSectionWidget(),
                   ],
                 ),
-                SizedBox(height: 3.h),
-                const OrderListWidget(),
+                SizedBox(height: 2.h),
+                const OrderSection(),
               ],
             ),
           ),
-          // Profile Section
         ],
       ),
     );

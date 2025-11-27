@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
+import '../config/app_styles.dart';
 import 'payment_price_widget.dart';
 
 class PriceDetailesList extends StatelessWidget {
@@ -14,8 +15,17 @@ class PriceDetailesList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 4,
         children: [
+          Text(
+            LanguageProvider.translate("global", "Total Price"),
+            style: TextStyleClass.normalStyle().copyWith(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 2.h),
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "price"),

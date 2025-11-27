@@ -19,7 +19,7 @@ class InfoGridWidget extends StatelessWidget {
         boxShadow: [
           const BoxShadow(
             color: Colors.black12,
-            blurRadius: 9,
+            blurRadius: 2,
             spreadRadius: -5,
             offset: Offset(0, 6),
           ),

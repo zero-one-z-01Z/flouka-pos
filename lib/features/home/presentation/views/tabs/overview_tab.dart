@@ -17,8 +17,10 @@ class OverviewTab extends StatelessWidget {
     return SingleChildScrollView(
       padding: EdgeInsets.all(3.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
+            flex: 6,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,13 +79,7 @@ class OverviewTab extends StatelessWidget {
           ),
           SizedBox(width: 2.w),
           // Profile Section
-          SizedBox(
-            width: 20.w,
-            child: Padding(
-              padding: EdgeInsets.only(top: 3.h, right: 2.w),
-              child: const ProfileSectionWidget(),
-            ),
-          ),
+          const Expanded(flex: 2, child: ProfileSectionWidget()),
         ],
       ),
     );

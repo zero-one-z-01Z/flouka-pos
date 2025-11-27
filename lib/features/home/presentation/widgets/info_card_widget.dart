@@ -42,7 +42,9 @@ class InfoCardWidget extends StatelessWidget {
                 SizedBox(height: 0.5.h),
                 Text(
                   infoCardEntity.subtitle,
-                  style: TextStyleClass.smallStyle().copyWith(fontSize: 10.sp),
+                  style: TextStyleClass.smallStyle(
+                    color: const Color(0xff71747d),
+                  ).copyWith(fontSize: 10.sp),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/config/app_styles.dart';
 
 class ProfileSectionWidget extends StatelessWidget {
   const ProfileSectionWidget({super.key});
@@ -7,8 +8,16 @@ class ProfileSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(2.h),
+      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
       decoration: BoxDecoration(
+        boxShadow: [
+          const BoxShadow(
+            color: Colors.black12,
+            blurRadius: 2,
+            spreadRadius: -5,
+            offset: Offset(0, 6),
+          ),
+        ],
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFF0F0F0)),
@@ -26,11 +35,7 @@ class ProfileSectionWidget extends StatelessWidget {
           // Name
           Text(
             'Moaz Mohamed',
-            style: TextStyle(
-              fontSize: 10.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
           ),
           SizedBox(height: 0.5.h),
 
@@ -39,12 +44,8 @@ class ProfileSectionWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Username: ',
-                style: TextStyle(fontSize: 8.sp, color: Colors.black54),
-              ),
-              Text(
-                'moaz.layd',
-                style: TextStyle(fontSize: 8.sp, color: Colors.black87),
+                'Username: mazo.fayd',
+                style: TextStyle(fontSize: 10.sp, color: Colors.black54),
               ),
             ],
           ),
@@ -53,38 +54,31 @@ class ProfileSectionWidget extends StatelessWidget {
           // Store Status
           Text(
             'Store Status',
-            style: TextStyle(fontSize: 8.sp, color: Colors.black54),
+            style: TextStyleClass.smallStyle().copyWith(fontSize: 10.sp),
           ),
           SizedBox(height: 1.h),
 
           // Active Status Button
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+            padding: EdgeInsets.symmetric(horizontal: .5.w),
+            width: 12.w,
+            height: 5.h,
             decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF4CAF50)),
+              color: const Color(0xfff1f1f1),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xff41CDFD)),
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SizedBox(width: 2.h),
                 Text(
-                  'ACTIVE',
-                  style: TextStyle(
-                    fontSize: 8.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF4CAF50),
-                  ),
+                  "ACTIVE",
+                  style: TextStyleClass.smallStyle(
+                    color: const Color(0xff72ca8a),
+                  ).copyWith(fontSize: 10.sp),
                 ),
-                SizedBox(width: 1.w),
-                Container(
-                  width: 2.h,
-                  height: 2.h,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF4CAF50),
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                CircleAvatar(radius: 2.h, backgroundColor: const Color(0xff72ca8a)),
               ],
             ),
           ),

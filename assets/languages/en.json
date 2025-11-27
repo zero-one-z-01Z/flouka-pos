@@ -153,7 +153,10 @@
     "order_status": "Order Status",
     "processing": "Processing",
     "more_details": "More Details",
-    "categories": "Categories"
+    "categories": "Categories",
+    "Delivery Address": "Delivery Address",
+    "Item Summary": "Item Summary",
+    "تسجيل الخروج": "Logout"
   },
   "empty": {},
   "error": {

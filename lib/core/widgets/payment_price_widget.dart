@@ -20,25 +20,17 @@ class PaymentPriceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: TextStyleClass.normalStyle().copyWith(
-            fontSize: 15.sp,
+            fontSize: 13.sp,
             fontWeight: isGreen ? FontWeight.w900 : FontWeight.normal,
             color: isGreen ? Colors.green : Colors.black,
           ),
         ),
-        const Spacer(),
-        PriceWidget(price: convertDataToNum(price) ?? 5555, fontSize: fontSize),
-        // Text(
-        //   "$price",
-        //   style: AppStyles.style15Normal.copyWith(
-        //     fontSize: 15.sp,
-        //     fontWeight: isGreen ? FontWeight.w900 : FontWeight.normal,
-        //     color: isGreen ? Colors.green : Colors.black,
-        //   ),
-        // ),
+        PriceWidget(price: convertDataToNum(price) ?? 5555, isGreen: isGreen),
       ],
     );
   }

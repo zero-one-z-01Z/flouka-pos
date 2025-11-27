@@ -20,34 +20,33 @@ class DeliveryAddressWidget extends StatelessWidget {
         children: [
           Text(
             LanguageProvider.translate("global", "Delivery Address"),
-            style: TextStyleClass.normalStyle().copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyleClass.smallStyle().copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 1.h),
+          SizedBox(height: 4.h),
           Text(
             "26 amna hafiz /street 23/door 24 alexandria sidegaber el mosher tantaimow",
             style: TextStyleClass.smallStyle().copyWith(
               color: const Color(0xff535353),
+              fontSize: 13.sp,
             ),
           ),
           SizedBox(height: 4.w),
           Row(
-            spacing: 8.w,
+            spacing: 2.w,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 LanguageProvider.translate("global", "Mobile number"),
                 style: TextStyleClass.normalStyle().copyWith(
                   color: const Color(0xff595959),
-                  fontSize: 16.sp,
+                  fontSize: 13.sp,
                 ),
               ),
               Text(
                 "+2010981234234",
                 style: TextStyleClass.normalStyle().copyWith(
                   color: AppColor.primaryColor,
-                  fontSize: 15.sp,
+                  fontSize: 12.sp,
                 ),
               ),
             ],

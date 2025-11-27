@@ -4,10 +4,9 @@ import 'package:sizer/sizer.dart';
 import '../config/app_styles.dart';
 
 class PriceWidget extends StatelessWidget {
-  const PriceWidget({super.key, required this.price, this.fontSize});
+  const PriceWidget({super.key, required this.price, required this.isGreen});
   final num price;
-  final double? fontSize;
-
+  final bool isGreen;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,18 +16,18 @@ class PriceWidget extends StatelessWidget {
           r"$",
           style: TextStyleClass.normalStyle().copyWith(
             // fontWeight: FontWeight.w900,
-            fontWeight: fontSize == 15.99.sp ? FontWeight.w900 : FontWeight.normal,
-            fontSize: fontSize ?? 18.sp,
-            color: fontSize == 15.99.sp ? Colors.green : Colors.black,
+            color: isGreen ? Colors.green : Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 13.sp,
           ),
         ),
         Text(
           price.toString(),
           style: TextStyleClass.normalStyle().copyWith(
             // fontWeight: FontWeight.w900,
-            fontSize: fontSize ?? 18.sp,
-            fontWeight: fontSize == 15.99.sp ? FontWeight.w900 : FontWeight.normal,
-            color: fontSize == 15.99.sp ? Colors.green : Colors.black,
+            fontSize: 13.sp,
+            color: isGreen ? Colors.green : Colors.black,
+            fontWeight: FontWeight.normal,
           ),
         ),
       ],

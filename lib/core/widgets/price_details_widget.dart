@@ -27,16 +27,6 @@ class PriceDetailesList extends StatelessWidget {
             title: LanguageProvider.translate("global", "Shiping"),
             price: "56165",
           ),
-          // if (couponProvider.couponEntity != null) ...[
-          //   Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
-          //   PaymentPriceWidget(
-          //     fontSize: 16.sp,
-          //     title: LanguageProvider.translate("global", "discount"),
-          //     price: couponProvider
-          //         .calcCoupon(checkoutProvider.subTotalTax)!
-          //         .toStringAsFixed(2),
-          //   ),
-          // ],
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 16.sp,

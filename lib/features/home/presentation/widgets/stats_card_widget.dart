@@ -26,15 +26,19 @@ class StatsCardWidget extends StatelessWidget {
             children: [
               const SvgWidget(svg: Images.products),
               SizedBox(width: .5.w),
-              Text(
-                entity.title,
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+              Expanded(
+                child: Text(
+                  entity.title,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
+              SizedBox(width: .5.w),
               Text(
                 entity.value,
                 style: TextStyle(
@@ -56,7 +60,15 @@ class StatsCardWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(stat.label, style: TextStyle(fontSize: 10.sp)),
+                  Expanded(
+                    child: Text(
+                      stat.label,
+                      style: TextStyle(fontSize: 10.sp),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 1.w),
                   Text(
                     stat.value,
                     style: TextStyle(

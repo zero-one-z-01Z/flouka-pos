@@ -42,14 +42,15 @@ class ProfileSectionWidget extends StatelessWidget {
           SizedBox(height: 0.5.h),
 
           // Username
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Username: mazo.fayd',
-                style: TextStyle(fontSize: 10.sp, color: Colors.black54),
-              ),
-            ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 1.w),
+            child: Text(
+              'Username: mazo.fayd',
+              style: TextStyle(fontSize: 10.sp, color: Colors.black54),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(height: 4.h),
 
@@ -62,9 +63,8 @@ class ProfileSectionWidget extends StatelessWidget {
 
           // Active Status Button
           Container(
-            padding: EdgeInsets.symmetric(horizontal: .5.w),
-            width: 12.w,
-            height: 5.h,
+            padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
+            constraints: BoxConstraints(minWidth: 10.w, maxWidth: 15.w),
             decoration: BoxDecoration(
               color: const Color(0xfff1f1f1),
               borderRadius: BorderRadius.circular(10),
@@ -72,15 +72,23 @@ class ProfileSectionWidget extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(width: 2.h),
-                Text(
-                  "ACTIVE",
-                  style: TextStyleClass.smallStyle(
-                    color: const Color(0xff72ca8a),
-                  ).copyWith(fontSize: 10.sp),
+                SizedBox(width: 1.w),
+                Flexible(
+                  child: Text(
+                    "ACTIVE",
+                    style: TextStyleClass.smallStyle(
+                      color: const Color(0xff72ca8a),
+                    ).copyWith(fontSize: 10.sp),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                CircleAvatar(radius: 2.h, backgroundColor: const Color(0xff72ca8a)),
+                SizedBox(width: 1.w),
+                CircleAvatar(
+                  radius: 1.5.h,
+                  backgroundColor: const Color(0xff72ca8a),
+                ),
               ],
             ),
           ),

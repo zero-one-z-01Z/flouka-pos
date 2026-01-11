@@ -1,3 +1,4 @@
+import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
@@ -5,12 +6,12 @@ import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/custom_star_rating_widget.dart';
 import '../../../../core/widgets/price_widget.dart';
 
-class OrderDetailsItemWidget extends StatelessWidget {
-  const OrderDetailsItemWidget({super.key});
+class UpdateOrderWiidget extends StatelessWidget {
+  const UpdateOrderWiidget({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 28.w,
+      width: 45.w,
       padding: EdgeInsets.only(left: 2.w, right: 2.w, top: 2.h, bottom: 3.h),
       decoration: BoxDecoration(
         color: const Color(0xfff3f3f3),
@@ -62,6 +63,8 @@ class OrderDetailsItemWidget extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 8),
+          ButtonWidget(width: 7.w, onTap: () {}, text: "Delete"),
         ],
       ),
     );

@@ -1,13 +1,11 @@
 import 'package:flouka_pos/core/widgets/price_details_widget.dart';
-import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flouka_pos/features/orders/presentation/widgets/delivery_address_widget.dart';
-import 'package:flouka_pos/features/orders/presentation/widgets/order_details_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../core/config/app_styles.dart';
+import '../widgets/item_summary_section.dart';
 import '../widgets/order_card_widget.dart';
 import '../widgets/order_details_header.dart';
+import '../widgets/update_order_wiidget.dart';
 
 class OrderDetailsView extends StatelessWidget {
   const OrderDetailsView({super.key});
@@ -31,11 +29,11 @@ class OrderDetailsView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-
             SizedBox(height: 4.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IntrinsicHeight(
                     child: Row(
@@ -48,32 +46,16 @@ class OrderDetailsView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4.h),
-
-                  Container(
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          LanguageProvider.translate("global", "Item Summary"),
-                          style: TextStyleClass.smallStyle().copyWith(),
-                        ),
-                        SizedBox(height: 2.h),
-                        Wrap(
-                          spacing: 12.0,
-                          runSpacing: 12.0,
-                          children: List.generate(
-                            6,
-                            (index) => const OrderDetailsItemWidget(),
-                          ),
-                        ),
-                      ],
+                  Wrap(
+                    spacing: 1.w,
+                    runSpacing: 1.h,
+                    children: List.generate(
+                      2,
+                      (index) => const UpdateOrderWiidget(),
                     ),
                   ),
+                  SizedBox(height: 4.h),
+                  const ItemSummarySection(),
                 ],
               ),
             ),

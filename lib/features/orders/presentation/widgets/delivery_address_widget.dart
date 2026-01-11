@@ -32,7 +32,7 @@ class DeliveryAddressWidget extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Row(
-            spacing: 2.w,
+            spacing: 1.w,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(

@@ -35,7 +35,8 @@
     "overview": "Overview",
     "products": "Products",
     "settings": "Settings",
-    "messages": "Messages"
+    "messages": "Messages",
+    "performance": "Performance"
   },
   "filter": {
     "category": "Category",
@@ -169,7 +170,21 @@
     "item_summary": "Item Summary",
     "delivery_address": "Delivery Address",
     "username": "Username",
-    "store_status": "Store Status"
+    "store_status": "Store Status",
+    "product_performance": "Product Performance",
+    "last_30_days": "Last 30 Days",
+    "all_categories": "All Categories",
+    "sort_revenue": "Sort: Revenue",
+    "status_all": "Status: All",
+    "product_name": "Product Name",
+    "sold_qty": "Sold Qty",
+    "revenue": "Revenue",
+    "profit_percent": "Profit %",
+    "status": "Status",
+    "bestseller": "Bestseller",
+    "active": "Active",
+    "low_sales": "Low Sales",
+    "performance": "Performance"
   },
   "inputs": {
     "phone": "Phone Number",

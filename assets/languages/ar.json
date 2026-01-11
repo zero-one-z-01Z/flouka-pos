@@ -18,7 +18,21 @@
     "store_status": "حالة المتجر",
     "Order ID": "رقم الطلب",
     "customer_name": "اسم العميل",
-    "total_price": "السعر الإجمالي"
+    "total_price": "السعر الإجمالي",
+    "product_performance": "أداء المنتج",
+    "last_30_days": "آخر 30 يوم",
+    "all_categories": "كل الفئات",
+    "sort_revenue": "ترتيب: الإيرادات",
+    "status_all": "الحالة: الكل",
+    "product_name": "اسم المنتج",
+    "sold_qty": "الكمية المباعة",
+    "revenue": "الإيرادات",
+    "profit_percent": "الربح %",
+    "status": "الحالة",
+    "bestseller": "الأكثر مبيعاً",
+    "active": "نشط",
+    "low_sales": "مبيعات منخفضة",
+    "performance": "الأداء"
   },
   "navbar": {
     "home": "الرئيسية",
@@ -29,7 +43,8 @@
     "overview": "نظرة عامة",
     "products": "المنتجات",
     "settings": "الإعدادات",
-    "messages": "الرسائل"
+    "messages": "الرسائل",
+    "performance": "الأداء"
   },
   "empty": {},
   "error": {

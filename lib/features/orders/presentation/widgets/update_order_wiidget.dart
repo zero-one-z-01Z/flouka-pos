@@ -12,7 +12,7 @@ class UpdateOrderWiidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 45.w,
+      width: 41.w,
       padding: EdgeInsets.only(left: 2.w, right: 2.w, top: 2.h, bottom: 3.h),
       decoration: BoxDecoration(
         color: const Color(0xfff3f3f3),
@@ -69,6 +69,7 @@ class UpdateOrderWiidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ButtonWidget(
+              takeSmallestWidth: true,
               color: isRemove ? const Color(0xffDF0033) : const Color(0xff00920A),
               width: 7.w,
               height: 4.h,

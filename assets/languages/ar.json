@@ -32,7 +32,8 @@
     "bestseller": "الأكثر مبيعاً",
     "active": "نشط",
     "low_sales": "مبيعات منخفضة",
-    "performance": "الأداء"
+    "performance": "الأداء",
+    "image_label": "الصورة"
   },
   "navbar": {
     "home": "الرئيسية",

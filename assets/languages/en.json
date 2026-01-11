@@ -184,7 +184,8 @@
     "bestseller": "Bestseller",
     "active": "Active",
     "low_sales": "Low Sales",
-    "performance": "Performance"
+    "performance": "Performance",
+    "image_label": "Image"
   },
   "inputs": {
     "phone": "Phone Number",

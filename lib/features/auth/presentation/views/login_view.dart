@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -53,7 +54,7 @@ class LoginView extends StatelessWidget {
                     onTap: () {
                       homeProvider.goToHomeView();
                     },
-                    text: "Log in",
+                    text: LanguageProvider.translate('buttons', 'Login'),
                   ),
                   SizedBox(height: 2.h),
                 ],

@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
@@ -45,7 +46,7 @@ class ProfileSectionWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.w),
             child: Text(
-              'Username: mazo.fayd',
+              '${LanguageProvider.translate('global', 'username')}: mazo.fayd',
               style: TextStyle(fontSize: 10.sp, color: Colors.black54),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -56,7 +57,7 @@ class ProfileSectionWidget extends StatelessWidget {
 
           // Store Status
           Text(
-            'Store Status',
+            LanguageProvider.translate('global', 'store_status'),
             style: TextStyleClass.smallStyle().copyWith(fontSize: 10.sp),
           ),
           SizedBox(height: 1.h),
@@ -77,7 +78,7 @@ class ProfileSectionWidget extends StatelessWidget {
                 SizedBox(width: 1.w),
                 Flexible(
                   child: Text(
-                    "ACTIVE",
+                    LanguageProvider.translate('buttons', 'Active'),
                     style: TextStyleClass.smallStyle(
                       color: const Color(0xff72ca8a),
                     ).copyWith(fontSize: 10.sp),

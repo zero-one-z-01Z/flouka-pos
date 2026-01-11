@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,7 +18,7 @@ class OrderDetailsHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Order Details",
+                LanguageProvider.translate('global', 'order_details'),
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColor.primaryColor,
@@ -25,7 +26,7 @@ class OrderDetailsHeader extends StatelessWidget {
                 ),
               ),
               Text(
-                "ORDER ID : 2342342",
+                "${LanguageProvider.translate('global', 'order_id_label')} : 2342342",
                 style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
               ),
             ],
@@ -37,7 +38,7 @@ class OrderDetailsHeader extends StatelessWidget {
             borderRadius: 8,
             height: 6.h,
             onTap: () {},
-            text: "Accept",
+            text: LanguageProvider.translate('buttons', 'accept'),
           ),
         ),
         SizedBox(width: 1.5.w),
@@ -47,7 +48,7 @@ class OrderDetailsHeader extends StatelessWidget {
             borderRadius: 8,
             height: 6.h,
             onTap: () {},
-            text: "Accept",
+            text: LanguageProvider.translate('buttons', 'remove'),
           ),
         ),
       ],

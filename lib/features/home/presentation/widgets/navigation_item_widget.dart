@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -30,7 +31,12 @@ class NavigationItemWidget extends StatelessWidget {
           children: [
             SizedBox(width: 2.w),
             SvgWidget(svg: navigationEntity.svgImage),
-            Text(navigationEntity.title),
+            Text(
+              LanguageProvider.translate(
+                'navbar',
+                navigationEntity.title.toLowerCase(),
+              ),
+            ),
           ],
         ),
       ),

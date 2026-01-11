@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -74,7 +75,9 @@ class UpdateOrderWiidget extends StatelessWidget {
               width: 7.w,
               height: 4.h,
               onTap: () {},
-              text: isRemove ? "remove" : "reset",
+              text: isRemove
+                  ? LanguageProvider.translate('buttons', 'remove')
+                  : LanguageProvider.translate('buttons', 'reset'),
             ),
           ),
         ],

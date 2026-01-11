@@ -1,4 +1,5 @@
 import 'package:flouka_pos/core/widgets/price_details_widget.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flouka_pos/features/orders/presentation/widgets/delivery_address_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -64,14 +65,14 @@ class OrderDetailsView extends StatelessWidget {
             ),
             SizedBox(height: 2.h),
             Text(
-              "Set Delivery Time",
+              LanguageProvider.translate('global', 'set_delivery_time'),
               style: TextStyleClass.smallStyle()
                   .copyWith(color: const Color(0xff333542))
                   .copyWith(fontSize: 14.sp),
             ),
             SizedBox(height: 1.h),
             Text(
-              "Select the nearest available shipping time for this order ",
+              LanguageProvider.translate('global', 'select_nearest_delivery_time'),
               style: TextStyleClass.smallStyle()
                   .copyWith(color: const Color(0xff333542))
                   .copyWith(fontSize: 12.sp),

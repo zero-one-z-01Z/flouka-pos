@@ -31,7 +31,11 @@
     "categories": "Categories",
     "orders": "Orders",
     "profile": "Profile",
-    "explore": "Explore"
+    "explore": "Explore",
+    "overview": "Overview",
+    "products": "Products",
+    "settings": "Settings",
+    "messages": "Messages"
   },
   "filter": {
     "category": "Category",
@@ -150,7 +154,22 @@
     "error_date": "There is an error in the date",
     "error_time": "There is an error in the time",
     "location": "There is an error with the location",
-    "open_gps": "Please enable location services to complete the process"
+    "open_gps": "Please enable location services to complete the process",
+    "set_delivery_time": "Set Delivery Time",
+    "select_nearest_delivery_time": "Select the nearest available shipping time for this order ",
+    "order_details": "Order Details",
+    "order_id_label": "ORDER ID",
+    "nearest_available": "Nearest Available",
+    "payment_method": "Payment Method",
+    "order_time": "Order Time",
+    "items_count": "Items Count",
+    "order_status": "Order Status",
+    "processing": "Processing",
+    "more_details": "More Details",
+    "item_summary": "Item Summary",
+    "delivery_address": "Delivery Address",
+    "username": "Username",
+    "store_status": "Store Status"
   },
   "inputs": {
     "phone": "Phone Number",
@@ -191,7 +210,10 @@
     "charge_wallet": "Wallet Charge",
     "apply": "Apply",
     "reset": "Reset",
-    "PAY NOW": "PAY NOW"
+    "PAY NOW": "PAY NOW",
+    "accept": "Accept",
+    "selected": "Selected",
+    "remove": "Remove"
   },
   "settings": {
     "settings": "Settings",

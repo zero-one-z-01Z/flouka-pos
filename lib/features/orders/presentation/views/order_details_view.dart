@@ -2,6 +2,8 @@ import 'package:flouka_pos/core/widgets/price_details_widget.dart';
 import 'package:flouka_pos/features/orders/presentation/widgets/delivery_address_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/config/app_styles.dart';
+import '../widgets/delivery_item_widget.dart';
 import '../widgets/item_summary_section.dart';
 import '../widgets/order_card_widget.dart';
 import '../widgets/order_details_header.dart';
@@ -17,6 +19,7 @@ class OrderDetailsView extends StatelessWidget {
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 2.w),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 5.h),
             const OrderDetailsHeader(),
@@ -59,6 +62,23 @@ class OrderDetailsView extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 2.h),
+            Text(
+              "Set Delivery Time",
+              style: TextStyleClass.smallStyle()
+                  .copyWith(color: const Color(0xff333542))
+                  .copyWith(fontSize: 14.sp),
+            ),
+            SizedBox(height: 1.h),
+            Text(
+              "Select the nearest available shipping time for this order ",
+              style: TextStyleClass.smallStyle()
+                  .copyWith(color: const Color(0xff333542))
+                  .copyWith(fontSize: 12.sp),
+            ),
+            SizedBox(height: 1.h),
+            const DelivryItemWidget(),
+            SizedBox(height: 7.h),
           ],
         ),
       ),

@@ -39,7 +39,6 @@ void main() async {
 
   HttpOverrides.global = MyHttpOverrides();
 
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // await notificationsFirebase();

@@ -22,7 +22,7 @@ class HomeProvider extends ChangeNotifier {
     NavigationEntity(title: "Products", svgImage: Images.products),
     NavigationEntity(title: "Settings", svgImage: Images.settings),
     NavigationEntity(title: "Orders", svgImage: Images.orders),
-    NavigationEntity(title: "Performance", svgImage: Images.totalSales),
+    NavigationEntity(title: "Performance", svgImage: Images.products),
     NavigationEntity(title: "Messages", svgImage: Images.messages),
   ];
   late NavigationEntity selectedNavigation = navigationList.first;

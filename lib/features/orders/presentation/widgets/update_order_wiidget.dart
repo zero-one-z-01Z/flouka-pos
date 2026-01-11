@@ -7,7 +7,8 @@ import '../../../../core/widgets/custom_star_rating_widget.dart';
 import '../../../../core/widgets/price_widget.dart';
 
 class UpdateOrderWiidget extends StatelessWidget {
-  const UpdateOrderWiidget({super.key});
+  const UpdateOrderWiidget({super.key, required this.isRemove});
+  final bool isRemove;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +24,7 @@ class UpdateOrderWiidget extends StatelessWidget {
           Image.asset(Images.macBook, width: 8.w),
           const SizedBox(width: 16),
           Expanded(
+            flex: 2,
             child: Column(
               spacing: 1.h,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +66,16 @@ class UpdateOrderWiidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          ButtonWidget(width: 7.w, onTap: () {}, text: "Delete"),
+          Expanded(
+            flex: 1,
+            child: ButtonWidget(
+              color: isRemove ? const Color(0xffDF0033) : const Color(0xff00920A),
+              width: 7.w,
+              height: 4.h,
+              onTap: () {},
+              text: isRemove ? "remove" : "reset",
+            ),
+          ),
         ],
       ),
     );

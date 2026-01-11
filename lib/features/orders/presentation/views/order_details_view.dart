@@ -51,7 +51,7 @@ class OrderDetailsView extends StatelessWidget {
                     runSpacing: 1.h,
                     children: List.generate(
                       2,
-                      (index) => const UpdateOrderWiidget(),
+                      (index) => UpdateOrderWiidget(isRemove: index == 0),
                     ),
                   ),
                   SizedBox(height: 4.h),

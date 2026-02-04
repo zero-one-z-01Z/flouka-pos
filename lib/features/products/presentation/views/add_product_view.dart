@@ -5,19 +5,8 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
 import '../providers/add_product_provider.dart';
 
-class AddProductView extends StatefulWidget {
+class AddProductView extends StatelessWidget {
   const AddProductView({super.key});
-
-  @override
-  State<AddProductView> createState() => _AddProductViewState();
-}
-
-class _AddProductViewState extends State<AddProductView> {
-  final TextEditingController _discountController = TextEditingController();
-  final TextEditingController _stockController = TextEditingController();
-
-  bool taxIncluded = true;
-  String status = 'Active';
 
   @override
   Widget build(BuildContext context) {
@@ -27,36 +16,7 @@ class _AddProductViewState extends State<AddProductView> {
     );
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'Products',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 2.w),
-            child: Row(
-              children: [
-                Text(
-                  'En',
-                  style: TextStyle(color: Colors.black, fontSize: 12.sp),
-                ),
-                Icon(Icons.arrow_drop_down, color: Colors.black, size: 18.sp),
-              ],
-            ),
-          ),
-        ],
-      ),
+      appBar: buildAppBar(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,53 +65,59 @@ class _AddProductViewState extends State<AddProductView> {
                             Expanded(
                               child: _buildTextField(
                                 label: 'Discounted Price (Optional)',
-                                controller: _discountController,
+                                controller: addProductProvider.discountController,
                                 keyboardType: TextInputType.number,
                                 prefix: '\$ ',
                               ),
                             ),
                             SizedBox(width: 3.w),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tax Included',
-                                    style: TextStyle(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  SizedBox(height: 1.h),
-                                  Row(
+                              child: Consumer<AddProductProvider>(
+                                builder: (context, provider, _) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Radio<bool>(
-                                        value: true,
-                                        groupValue: taxIncluded,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            taxIncluded = value!;
-                                          });
-                                        },
-                                        activeColor: AppColor.primaryColor,
+                                      Text(
+                                        'Tax Included',
+                                        style: TextStyle(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87,
+                                        ),
                                       ),
-                                      Text('Yes', style: TextStyle(fontSize: 11.sp)),
-                                      SizedBox(width: 2.w),
-                                      Radio<bool>(
-                                        value: false,
-                                        groupValue: taxIncluded,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            taxIncluded = value!;
-                                          });
-                                        },
-                                        activeColor: AppColor.primaryColor,
+                                      SizedBox(height: 1.h),
+                                      Row(
+                                        children: [
+                                          Radio<bool>(
+                                            value: true,
+                                            groupValue: provider.taxIncluded,
+                                            onChanged: (value) {
+                                              provider.updateTaxIncluded(value!);
+                                            },
+                                            activeColor: AppColor.primaryColor,
+                                          ),
+                                          Text(
+                                            'Yes',
+                                            style: TextStyle(fontSize: 11.sp),
+                                          ),
+                                          SizedBox(width: 2.w),
+                                          Radio<bool>(
+                                            value: false,
+                                            groupValue: provider.taxIncluded,
+                                            onChanged: (value) {
+                                              provider.updateTaxIncluded(value!);
+                                            },
+                                            activeColor: AppColor.primaryColor,
+                                          ),
+                                          Text(
+                                            'No',
+                                            style: TextStyle(fontSize: 11.sp),
+                                          ),
+                                        ],
                                       ),
-                                      Text('No', style: TextStyle(fontSize: 11.sp)),
                                     ],
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ),
                           ],
@@ -164,62 +130,64 @@ class _AddProductViewState extends State<AddProductView> {
                             Expanded(
                               child: _buildTextField(
                                 label: 'Stock Quantity',
-                                controller: _stockController,
+                                controller: addProductProvider.stockController,
                                 keyboardType: TextInputType.number,
                               ),
                             ),
                             SizedBox(width: 3.w),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Status',
-                                    style: TextStyle(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  SizedBox(height: 1.h),
-                                  DropdownButtonFormField<String>(
-                                    value: status,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 2.w,
-                                        vertical: 1.5.h,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFFE0E0E0),
+                              child: Consumer<AddProductProvider>(
+                                builder: (context, provider, _) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Status',
+                                        style: TextStyle(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87,
                                         ),
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFFE0E0E0),
-                                        ),
-                                      ),
-                                    ),
-                                    items: ['Active', 'Inactive']
-                                        .map(
-                                          (e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Text(
-                                              e,
-                                              style: TextStyle(fontSize: 11.sp),
+                                      SizedBox(height: 1.h),
+                                      DropdownButtonFormField<String>(
+                                        value: provider.status,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 2.w,
+                                            vertical: 1.5.h,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFE0E0E0),
                                             ),
                                           ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        status = value!;
-                                      });
-                                    },
-                                  ),
-                                ],
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFE0E0E0),
+                                            ),
+                                          ),
+                                        ),
+                                        items: ['Active', 'Inactive']
+                                            .map(
+                                              (e) => DropdownMenuItem(
+                                                value: e,
+                                                child: Text(
+                                                  e,
+                                                  style: TextStyle(fontSize: 11.sp),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                        onChanged: (value) {
+                                          provider.updateStatus(value!);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ],
@@ -231,7 +199,7 @@ class _AddProductViewState extends State<AddProductView> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () => addProductProvider.addAttributes(),
                               style: OutlinedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 4.w,
@@ -252,7 +220,7 @@ class _AddProductViewState extends State<AddProductView> {
                             ),
                             SizedBox(width: 2.w),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () => addProductProvider.publishProduct(),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.primaryColor,
                                 padding: EdgeInsets.symmetric(
@@ -283,6 +251,39 @@ class _AddProductViewState extends State<AddProductView> {
           const Expanded(flex: 4, child: SizedBox()),
         ],
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      title: Text(
+        'Products',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.menu, color: Colors.black),
+        onPressed: () {},
+      ),
+      actions: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 2.w),
+          child: Row(
+            children: [
+              Text(
+                'En',
+                style: TextStyle(color: Colors.black, fontSize: 12.sp),
+              ),
+              Icon(Icons.arrow_drop_down, color: Colors.black, size: 18.sp),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

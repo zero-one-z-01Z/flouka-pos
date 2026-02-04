@@ -9,7 +9,7 @@ class ProductItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 12.w,
+      // width: 15.w,
       padding: EdgeInsets.only(bottom: 4.h, left: 1.w, right: 1.w),
       decoration: BoxDecoration(
         color: AppColor.backgroundColor,
@@ -23,6 +23,7 @@ class ProductItemWidget extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,14 +45,15 @@ class ProductItemWidget extends StatelessWidget {
           ),
           SizedBox(height: 1.h),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "1200 EGP",
+                r"$1200",
                 style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w600),
               ),
               SizedBox(width: 1.w),
               Text(
-                "1500 EGP",
+                r"$ 1500",
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w600,

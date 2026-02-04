@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
 import '../config/app_color.dart';
-import '../config/app_styles.dart';
 import '../helper_function/image.dart';
 
 class UploadMultiImageWidget extends StatelessWidget {
@@ -17,140 +16,196 @@ class UploadMultiImageWidget extends StatelessWidget {
     required this.imagesList,
     this.title,
   });
+
   final List images;
   final String? title;
   final int count;
   final void Function(int i) deleteImage;
   final void Function(List<XFile> images) imagesList;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w,
+      width: double.infinity,
+      padding: EdgeInsets.all(2.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2.w),
-        color: Colors.white,
-        boxShadow: [
-          // BoxShadow(
-          //   color: Colors.black.withAlpha((0.1 * 255).round()),
-          //   spreadRadius: 0,
-          //   blurRadius: 30,
-          //   offset: const Offset(0, 4),
-          // ),
-        ],
+        color: const Color(0xFFF8F9FA),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.5.h),
-      child: InkWell(
-        onTap: () async {
-          List<XFile>? pickedImages = await chooseImageMulti(context);
-          if (pickedImages != null) {
-            imagesList(pickedImages);
-          }
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (images.isEmpty)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    LanguageProvider.translate(
-                      'global',
-                      title ?? 'upload_image',
-                    ).replaceAll('*count*', count.toString()),
-                    style: TextStyleClass.normalStyle().copyWith(
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            SizedBox(height: 0.5.h),
-            if (images.isNotEmpty)
-              SizedBox(
-                width: 94.w,
-                height: 10.h,
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 1.h),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 1.5.h,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.w),
-                        color: AppColor.primaryColor,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: Icon(Icons.add, size: 6.w, color: Colors.white),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: images.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (ctx, i) {
-                          return InkWell(
-                            onTap: () {
-                              deleteImage(i);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 2.w),
-                              child: Container(
-                                width: 18.w,
-                                height: 14.w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: (images[i] is XFile)
-                                      ? DecorationImage(
-                                          image: FileImage(File(images[i].path)),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                            images[i].image,
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Images Grid
+          if (images.isNotEmpty)
+            SizedBox(
+              height: 12.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: images.length + 1, // +1 for the add button
+                itemBuilder: (ctx, i) {
+                  // Add Image Button
+                  if (i == images.length) {
+                    return InkWell(
+                      onTap: () async {
+                        List<XFile>? pickedImages = await chooseImageMulti(context);
+                        if (pickedImages != null) {
+                          imagesList(pickedImages);
+                        }
+                      },
+                      child: Container(
+                        width: 12.h,
+                        height: 12.h,
+                        margin: EdgeInsets.only(left: 1.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppColor.primaryColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_circle_outline,
+                              size: 20.sp,
+                              color: AppColor.primaryColor,
+                            ),
+                            SizedBox(height: 0.5.h),
+                            Text(
+                              'Add Image',
+                              style: TextStyle(
+                                color: AppColor.primaryColor,
+                                fontSize: 8.sp,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          );
-                        },
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  // Image Thumbnail with Delete
+                  return InkWell(
+                    onTap: () => deleteImage(i),
+                    child: Container(
+                      width: 12.h,
+                      height: 12.h,
+                      margin: EdgeInsets.only(left: i == 0 ? 0 : 1.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
+                        image: (images[i] is XFile)
+                            ? DecorationImage(
+                                image: FileImage(File(images[i].path)),
+                                fit: BoxFit.cover,
+                              )
+                            : DecorationImage(
+                                image: CachedNetworkImageProvider(images[i].image),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                      child: Stack(
+                        children: [
+                          // Delete icon overlay
+                          Positioned(
+                            top: 0.5.w,
+                            right: 0.5.w,
+                            child: Container(
+                              padding: EdgeInsets.all(0.3.w),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.close,
+                                size: 10.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            if (images.isEmpty)
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 1.h),
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+            )
+          else
+            // Empty state - Add First Image
+            InkWell(
+              onTap: () async {
+                List<XFile>? pickedImages = await chooseImageMulti(context);
+                if (pickedImages != null) {
+                  imagesList(pickedImages);
+                }
+              },
+              child: Container(
+                height: 12.h,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2.w),
-                  color: AppColor.primaryColor,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(Icons.add),
-              ),
-
-            Row(
-              children: [
-                if (images.isNotEmpty)
-                  Text(
-                    LanguageProvider.translate('global', 'delete_image'),
-                    style: TextStyleClass.normalStyle().copyWith(
-                      color: const Color(0xff323131),
-                    ),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColor.primaryColor,
+                    width: 2,
+                    style: BorderStyle.solid,
                   ),
-                const Spacer(),
-                Text(
-                  '${images.length}/$count',
-                  style: TextStyle(color: Colors.black, fontSize: 15.sp),
+                  color: Colors.white,
                 ),
-              ],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate_outlined,
+                        size: 25.sp,
+                        color: AppColor.primaryColor,
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        LanguageProvider.translate(
+                          'global',
+                          title ?? 'upload_image',
+                        ).replaceAll('*count*', count.toString()),
+                        style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
+          SizedBox(height: 1.5.h),
+
+          // Image Counter
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (images.isNotEmpty)
+                Text(
+                  LanguageProvider.translate('global', 'delete_image'),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 9.sp),
+                )
+              else
+                const SizedBox(),
+              Text(
+                '${images.length}/$count',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

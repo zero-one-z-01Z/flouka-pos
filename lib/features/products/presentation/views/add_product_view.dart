@@ -5,6 +5,8 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
 import '../providers/add_product_provider.dart';
 
+import '../widgets/product_images_section.dart';
+
 class AddProductView extends StatelessWidget {
   const AddProductView({super.key});
 
@@ -248,7 +250,9 @@ class AddProductView extends StatelessWidget {
               ),
             ),
           ),
-          const Expanded(flex: 4, child: SizedBox()),
+
+          // Right section - Product Images
+          const ProductImagesSection(),
         ],
       ),
     );

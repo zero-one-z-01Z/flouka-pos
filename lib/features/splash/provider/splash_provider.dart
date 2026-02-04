@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/helper_function/prefs.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/helper_function/helper_function.dart';
+import '../../products/presentation/views/add_attributes_view.dart';
 
 class SplashProvider extends ChangeNotifier {
   void startApp() async {
@@ -20,8 +21,8 @@ class SplashProvider extends ChangeNotifier {
     String? isLoggedIn = sharedPreferences.getString('token');
     // if (!isFirstTime) {
     // if (isFirstTime) {
-    // authProvider.goToLoginView();
-    navP(const AddProductView());
+    authProvider.goToLoginView();
+    // navP(const AddAttributesView());
     // }else{
     // Provider.of<NavBarProvider>(Constants.globalContext(), listen: false,).currentIndex = 0;
     // }

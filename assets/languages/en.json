@@ -220,7 +220,13 @@
     "User": "User",
     "pick": "Pick",
     "camera": "Camera",
-    "photo": "Photo"
+    "photo": "Photo",
+    "price": "Price",
+    "stock": "Stock",
+    "sku": "SKU",
+    "ram": "RAM",
+    "storage": "Storage",
+    "color": "Color"
   },
   "time": {
     "ago": "ago",
@@ -253,7 +259,9 @@
     "PAY NOW": "PAY NOW",
     "accept": "Accept",
     "selected": "Selected",
-    "remove": "Remove"
+    "remove": "Remove",
+    "add_variant": "Add Variant",
+    "publish_product": "Publish Product"
   },
   "settings": {
     "settings": "Settings",

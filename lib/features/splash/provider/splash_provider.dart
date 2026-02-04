@@ -1,6 +1,8 @@
 // ignore_for_file: unused_import
 
+import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flouka_pos/features/products/presentation/views/add_product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/helper_function/prefs.dart';
@@ -18,8 +20,8 @@ class SplashProvider extends ChangeNotifier {
     String? isLoggedIn = sharedPreferences.getString('token');
     // if (!isFirstTime) {
     // if (isFirstTime) {
-    authProvider.goToLoginView();
-
+    // authProvider.goToLoginView();
+    navP(const AddProductView());
     // }else{
     // Provider.of<NavBarProvider>(Constants.globalContext(), listen: false,).currentIndex = 0;
     // }

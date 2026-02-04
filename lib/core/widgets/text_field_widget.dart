@@ -74,7 +74,7 @@ class TextFieldWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (titleWidget != null) ...[titleWidget!, SizedBox(height: 0.8.h)],
+          if (titleWidget != null) ...[titleWidget!, SizedBox(height: 0.6.h)],
           Material(
             borderRadius: BorderRadius.circular(borderRadius ?? 3.w),
             elevation: elevation ?? 0,
@@ -200,7 +200,7 @@ class TextFieldWidget extends StatelessWidget {
           EdgeInsets.only(
             left: 3.w,
             right: 5.w,
-            top: Constants.isTablet ? 1.4.h : 1.9.h,
+            top: Constants.isTablet ? .5.h : 1.9.h,
             bottom: 2.2.h,
           ),
       suffixIcon:

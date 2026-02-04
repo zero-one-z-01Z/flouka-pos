@@ -1,24 +1,35 @@
 import 'package:camera/camera.dart';
 import 'package:flouka_pos/core/models/text_field_model.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 
 class AddProductProvider extends ChangeNotifier {
-  // Main text fields (Product Name, Description, Price)
-  List<TextFieldModel> addProductTextFields = [
+  // Main text fields controllers
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+
+  // Getters for controllers if needed (optional)
+  TextEditingController get nameController => _nameController;
+  TextEditingController get descriptionController => _descriptionController;
+  TextEditingController get priceController => _priceController;
+
+  // Main text fields model list (Dynamic for translation)
+  List<TextFieldModel> get addProductTextFields => [
     TextFieldModel(
-      label: 'Product Name',
-      controller: TextEditingController(),
-      key: '',
+      label: LanguageProvider.translate('product', 'product_name'),
+      controller: _nameController,
+      key: 'product_name',
     ),
     TextFieldModel(
-      label: 'Product Description',
-      controller: TextEditingController(),
-      key: '',
+      label: LanguageProvider.translate('product', 'product_description'),
+      controller: _descriptionController,
+      key: 'product_description',
     ),
     TextFieldModel(
-      label: 'Product Price',
-      controller: TextEditingController(),
-      key: '',
+      label: LanguageProvider.translate('product', 'product_price'),
+      controller: _priceController,
+      key: 'product_price',
     ),
   ];
 
@@ -70,9 +81,9 @@ class AddProductProvider extends ChangeNotifier {
   // Publish product method placeholder
   void publishProduct() {
     debugPrint('Publishing product...');
-    debugPrint('Name: ${addProductTextFields[0].controller.text}');
-    debugPrint('Description: ${addProductTextFields[1].controller.text}');
-    debugPrint('Price: ${addProductTextFields[2].controller.text}');
+    debugPrint('Name: ${_nameController.text}');
+    debugPrint('Description: ${_descriptionController.text}');
+    debugPrint('Price: ${_priceController.text}');
     debugPrint('Discount: ${discountController.text}');
     debugPrint('Stock: ${stockController.text}');
     debugPrint('Tax Included: $_taxIncluded');

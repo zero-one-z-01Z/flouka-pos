@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
+import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/add_product_provider.dart';
 
 import '../widgets/product_images_section.dart';
@@ -24,9 +25,9 @@ class AddProductView extends StatelessWidget {
         children: [
           // Left section - Basic Details
           Expanded(
-            flex: 6,
+            flex: 4,
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(3.w),
+              padding: EdgeInsets.all(1.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -48,7 +49,7 @@ class AddProductView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Basic Details',
+                          LanguageProvider.translate('product', 'basic_details'),
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
@@ -66,10 +67,14 @@ class AddProductView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _buildTextField(
-                                label: 'Discounted Price (Optional)',
+                                label: LanguageProvider.translate(
+                                  'product',
+                                  'discounted_price',
+                                ),
                                 controller: addProductProvider.discountController,
                                 keyboardType: TextInputType.number,
-                                prefix: '\$ ',
+                                prefix:
+                                    '${LanguageProvider.translate('global', 'currency_symbol')} ',
                               ),
                             ),
                             SizedBox(width: 3.w),
@@ -80,7 +85,10 @@ class AddProductView extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Tax Included',
+                                        LanguageProvider.translate(
+                                          'product',
+                                          'tax_included',
+                                        ),
                                         style: TextStyle(
                                           fontSize: 11.sp,
                                           fontWeight: FontWeight.w500,
@@ -99,7 +107,10 @@ class AddProductView extends StatelessWidget {
                                             activeColor: AppColor.primaryColor,
                                           ),
                                           Text(
-                                            'Yes',
+                                            LanguageProvider.translate(
+                                              'global',
+                                              'yes',
+                                            ),
                                             style: TextStyle(fontSize: 11.sp),
                                           ),
                                           SizedBox(width: 2.w),
@@ -112,7 +123,10 @@ class AddProductView extends StatelessWidget {
                                             activeColor: AppColor.primaryColor,
                                           ),
                                           Text(
-                                            'No',
+                                            LanguageProvider.translate(
+                                              'global',
+                                              'no',
+                                            ),
                                             style: TextStyle(fontSize: 11.sp),
                                           ),
                                         ],
@@ -131,7 +145,10 @@ class AddProductView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _buildTextField(
-                                label: 'Stock Quantity',
+                                label: LanguageProvider.translate(
+                                  'product',
+                                  'stock_quantity',
+                                ),
                                 controller: addProductProvider.stockController,
                                 keyboardType: TextInputType.number,
                               ),
@@ -144,7 +161,10 @@ class AddProductView extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Status',
+                                        LanguageProvider.translate(
+                                          'global',
+                                          'status',
+                                        ),
                                         style: TextStyle(
                                           fontSize: 11.sp,
                                           fontWeight: FontWeight.w500,
@@ -177,7 +197,10 @@ class AddProductView extends StatelessWidget {
                                               (e) => DropdownMenuItem(
                                                 value: e,
                                                 child: Text(
-                                                  e,
+                                                  LanguageProvider.translate(
+                                                    'global',
+                                                    e.toLowerCase(),
+                                                  ),
                                                   style: TextStyle(fontSize: 11.sp),
                                                 ),
                                               ),
@@ -213,7 +236,10 @@ class AddProductView extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                'Add Attributes',
+                                LanguageProvider.translate(
+                                  'product',
+                                  'add_attributes',
+                                ),
                                 style: TextStyle(
                                   color: AppColor.primaryColor,
                                   fontSize: 11.sp,
@@ -234,7 +260,10 @@ class AddProductView extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                'Publish Product',
+                                LanguageProvider.translate(
+                                  'product',
+                                  'publish_product',
+                                ),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 11.sp,
@@ -252,7 +281,7 @@ class AddProductView extends StatelessWidget {
           ),
 
           // Right section - Product Images
-          const ProductImagesSection(),
+          const Expanded(flex: 3, child: ProductImagesSection()),
         ],
       ),
     );
@@ -263,7 +292,7 @@ class AddProductView extends StatelessWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       title: Text(
-        'Products',
+        LanguageProvider.translate('global', 'products'),
         style: TextStyle(
           color: Colors.black,
           fontSize: 16.sp,

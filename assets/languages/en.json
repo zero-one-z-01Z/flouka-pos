@@ -185,7 +185,31 @@
     "active": "Active",
     "low_sales": "Low Sales",
     "performance": "Performance",
-    "image_label": "Image"
+    "image_label": "Image",
+    "yes": "Yes",
+    "no": "No",
+    "inactive": "Inactive",
+    "browse": "Browse",
+    "replace": "Replace",
+    "add_image": "Add Image",
+    "upload_image": "Upload Image",
+    "no_image_selected": "No image selected",
+    "currency_symbol": "$"
+  },
+  "product": {
+    "basic_details": "Basic Details",
+    "discounted_price": "Discounted Price (Optional)",
+    "tax_included": "Tax Included",
+    "stock_quantity": "Stock Quantity",
+    "add_attributes": "Add Attributes",
+    "publish_product": "Publish Product",
+    "upload_product_image": "Upload Product Image",
+    "product_image": "Product Image",
+    "product_categories": "Product Categories",
+    "product_name": "Product Name",
+    "product_description": "Product Description",
+    "product_price": "Product Price",
+    "upload_product_images": "Upload Product Images"
   },
   "inputs": {
     "phone": "Phone Number",

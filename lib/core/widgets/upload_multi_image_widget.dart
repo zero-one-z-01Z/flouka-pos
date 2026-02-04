@@ -15,10 +15,12 @@ class UploadMultiImageWidget extends StatelessWidget {
     required this.deleteImage,
     required this.imagesList,
     this.title,
+    this.translationSection = 'global',
   });
 
   final List images;
   final String? title;
+  final String translationSection;
   final int count;
   final void Function(int i) deleteImage;
   final void Function(List<XFile> images) imagesList;
@@ -26,7 +28,6 @@ class UploadMultiImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       padding: EdgeInsets.all(2.w),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F9FA),
@@ -76,7 +77,7 @@ class UploadMultiImageWidget extends StatelessWidget {
                             ),
                             SizedBox(height: 0.5.h),
                             Text(
-                              'Add Image',
+                              LanguageProvider.translate('global', 'add_image'),
                               style: TextStyle(
                                 color: AppColor.primaryColor,
                                 fontSize: 8.sp,
@@ -168,7 +169,7 @@ class UploadMultiImageWidget extends StatelessWidget {
                       SizedBox(height: 1.h),
                       Text(
                         LanguageProvider.translate(
-                          'global',
+                          translationSection,
                           title ?? 'upload_image',
                         ).replaceAll('*count*', count.toString()),
                         style: TextStyle(

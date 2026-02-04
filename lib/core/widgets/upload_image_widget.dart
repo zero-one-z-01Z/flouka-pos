@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../../features/language/presentation/provider/language_provider.dart';
 import '../config/app_color.dart';
 import '../helper_function/image.dart';
 
@@ -52,7 +53,7 @@ class UploadImageWidget extends StatelessWidget {
             Center(
               child: Container(
                 width: 25.w,
-                height: 20.w,
+                height: 12.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.white,
@@ -61,10 +62,10 @@ class UploadImageWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.image_outlined, size: 35.sp, color: Colors.grey[400]),
+                    Icon(Icons.image_outlined, size: 30.sp, color: Colors.grey[400]),
                     SizedBox(height: 1.h),
                     Text(
-                      'No image selected',
+                      LanguageProvider.translate('global', 'no_image_selected'),
                       style: TextStyle(color: Colors.grey[600], fontSize: 10.sp),
                     ),
                   ],
@@ -91,7 +92,7 @@ class UploadImageWidget extends StatelessWidget {
                   color: AppColor.primaryColor,
                 ),
                 label: Text(
-                  'Browse',
+                  LanguageProvider.translate('global', 'browse'),
                   style: TextStyle(color: AppColor.primaryColor, fontSize: 10.sp),
                 ),
                 style: OutlinedButton.styleFrom(
@@ -114,7 +115,7 @@ class UploadImageWidget extends StatelessWidget {
                   },
                   icon: Icon(Icons.refresh, size: 14.sp, color: Colors.grey[700]),
                   label: Text(
-                    'Replace',
+                    LanguageProvider.translate('global', 'replace'),
                     style: TextStyle(color: Colors.grey[700], fontSize: 10.sp),
                   ),
                   style: OutlinedButton.styleFrom(

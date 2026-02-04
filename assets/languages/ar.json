@@ -33,7 +33,31 @@
     "active": "نشط",
     "low_sales": "مبيعات منخفضة",
     "performance": "الأداء",
-    "image_label": "الصورة"
+    "image_label": "الصورة",
+    "yes": "نعم",
+    "no": "لا",
+    "inactive": "غير نشط",
+    "browse": "تصفح",
+    "replace": "استبدال",
+    "add_image": "إضافة صورة",
+    "upload_image": "رفع صورة",
+    "no_image_selected": "لم يتم اختيار صورة",
+    "currency_symbol": "ر.س"
+  },
+  "product": {
+    "basic_details": "التفاصيل الأساسية",
+    "discounted_price": "السعر بعد الخصم (اختياري)",
+    "tax_included": "شامل الضريبة",
+    "stock_quantity": "كمية المخزون",
+    "add_attributes": "إضافة خصائص",
+    "publish_product": "نشر المنتج",
+    "upload_product_image": "رفع صورة المنتج",
+    "product_image": "صورة المنتج",
+    "product_categories": "فئات المنتج",
+    "product_name": "اسم المنتج",
+    "product_description": "وصف المنتج",
+    "product_price": "سعر المنتج",
+    "upload_product_images": "رفع صور المنتج"
   },
   "navbar": {
     "home": "الرئيسية",

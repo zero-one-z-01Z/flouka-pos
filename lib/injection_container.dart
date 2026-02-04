@@ -9,10 +9,8 @@ final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   sl.registerSingleton<ApiHandel>(ApiHandel.getInstance);
-   // auth
+  // auth
   sl.registerSingleton<AuthRemoteDataSource>(AuthRemoteDataSource(sl.get()));
   sl.registerSingleton<AuthRepo>(AuthRepoImpl(sl.get()));
   sl.registerSingleton<AuthUseCase>(AuthUseCase(sl.get()));
- 
-
 }

@@ -47,7 +47,7 @@ void main() async {
 
   await startSharedPref();
 
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,

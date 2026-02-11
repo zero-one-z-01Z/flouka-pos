@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,13 +64,14 @@ class LoginView extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   ButtonWidget(
-                    borderRadius: 15.sp,
+                    borderRadius: 12.sp,
                     onTap: () {
                       homeProvider.goToHomeView();
                     },
                     text: LanguageProvider.translate('buttons', 'Login'),
                   ),
                   SizedBox(height: 2.h),
+                  const HaveAccountSection(isLogin: true),
                 ],
               ),
             ),

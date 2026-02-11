@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/auth/presentation/providers/register_provider.dart';
 import 'features/category/presentation/providers/category_provider.dart';
 import 'features/home/presentation/providers/home_provider.dart';
 import 'features/home/presentation/providers/overview_provider.dart';
@@ -28,6 +29,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderDetailsProvider()),
         ChangeNotifierProvider(create: (_) => AddProductProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => RegisterProvider()),
       ],
       child: child,
     );

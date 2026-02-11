@@ -212,7 +212,7 @@
     "upload_product_images": "Upload Product Images"
   },
   "inputs": {
-    "phone": "Phone Number",
+    "phone_number": "Phone Number",
     "Email": "Email",
     "First Name": "First Name",
     "Number": "Number",

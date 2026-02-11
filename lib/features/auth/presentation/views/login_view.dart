@@ -18,7 +18,13 @@ class LoginView extends StatelessWidget {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
           appBar: AppBar(
+            backgroundColor: Colors.white.withValues(alpha: 0.6),
+            title: Text(
+              'POS SYSTEM V 0.1',
+              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+            ),
             actions: [
               Padding(
                 padding: EdgeInsets.only(bottom: 5.h),
@@ -30,7 +36,13 @@ class LoginView extends StatelessWidget {
                         color: const Color(0xff828282),
                       ).copyWith(fontSize: 12.sp),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: 1.w),
+                    Switch(
+                      value: !LanguageProvider.isAr(),
+                      onChanged: (value) {
+                        // LanguageProvider.changeLanguage(value);
+                      },
+                    ),
                   ],
                 ),
               ),

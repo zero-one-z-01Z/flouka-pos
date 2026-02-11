@@ -63,6 +63,7 @@ class LoginView extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   ButtonWidget(
+                    borderRadius: 15.sp,
                     onTap: () {
                       homeProvider.goToHomeView();
                     },

@@ -5,6 +5,7 @@ import 'package:flouka_pos/features/auth/presentation/widgets/have_account_secti
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
@@ -47,11 +48,8 @@ class RegisterPage2 extends StatelessWidget {
               ),
 
             // Title
-            Text(
-              "Business & ID Info",
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 2.h),
+           _buildTitleSection(),
+            SizedBox(height: 4.h),
 
             // ID Uploads (2 in a row)
             Row(
@@ -122,6 +120,22 @@ class RegisterPage2 extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTitleSection() {
+    return Column(
+      children: [
+        Text(
+          LanguageProvider.translate('global', 'complete_registration'),
+          style: TextStyleClass.headStyle().copyWith(fontSize: 16.sp),
+        ),
+        SizedBox(height: 1.h),
+        Text(
+          LanguageProvider.translate('global', 'company_info_subtitle'),
+          style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+        ),
+      ],
     );
   }
 }

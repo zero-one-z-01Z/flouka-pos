@@ -1,91 +1,73 @@
+import 'package:flouka_pos/features/auth/presentation/views/register_page1.dart';
+import 'package:flouka_pos/features/auth/presentation/views/register_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
-import '../../../../core/widgets/button_widget.dart';
-import '../../../../core/widgets/list_text_field_widget.dart';
-import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/register_provider.dart';
+import 'register_page3.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final RegisterProvider registerProvider = Provider.of(context);
-    return Scaffold(
-      backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withValues(alpha: 0.6),
-        title: Text(
-          'POS SYSTEM V 0.1',
-          style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 5.h),
-            child: Row(
-              children: [
-                Text(
-                  "En",
-                  style: TextStyleClass.smallStyle(
-                    color: const Color(0xff828282),
-                  ).copyWith(fontSize: 12.sp),
-                ),
-                SizedBox(width: 1.w),
-                Switch(
-                  value: !LanguageProvider.isAr(),
-                  onChanged: (value) {
-                    // LanguageProvider.changeLanguage(value);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Image.asset(
-                  Images.floukaLogo,
-                  height: 14.h,
-                  width: 14.w,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              Text(
-                LanguageProvider.translate('global', 'create_account'),
-                style: TextStyleClass.headStyle().copyWith(fontSize: 16.sp),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                LanguageProvider.translate('global', 'personal_info'),
-                style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
-              ),
-              SizedBox(height: 2.h),
-              ListTextFieldWidget(
-                color: Colors.white,
-                inputs: registerProvider.registerTextFieldList,
-              ),
-              SizedBox(height: 2.h),
-              ButtonWidget(
-                borderRadius: 12.sp,
-                onTap: () {
-                  registerProvider.goToRegisterView();
-                },
-                text: LanguageProvider.translate('buttons', 'Register'),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return ChangeNotifierProvider(
+      create: (_) => RegisterProvider(),
+      child: const _RegisterBody(),
     );
   }
+}
+
+class _RegisterBody extends StatelessWidget {
+  const _RegisterBody();
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<RegisterProvider>();
+
+    Widget page;
+    switch (provider.currentStep) {
+      case 1:
+        page = const RegisterPage1();
+        break;
+      case 2:
+        page = const RegisterPage2();
+        break;
+      case 3:
+        page = const RegisterPage3();
+        break;
+      default:
+        page = const RegisterPage1();
+    }
+
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: const Color(0xff00A8E1).withOpacity(0.05),
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white.withOpacity(0.6),
+            title: Text(
+              'POS SYSTEM V 0.1',
+              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+            ),
+          ),
+          body: page,
+        ),
+          Positioned(
+          top: 0,
+          left: 0,
+          child: Image.asset(Images.topCircles, width: 25.w),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Image.asset(Images.bottomCircles, width: 25.w),
+        ),
+      ],
+    );
+  }
+  
 }

@@ -22,8 +22,11 @@ class HomeProvider extends ChangeNotifier {
     NavigationEntity(title: "Products", svgImage: Images.products),
     NavigationEntity(title: "Settings", svgImage: Images.settings),
     NavigationEntity(title: "Orders", svgImage: Images.orders),
-    NavigationEntity(title: "Performance", svgImage: Images.products),
     NavigationEntity(title: "Messages", svgImage: Images.messages),
+    NavigationEntity(title: "Add Product", svgImage: Images.addProduct),
+    NavigationEntity(title: "Video", svgImage: Images.video),
+
+    NavigationEntity(title: "Performance", svgImage: Images.products),
   ];
   late NavigationEntity selectedNavigation = navigationList.first;
   void setSelectedNavigation(NavigationEntity navigation) {

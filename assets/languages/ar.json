@@ -111,6 +111,7 @@
   "buttons": {
     "accept": "قبول",
     "selected": "محدد",
+    "add_products": "أضف منتجات",
     "next_step": "الخطوة التالية",
     "remove": "حذف",
     "reset": "إعادة ضبط"

@@ -1,75 +1,136 @@
-import 'package:flouka_pos/core/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
+import '../../domain/entities/product_entity.dart';
 
 class ProductItemWidget extends StatelessWidget {
-  const ProductItemWidget({super.key});
+  final Product product;
+  final ValueChanged<bool>? onActiveChanged;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+
+  const ProductItemWidget({
+    super.key,
+    required this.product,
+    this.onActiveChanged,
+    this.onEdit,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 15.w,
-      padding: EdgeInsets.only(bottom: 4.h, left: 1.w, right: 1.w),
+      width: 15.w, // small width to fit multiple items per row
+      margin: EdgeInsets.only(bottom: 2.h),
+      padding: EdgeInsets.all(1.w),
       decoration: BoxDecoration(
         color: AppColor.backgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 3.h),
+          // Product Image
           Container(
-            decoration: const BoxDecoration(color: Color(0xfff8f7fa)),
-            child: Image.asset(Images.macBook, fit: BoxFit.cover),
-          ),
-          SizedBox(height: 1.h),
-          SizedBox(
-            width: 8.w,
-            child: Text(
-              "Apple 13” Macbook Pro",
-              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500),
-              softWrap: true,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            height: 12.h,
+            decoration: BoxDecoration(
+              color: const Color(0xfff8f7fa),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(product.imagePath, fit: BoxFit.cover),
             ),
           ),
           SizedBox(height: 1.h),
+
+          // Name
+          Text(
+            product.name,
+            style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w500),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 0.5.h),
+
+          // Price + Old Price
           Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                r"$1200",
+                "\$${product.price}",
                 style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w600),
               ),
+              if (product.oldPrice != null) ...[
+                SizedBox(width: 2.w),
+                Text(
+                  "\$${product.oldPrice}",
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: AppColor.tertiaryColor,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ]
+            ],
+          ),
+
+          // Rating
+          Row(
+            children: [
+              const Icon(Icons.star, color: Colors.amber, size: 14),
               SizedBox(width: 1.w),
               Text(
-                r"$ 1500",
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColor.tertiaryColor,
-                  decoration: TextDecoration.lineThrough,
-                ),
+                product.rating.toString(),
+                style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
               ),
             ],
           ),
+          SizedBox(height: 1.h),
+
+          // Switch + Edit/Delete icons
           Row(
-            mainAxisSize: MainAxisSize.min,
+          
             children: [
-              const Icon(Icons.star, color: Colors.amber),
-              Text(
-                "4.5",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11.sp),
+              // Active Switch
+              Row(
+                children: [
+                  Switch(
+                    value: product.isActive,
+                    onChanged: onActiveChanged,
+                    activeColor: AppColor.primaryColor,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  Text(
+                    product.isActive ? "Active" : "Inactive",
+                    style: TextStyle(fontSize: 10.sp),
+                  ),
+                ],
+              ),
+              SizedBox(width: 1.w,),
+              // Edit / Delete Icons
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: Icon(Icons.edit, size: 14.sp, color: Colors.blue),
+                    onPressed: onEdit,
+                  ),
+                  SizedBox(width: 1.w),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: Icon(Icons.delete, size: 14.sp, color: Colors.red),
+                    onPressed: onDelete,
+                  ),
+                ],
               ),
             ],
           ),

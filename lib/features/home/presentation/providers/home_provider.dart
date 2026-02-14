@@ -23,7 +23,7 @@ class HomeProvider extends ChangeNotifier {
     NavigationEntity(title: "Settings", svgImage: Images.settings),
     NavigationEntity(title: "Orders", svgImage: Images.orders),
     NavigationEntity(title: "Messages", svgImage: Images.messages),
-    NavigationEntity(title: "Add Product", svgImage: Images.addProduct),
+    NavigationEntity(title: "AddProduct", svgImage: Images.addProduct),
     NavigationEntity(title: "Video", svgImage: Images.video),
 
     NavigationEntity(title: "Performance", svgImage: Images.products),

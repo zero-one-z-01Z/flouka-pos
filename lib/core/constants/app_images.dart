@@ -28,6 +28,10 @@ abstract class Images {
   static const String addProduct = 'assets/images/navigation/add_product.svg';
   static const String video = 'assets/images/navigation/video.svg';
 
+  //products
+  static const String edit = 'assets/images/products/edit.svg';
+  static const String delete = 'assets/images/products/delete.svg';
+
   // Test
   static const String macBook = 'assets/images/test/mac_book.png';
 }

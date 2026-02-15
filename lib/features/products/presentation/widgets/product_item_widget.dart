@@ -1,4 +1,8 @@
+import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/widgets/svg_widget.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
 import '../../domain/entities/product_entity.dart';
@@ -20,7 +24,7 @@ class ProductItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 15.w, // small width to fit multiple items per row
+      width: 12.w, // small width to fit multiple items per row
       margin: EdgeInsets.only(bottom: 2.h),
       padding: EdgeInsets.all(1.w),
       decoration: BoxDecoration(
@@ -39,7 +43,7 @@ class ProductItemWidget extends StatelessWidget {
         children: [
           // Product Image
           Container(
-            height: 12.h,
+            height: 10.h,
             decoration: BoxDecoration(
               color: const Color(0xfff8f7fa),
               borderRadius: BorderRadius.circular(8),
@@ -96,44 +100,51 @@ class ProductItemWidget extends StatelessWidget {
 
           // Switch + Edit/Delete icons
           Row(
-          
-            children: [
-              // Active Switch
-              Row(
-                children: [
-                  Switch(
-                    value: product.isActive,
-                    onChanged: onActiveChanged,
-                    activeColor: AppColor.primaryColor,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  Text(
-                    product.isActive ? "Active" : "Inactive",
-                    style: TextStyle(fontSize: 10.sp),
-                  ),
-                ],
-              ),
-              SizedBox(width: 1.w,),
-              // Edit / Delete Icons
-              Row(
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: Icon(Icons.edit, size: 14.sp, color: Colors.blue),
-                    onPressed: onEdit,
-                  ),
-                  SizedBox(width: 1.w),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: Icon(Icons.delete, size: 14.sp, color: Colors.red),
-                    onPressed: onDelete,
-                  ),
-                ],
-              ),
-            ],
-          ),
+  children: [
+    FlutterSwitch(
+      width: 5.w,
+      height: 3.h,
+      toggleSize: 3.h,
+      value: product.isActive,
+      borderRadius: 20.sp,
+      padding: 2.sp,
+      activeColor: Colors.green,
+      inactiveColor: Colors.red,
+      showOnOff: true,
+      activeText: LanguageProvider.translate('global', 'active'),
+      inactiveText: LanguageProvider.translate('global', 'inactive'),
+      activeTextColor: Colors.white,
+      inactiveTextColor: Colors.white,
+      valueFontSize: 9.sp,
+      onToggle: (value) {
+        if (onActiveChanged != null) {
+          onActiveChanged!(value);
+        }
+      },
+    ),
+
+    SizedBox(width: 1.w),
+
+    // Edit / Delete Icons
+    Row(
+      children: [
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+          icon: SvgWidget(svg: Images.edit, width: 13.sp, height: 13.sp, color: Colors.black),
+          onPressed: onEdit,
+        ),
+      
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+          icon: SvgWidget(svg: Images.delete, width: 13.sp, height: 13.sp, color: Colors.black),
+          onPressed: onDelete,
+        ),
+      ],
+    ),
+  ],
+)
         ],
       ),
     );

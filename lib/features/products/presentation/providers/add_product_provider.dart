@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
+import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/core/models/text_field_model.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
+import 'package:flouka_pos/features/products/presentation/views/add_attributes_view.dart';
 import 'package:flutter/material.dart';
 
 class AddProductProvider extends ChangeNotifier {
@@ -90,8 +92,10 @@ class AddProductProvider extends ChangeNotifier {
     debugPrint('Status: $_status');
   }
 
+
   // Add attributes method placeholder
   void addAttributes() {
+    navP(const AddAttributesView());
     debugPrint('Adding attributes...');
   }
 }

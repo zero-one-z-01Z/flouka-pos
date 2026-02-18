@@ -19,7 +19,6 @@ class AddProductView extends StatelessWidget {
     );
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      appBar: buildAppBar(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

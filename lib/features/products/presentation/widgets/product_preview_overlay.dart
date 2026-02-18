@@ -159,7 +159,7 @@ class _ProductPreviewOverlayState extends State<ProductPreviewOverlay> {
                     SizedBox(height: 2.h),
 
                     // Sold By Section
-                    SoldByProductContainerWidget(),
+                    const SoldByProductContainerWidget(),
                   ],
                 ),
               ),

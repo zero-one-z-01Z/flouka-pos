@@ -102,7 +102,7 @@ class SoldByProductContainerWidget extends StatelessWidget {
               bottomLeft: borderRadius.bottomLeft,
             ),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.white, Colors.lightBlueAccent],
                   begin: Alignment.topCenter,
@@ -125,7 +125,7 @@ class SoldByProductContainerWidget extends StatelessWidget {
               bottomRight: borderRadius.bottomRight,
             ),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.white, Colors.lightBlueAccent],
                   begin: Alignment.topCenter,

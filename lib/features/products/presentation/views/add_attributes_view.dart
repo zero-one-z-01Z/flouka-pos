@@ -44,6 +44,14 @@ class _AddAttributesViewState extends State<AddAttributesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF8F9FD),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
         child: Center(

@@ -1,4 +1,5 @@
 import 'package:flouka_pos/features/products/presentation/providers/product_provider.dart';
+import 'package:flouka_pos/features/video/presentation/providers/video_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
@@ -32,6 +33,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => VideoProvider()),
       ],
       child: child,
     );

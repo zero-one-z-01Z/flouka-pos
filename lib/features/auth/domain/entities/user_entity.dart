@@ -1,21 +1,29 @@
 class UserEntity {
-  final int id;
-  String? phone;
-  String? email;
-  String? image;
-  String? firstName;
-  String? lastName;
-  num wallet;
-  String? token;
+  final int? id;
+  final String? firstName;
+  final String? lastName;
+  final String? phone;
+  final String? email;
+  final String? type;
+  final String? nationalIdNumber;
+  final int? cityId;
+  final String? bankAccountNumber;
+  final String? frontIdCardImage;
+  final String? backIdCardImage;
+  final String? token;
 
   UserEntity({
-    required this.id,
-    required this.phone,
-    required this.email,
-    required this.image,
-    required this.firstName,
-    required this.lastName,
-    required this.wallet,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.email,
+    this.type,
+    this.nationalIdNumber,
+    this.cityId,
+    this.bankAccountNumber,
+    this.frontIdCardImage,
+    this.backIdCardImage,
     this.token,
   });
 }

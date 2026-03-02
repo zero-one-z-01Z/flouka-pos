@@ -1,4 +1,4 @@
-import 'package:flouka_pos/features/home/presentation/views/home_view.dart';
+import 'package:flouka_pos/features/splash/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 theme: defaultTheme,
-                home: const HomeView(),
+                home: const SplashView(),
                 builder: (context, child) {
                   return GestureDetector(
                     onTap: () {

@@ -31,7 +31,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderDetailsProvider()),
         ChangeNotifierProvider(create: (_) => AddProductProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider(sl.get())),
-        ChangeNotifierProvider(create: (_) => RegisterProvider()),
+        ChangeNotifierProvider(create: (_) => RegisterProvider(userUseCase: sl.get())),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
       ],

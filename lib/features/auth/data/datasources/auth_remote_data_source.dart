@@ -78,4 +78,14 @@ class AuthRemoteDataSource {
       (r) => Right(UserModel.fromJson(r.data['data'])),
     );
   }
+
+  Future<Either<DioException, UserModel>> register(
+    Map<String, dynamic> data,
+  ) async {
+    var response = await apiHandel.post('store/register', data);
+    return response.fold(
+      (l) => Left(l),
+      (r) => Right(UserModel.fromJson(r.data['data'])),
+    );
+  }
 }

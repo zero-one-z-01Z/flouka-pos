@@ -30,10 +30,11 @@ class SplashProvider extends ChangeNotifier {
   //   // }
   // }
 
-  void startApp() async {
+  void startApp(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
-    final context = Constants.globalContext();
+    // Use the context passed directly from the widget tree — avoids a null-check
+    // crash on navState.currentContext which may not be mounted yet at splash time.
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     final token = sharedPreferences.getString('token');
@@ -43,6 +44,7 @@ class SplashProvider extends ChangeNotifier {
       authProvider.goToLoginView();
       return;
     }
+
     /// Restore token into API header
     ApiHandel.getInstance.updateHeader(token);
 

@@ -27,21 +27,18 @@ class RegisterPage1 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-                  SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
               Column(
                 children: [
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      Images.floukaLogo,
-                      width: 14.w,
-                    ),
+                    child: Image.asset(Images.floukaLogo, width: 14.w),
                   ),
                   SizedBox(height: 2.h),
                   Padding(
-                    padding: EdgeInsets.only(right:2.w),
+                    padding: EdgeInsets.only(right: 2.w),
                     child: const RegisterStepIndicator(),
-                  )
+                  ),
                 ],
               ),
               SizedBox(height: 4.h),
@@ -61,7 +58,11 @@ class RegisterPage1 extends StatelessWidget {
                 width: 30.w,
                 borderRadius: 12.sp,
                 onTap: () {
-                  registerProvider.nextStep();
+                  if (registerProvider.registerFormKey.currentState
+                          ?.validate() ??
+                      false) {
+                    registerProvider.nextStep();
+                  }
                 },
                 widget: Padding(
                   padding: EdgeInsets.all(1.w),
@@ -86,8 +87,6 @@ class RegisterPage1 extends StatelessWidget {
       ),
     );
   }
-
-  
 
   Widget _buildTitleSection() {
     return Column(

@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/auth/presentation/providers/register_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'core/helper_function/api.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
@@ -13,4 +14,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<AuthRemoteDataSource>(AuthRemoteDataSource(sl.get()));
   sl.registerSingleton<AuthRepo>(AuthRepoImpl(sl.get()));
   sl.registerSingleton<AuthUseCase>(AuthUseCase(sl.get()));
+  sl.registerSingleton<RegisterProvider>(
+    RegisterProvider(userUseCase: sl.get()),
+  );
 }

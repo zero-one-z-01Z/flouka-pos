@@ -60,5 +60,9 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<DioException, UserEntity>> login(Map<String, dynamic> data) {
     return userRemoteDatasource.login(data);
   }
+  @override
+  Future<Either<DioException, UserEntity>> register(Map<String, dynamic> data) {
+    return userRemoteDatasource.register(data);
+  }
  
 }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
+import '../../../../injection_container.dart';
 import '../providers/register_provider.dart';
 import 'register_page3.dart';
 
@@ -14,7 +15,7 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => RegisterProvider(),
+      create: (_) => RegisterProvider(userUseCase: sl.get()),
       child: const _RegisterBody(),
     );
   }
@@ -56,7 +57,7 @@ class _RegisterBody extends StatelessWidget {
           ),
           body: page,
         ),
-          Positioned(
+        Positioned(
           top: 0,
           left: 0,
           child: Image.asset(Images.topCircles, width: 25.w),
@@ -69,5 +70,4 @@ class _RegisterBody extends StatelessWidget {
       ],
     );
   }
-  
 }

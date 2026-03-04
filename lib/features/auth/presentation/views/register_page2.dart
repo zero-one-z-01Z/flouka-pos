@@ -21,82 +21,87 @@ class RegisterPage2 extends StatelessWidget {
     final provider = context.read<RegisterProvider>();
 
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 6.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+      child: Form(
+        key: provider.registerForm2Key,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 4.h),
 
-            SizedBox(height: 4.h),
-
-             SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
               Column(
                 children: [
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      Images.floukaLogo,
-                      width: 14.w,
-                    ),
+                    child: Image.asset(Images.floukaLogo, width: 14.w),
                   ),
                   SizedBox(height: 2.h),
                   Padding(
-                    padding: EdgeInsets.only(right:2.w),
+                    padding: EdgeInsets.only(right: 2.w),
                     child: const RegisterStepIndicator(),
-                  )
+                  ),
                 ],
               ),
 
-            // Title
-           _buildTitleSection(),
-            SizedBox(height: 4.h),
+              // Title
+              _buildTitleSection(),
+              SizedBox(height: 4.h),
 
-            // ID Uploads (2 in a row)
-            Row(
-              children: [
-                Expanded(
-                  child: ImagePickerField(
-                    label: "ID Card Front",
-                    onImageSelected: (file) {
-                      provider.setIdFront(file);
-                    },
+              // ID Uploads (2 in a row)
+              Row(
+                children: [
+                  Expanded(
+                    child: ImagePickerField(
+                      label: "ID Card Front",
+                      onImageSelected: (file) {
+                        provider.setIdFront(file);
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: ImagePickerField(
-                    label: "ID Card Back",
-                    onImageSelected: (file) {
-                      provider.setIdBack(file);
-                    },
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: ImagePickerField(
+                      label: "ID Card Back",
+                      onImageSelected: (file) {
+                        provider.setIdBack(file);
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            SizedBox(height: 3.h),
+              SizedBox(height: 3.h),
 
-            // Text Fields (2 in a row)
-            ListTextFieldWidget(
-              color: Colors.white,
-              inputs: provider.registerPage2TextFields,
-            ),
+              // Text Fields (2 in a row)
+              ListTextFieldWidget(
+                color: Colors.white,
+                inputs: provider.registerPage2TextFields,
+              ),
 
-            SizedBox(height: 4.h),
+              SizedBox(height: 4.h),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.rotationY(math.pi),
-                    child: IconButton(onPressed: provider.previousStep, icon: const Icon(Icons.arrow_forward, color: Colors.black))),
+                    child: IconButton(
+                      onPressed: provider.previousStep,
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   SizedBox(width: 2.w),
-                ButtonWidget(
+                  ButtonWidget(
                     width: 30.w,
                     borderRadius: 12.sp,
                     onTap: () {
-                      provider.nextStep();
+                      provider.register();
                     },
                     widget: Padding(
                       padding: EdgeInsets.all(1.w),
@@ -112,14 +117,15 @@ class RegisterPage2 extends StatelessWidget {
                     ),
                     text: LanguageProvider.translate('buttons', 'next_step'),
                   ),
-              ],
-            ),
-            SizedBox(height: 3.h),
-            const HaveAccountSection(isLogin: false),
-            SizedBox(height: 3.h),
-          ],
+                ],
+              ),
+              SizedBox(height: 3.h),
+              const HaveAccountSection(isLogin: false),
+              SizedBox(height: 3.h),
+            ],
+          ),
         ),
-      ),
+      ), // closes Form
     );
   }
 

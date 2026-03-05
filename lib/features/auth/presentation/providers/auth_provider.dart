@@ -183,10 +183,10 @@ class AuthProvider extends ChangeNotifier {
       (l) {
         showToast(l.message!);
       },
-      (r)  {
+      (r) {
         userEntity = r;
         loginSuccess(r);
-         Provider.of<OrdersProvider>(
+        Provider.of<OrdersProvider>(
           Constants.globalContext(),
           listen: false,
         ).getData();

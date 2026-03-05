@@ -12,7 +12,12 @@ import '../providers/order_details_provider.dart';
 
 class OrderCardWidget extends StatelessWidget {
   final OrderEntity orderEntity;
-  const OrderCardWidget({super.key, required this.orderEntity});
+  final bool withButton;
+  const OrderCardWidget({
+    super.key,
+    required this.orderEntity,
+    this.withButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,17 +90,20 @@ class OrderCardWidget extends StatelessWidget {
                 ),
                 const Divider(color: Colors.grey, thickness: 0.5),
                 SizedBox(height: 0.5.h),
-                ButtonWidget(
-                  height: 4.h,
-                  borderRadius: 8,
-                  onTap: () {},
-                  text: LanguageProvider.translate('global', 'more_details'),
-                  textStyle: TextStyle(
-                    fontSize: 10.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                if (withButton)
+                  ButtonWidget(
+                    height: 4.h,
+                    borderRadius: 8,
+                    onTap: () {
+                      orderDetailsProvider.goToOrderDetailsView(orderEntity.id);
+                    },
+                    text: LanguageProvider.translate('global', 'more_details'),
+                    textStyle: TextStyle(
+                      fontSize: 10.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

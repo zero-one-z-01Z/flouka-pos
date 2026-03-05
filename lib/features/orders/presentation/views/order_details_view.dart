@@ -43,7 +43,9 @@ class OrderDetailsView extends StatelessWidget {
                     child: Row(
                       spacing: 2.w,
                       children: [
-                        const Expanded(child: OrderCardWidget()),
+                        // const Expanded(child: OrderCardWidget()),
+                        const Expanded(child: DeliveryAddressWidget()),
+
                         const Expanded(child: DeliveryAddressWidget()),
                         const Expanded(child: PriceDetailesList()),
                       ],

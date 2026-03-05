@@ -13,6 +13,7 @@ class OrderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ordersProvider = Provider.of<OrdersProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,9 +53,9 @@ class OrderSection extends StatelessWidget {
                 mainAxisSpacing: 2.h,
                 childAspectRatio: 1.15,
               ),
-              itemCount: 3,
+              itemCount: ordersProvider.data!.length,
               itemBuilder: (context, index) {
-                return const OrderCardWidget();
+                return OrderCardWidget(orderEntity: ordersProvider.data![index]);
               },
             );
           },

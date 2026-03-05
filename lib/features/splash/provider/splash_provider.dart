@@ -40,20 +40,20 @@ class SplashProvider extends ChangeNotifier {
     final token = sharedPreferences.getString('token');
 
     /// No token → Login
-    if (token == null || token.isEmpty) {
-      authProvider.goToLoginView();
-      return;
-    }
+    // if (token == null || token.isEmpty) {
+    authProvider.goToLoginView();
+    // return;
+    // }
 
     /// Restore token into API header
-    ApiHandel.getInstance.updateHeader(token);
+    // ApiHandel.getInstance.updateHeader(token!);
 
-    try {
-      await authProvider.getProfile();
-      navP(const HomeView());
-    } catch (_) {
-      await sharedPreferences.remove('token');
-      authProvider.goToLoginView();
-    }
+    // try {
+    //   await authProvider.getProfile();
+    //   navP(const HomeView());
+    // } catch (_) {
+    //   await sharedPreferences.remove('token');
+    //   authProvider.goToLoginView();
+    // }
   }
 }

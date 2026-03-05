@@ -25,7 +25,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => language),
         ChangeNotifierProvider(create: (_) => SplashProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => OrdersProvider()),
+        ChangeNotifierProvider(create: (_) => OrdersProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => OverviewProvider()),
         ChangeNotifierProvider(create: (_) => OrderDetailsProvider()),

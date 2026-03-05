@@ -107,7 +107,7 @@ class TextFieldWidget extends StatelessWidget {
                 autofocus: autoFocus,
                 maxLines: maxLines ?? 1,
                 maxLength: maxLength,
-                style: style ?? TextStyle(fontSize: 15.sp, color: Colors.black),
+                style: style ?? TextStyle(fontSize: 14.sp, color: Colors.black),
                 validator:
                     validator ??
                     (value) {
@@ -194,7 +194,7 @@ class TextFieldWidget extends StatelessWidget {
       ),
       hoverColor: Colors.grey,
       prefixIcon: prefix,
-      errorStyle: TextStyleClass.normalStyle().copyWith(color: Colors.red),
+      errorStyle: TextStyleClass.captionStyle().copyWith(color: Colors.red),
       contentPadding:
           contentPadding ??
           EdgeInsets.only(

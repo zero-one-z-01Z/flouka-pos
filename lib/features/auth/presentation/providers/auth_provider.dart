@@ -166,7 +166,7 @@ class AuthProvider extends ChangeNotifier {
     if (!loginFormKey.currentState!.validate()) return;
 
     Map<String, dynamic> data = {};
-    data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
+    // data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
 
     for (var element in loginTextFieldList) {
       data[element.key] = element.controller.text.trim();

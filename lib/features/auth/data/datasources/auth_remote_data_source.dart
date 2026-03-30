@@ -62,16 +62,12 @@ class AuthRemoteDataSource {
     );
   }
 
-  Future<Either<DioException, String>> sendOtp(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Either<DioException, String>> sendOtp(Map<String, dynamic> data) async {
     var response = await apiHandel.post('store/send_otp_code', data);
     return response.fold((l) => Left(l), (r) => Right(r.data['data']));
   }
 
-  Future<Either<DioException, UserModel>> login(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Either<DioException, UserModel>> login(Map<String, dynamic> data) async {
     var response = await apiHandel.post('store/login', data);
     return response.fold(
       (l) => Left(l),
@@ -79,9 +75,7 @@ class AuthRemoteDataSource {
     );
   }
 
-  Future<Either<DioException, UserModel>> register(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Either<DioException, UserModel>> register(Map<String, dynamic> data) async {
     var response = await apiHandel.post('store/register', data);
     return response.fold(
       (l) => Left(l),

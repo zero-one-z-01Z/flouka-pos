@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../config/app_styles.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
@@ -19,23 +20,8 @@ class EmptyWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Stack(children: [
-        //   SvgWidget(svg: Images.emptyIcon, width: 40.w),
-        //   Positioned(
-        //       bottom: 0,
-        //       right: 0,
-        //       left: 0,
-        //       child: SvgWidget(
-        //           svg: Images.emptyCartIcon,
-        //           color: AppColor.defaultBlackColor,
-        //           width: 40.w))
-        // ]),
         Center(
-          child: Image.asset(
-            image,
-            width: width ?? 70.w,
-            fit: BoxFit.contain,
-          ),
+          child: Lottie.asset(image, fit: BoxFit.cover, width: width),
         ),
         Text(
           LanguageProvider.translate("empty", title),

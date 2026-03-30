@@ -3,8 +3,11 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flouka_pos/features/home/presentation/views/home_view.dart';
+import 'package:flouka_pos/features/orders/presentation/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/dialog/confirm_dialog.dart';
 import '../../../../core/dialog/confirm_pop_up_dialog.dart';
 import '../../../../core/dialog/snack_bar.dart';
@@ -166,7 +169,7 @@ class AuthProvider extends ChangeNotifier {
     if (!loginFormKey.currentState!.validate()) return;
 
     Map<String, dynamic> data = {};
-    data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
+    // data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
 
     for (var element in loginTextFieldList) {
       data[element.key] = element.controller.text.trim();
@@ -183,7 +186,10 @@ class AuthProvider extends ChangeNotifier {
       (r) {
         userEntity = r;
         loginSuccess(r);
-
+        Provider.of<OrdersProvider>(
+          Constants.globalContext(),
+          listen: false,
+        ).getData();
         navPR(const HomeView());
       },
     );

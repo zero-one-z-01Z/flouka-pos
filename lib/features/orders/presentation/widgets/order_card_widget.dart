@@ -3,15 +3,26 @@ import 'package:flouka_pos/features/language/presentation/provider/language_prov
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/core/widgets/svg_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/config/app_color.dart';
+import '../../domain/entity/order_entity.dart';
+import '../providers/order_details_provider.dart';
 
 class OrderCardWidget extends StatelessWidget {
-  const OrderCardWidget({super.key});
+  final OrderEntity orderEntity;
+  final bool withButton;
+  const OrderCardWidget({
+    super.key,
+    required this.orderEntity,
+    this.withButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final OrderDetailsProvider orderDetailsProvider =
+        Provider.of<OrderDetailsProvider>(context);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -25,31 +36,31 @@ class OrderCardWidget extends StatelessWidget {
                 // Order Details
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'Order ID'),
-                  "56456",
+                  orderEntity.id.toString(),
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'customer_name'),
-                  "3omran",
+                  orderEntity.userName,
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'total_price'),
-                  "1000",
+                  orderEntity.total,
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'payment_method'),
-                  "Visa",
+                  orderEntity.paymentMethod,
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'order_time'),
-                  "09/10/2025 - 10:30 AM",
+                  orderEntity.orderTime,
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'items_count'),
-                  "10",
+                  orderEntity.itemCount.toString(),
                 ),
                 _buildDetailRow(
                   LanguageProvider.translate('global', 'Address'),
-                  "Smoha,32 ElBulring,20Alex...",
+                  orderEntity.address,
                 ),
 
                 // Order Status
@@ -79,17 +90,20 @@ class OrderCardWidget extends StatelessWidget {
                 ),
                 const Divider(color: Colors.grey, thickness: 0.5),
                 SizedBox(height: 0.5.h),
-                ButtonWidget(
-                  height: 4.h,
-                  borderRadius: 8,
-                  onTap: () {},
-                  text: LanguageProvider.translate('global', 'more_details'),
-                  textStyle: TextStyle(
-                    fontSize: 10.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                if (withButton)
+                  ButtonWidget(
+                    height: 4.h,
+                    borderRadius: 8,
+                    onTap: () {
+                      orderDetailsProvider.goToOrderDetailsView(orderEntity.id);
+                    },
+                    text: LanguageProvider.translate('global', 'more_details'),
+                    textStyle: TextStyle(
+                      fontSize: 10.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

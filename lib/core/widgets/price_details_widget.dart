@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
+import '../../features/orders/presentation/providers/order_details_provider.dart';
 import '../config/app_styles.dart';
 import 'payment_price_widget.dart';
 
@@ -8,6 +10,7 @@ class PriceDetailesList extends StatelessWidget {
   const PriceDetailesList({super.key});
   @override
   Widget build(BuildContext context) {
+    final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
@@ -29,25 +32,26 @@ class PriceDetailesList extends StatelessWidget {
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "price"),
-            price: "55",
+            price: orderDetailsProvider.orderDetailsEntity!.subtotal.toString(),
           ),
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "Shiping"),
-            price: "56165",
+            price: orderDetailsProvider.orderDetailsEntity!.fees.toString(),
           ),
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "Taxes"),
-            price: "5641",
+            price: orderDetailsProvider.orderDetailsEntity!.tax.toString(),
           ),
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 15.99.sp,
             title: LanguageProvider.translate("global", "total"),
-            price: "5641",
+            price: orderDetailsProvider.orderDetailsEntity!.total.toString(),
+
             isGreen: true,
           ),
         ],

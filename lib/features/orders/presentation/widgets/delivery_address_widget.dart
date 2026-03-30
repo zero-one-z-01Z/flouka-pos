@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/config/app_color.dart';
 import '../../../../core/config/app_styles.dart';
 import '../../../language/presentation/provider/language_provider.dart';
+import '../providers/order_details_provider.dart';
 
 class DeliveryAddressWidget extends StatelessWidget {
   const DeliveryAddressWidget({super.key});
   @override
   Widget build(BuildContext context) {
+    final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
       decoration: BoxDecoration(
@@ -24,7 +27,7 @@ class DeliveryAddressWidget extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            "26 amna hafiz /street 23/door 24 alexandria sidegaber el mosher tantaimow",
+            orderDetailsProvider.orderDetailsEntity!.address,
             style: TextStyleClass.smallStyle().copyWith(
               color: const Color(0xff535353),
               fontSize: 13.sp,
@@ -43,7 +46,7 @@ class DeliveryAddressWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                "+2010981234234",
+                orderDetailsProvider.orderDetailsEntity!.userPhone,
                 style: TextStyleClass.normalStyle().copyWith(
                   color: AppColor.primaryColor,
                   fontSize: 12.sp,

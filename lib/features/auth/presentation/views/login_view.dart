@@ -66,9 +66,7 @@ class LoginView extends StatelessWidget {
                   ButtonWidget(
                     borderRadius: 12.sp,
                     onTap: () async {
-                      if (authProvider.loginFormKey.currentState!.validate()) {
-                        await authProvider.login();
-                      }
+                      await authProvider.login();
                     },
                     text: LanguageProvider.translate('buttons', 'Login'),
                   ),

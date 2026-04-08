@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/auth/domain/entities/user_entity.dart';
 import '../../../../core/dialog/snack_bar.dart';
@@ -16,8 +17,7 @@ import '../../../language/presentation/provider/language_provider.dart';
 class RegisterProvider extends ChangeNotifier {
   // ── Form keys ─────────────────────────────────────────────────────────────
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>(); // page 1
-  final GlobalKey<FormState> registerForm2Key =
-      GlobalKey<FormState>(); // page 2
+  final GlobalKey<FormState> registerForm2Key = GlobalKey<FormState>(); // page 2
 
   UserEntity? userEntity;
   final AuthUseCase userUseCase;
@@ -45,8 +45,7 @@ class RegisterProvider extends ChangeNotifier {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   // Page 1 field models — getter labels are fine (lazy), controllers are persistent
   List<TextFieldModel> get registerTextFieldList => [
@@ -54,15 +53,13 @@ class RegisterProvider extends ChangeNotifier {
       key: 'first_name',
       label: LanguageProvider.translate('inputs', 'first_name'),
       controller: firstNameController,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter first name' : null,
+      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter first name' : null,
     ),
     TextFieldModel(
       key: 'last_name',
       label: LanguageProvider.translate('inputs', 'last_name'),
       controller: lastNameController,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter last name' : null,
+      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter last name' : null,
     ),
     TextFieldModel(
       key: 'phone',
@@ -97,7 +94,7 @@ class RegisterProvider extends ChangeNotifier {
   ];
 
   // ── Account type ───────────────────────────────────────────────────────────
-  final List<String> accountTypes = ["Admin", "Merchant", "Cashier"];
+  final List<String> accountTypes = ["company", "personal"];
   String? selectedAccountType;
 
   void setAccountType(String type) {
@@ -111,8 +108,7 @@ class RegisterProvider extends ChangeNotifier {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController bankAccountController = TextEditingController();
-  final TextEditingController businessLicenseController =
-      TextEditingController();
+  final TextEditingController businessLicenseController = TextEditingController();
 
   // Page 2 field models — persistent controllers
   List<TextFieldModel> get registerPage2TextFields => [
@@ -120,8 +116,7 @@ class RegisterProvider extends ChangeNotifier {
       key: 'national_id',
       label: 'National ID Number',
       controller: nationalIdController,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter ID number' : null,
+      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter ID number' : null,
     ),
     TextFieldModel(
       key: 'city',
@@ -133,8 +128,7 @@ class RegisterProvider extends ChangeNotifier {
       key: 'address',
       label: 'Address',
       controller: addressController,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter address' : null,
+      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter address' : null,
     ),
     TextFieldModel(
       key: 'company_name',
@@ -178,23 +172,23 @@ class RegisterProvider extends ChangeNotifier {
       'email': emailController.text.trim(),
       'password': passwordController.text.trim(),
       'password_confirmation': confirmPasswordController.text.trim(),
-      'national_id': nationalIdController.text.trim(),
-      'city': cityController.text.trim(),
+      'national_id_number': nationalIdController.text.trim(),
+      'city_id': 1,
       'address': addressController.text.trim(),
       'company_name': companyNameController.text.trim(),
-      'bank_account': bankAccountController.text.trim(),
-      'business_license': businessLicenseController.text.trim(),
+      'bank_account_number': bankAccountController.text.trim(),
+      // 'business_license': businessLicenseController.text.trim(),
     };
 
     if (selectedAccountType != null) {
-      data['type'] = selectedAccountType;
+      data['type'] = "company";
     }
 
     if (idFront != null) {
-      data['front_id_card_image'] = base64Encode(await idFront!.readAsBytes());
+      data['front_id_card_image'] = await MultipartFile.fromFile(idFront!.path);
     }
     if (idBack != null) {
-      data['back_id_card_image'] = base64Encode(await idBack!.readAsBytes());
+      data['back_id_card_image'] = await MultipartFile.fromFile(idBack!.path);
     }
 
     return data;

@@ -10,16 +10,10 @@ abstract class AuthRepo {
   Future<Either<DioException, String>> deleteAccount();
   Future<Either<DioException, String>> logout(Map<String, dynamic> data);
   Future<Either<DioException, String>> refreshToken(Map<String, dynamic> data);
-  Future<Either<DioException, UserEntity>> socialLogin(
-    Map<String, dynamic> data,
-  );
+  Future<Either<DioException, UserEntity>> socialLogin(Map<String, dynamic> data);
 
-  Future<Either<DioException, UserEntity>> updateProfile(
-    Map<String, dynamic> data,
-  );
+  Future<Either<DioException, UserEntity>> updateProfile(Map<String, dynamic> data);
 
   Future<Either<DioException, UserEntity>> login(Map<String, dynamic> data);
-  Future<Either<DioException, UserEntity>> register(
-    Map<String, dynamic> data,
-  );
+  Future<Either<DioException, void>> register(Map<String, dynamic> data);
 }

@@ -57,8 +57,6 @@ class HomeView extends StatelessWidget {
         return const SettingsTab();
       case 'Orders':
         return const OrderTab();
-      case 'Messages':
-        return const Center(child: Text('Messages Tab'));
       case 'add_products':
         return const AddProductView();
       case 'Performance':

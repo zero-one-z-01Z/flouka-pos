@@ -43,7 +43,7 @@ class ProductsTab extends StatelessWidget {
                     onTap: () {
                       navProvider.setSelectedNavigation(
                         navProvider.navigationList.firstWhere(
-                          (nav) => nav.title == 'AddProduct',
+                          (nav) => nav.title == 'add_products',
                         ),
                       );
                     },
@@ -51,7 +51,7 @@ class ProductsTab extends StatelessWidget {
                     width: 15.w,
                     height: 5.h,
                     borderRadius: 9.sp,
-                  )
+                  ),
                 ],
               ),
               SizedBox(height: 2.h),
@@ -60,27 +60,23 @@ class ProductsTab extends StatelessWidget {
               Wrap(
                 spacing: 2.w,
                 runSpacing: 2.h,
-                children: List.generate(
-                  productProvider.products.length,
-                  (index) {
-                    final product = productProvider.products[index];
-                    return ProductItemWidget(
-                      product: product,
-                      index: index,
-                      onEdit: () => print("Edit ${product.name}"),
-                      onDelete: () => print("Delete ${product.name}"),
-                    );
-                  },
-                ),
+                children: List.generate(productProvider.products.length, (index) {
+                  final product = productProvider.products[index];
+                  return ProductItemWidget(
+                    product: product,
+                    index: index,
+                    onEdit: () => print("Edit ${product.name}"),
+                    onDelete: () => print("Delete ${product.name}"),
+                  );
+                }),
               ),
             ],
           ),
         ),
 
         /// Product Preview Overlay
-        if (productProvider.isPreviewOpen &&
-            productProvider.selectedProduct != null)
-          ProductPreviewOverlay(product: productProvider.selectedProduct!)
+        if (productProvider.isPreviewOpen && productProvider.selectedProduct != null)
+          ProductPreviewOverlay(product: productProvider.selectedProduct!),
       ],
     );
   }

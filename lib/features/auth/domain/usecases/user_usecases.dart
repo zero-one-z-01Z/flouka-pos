@@ -51,7 +51,7 @@ class AuthUseCase {
     return await userRepo.login(data);
   }
 
-  Future<Either<DioException, UserEntity>> register(
+  Future<Either<DioException, void>> register(
     Map<String, dynamic> data,
   ) async {
     return await userRepo.register(data);

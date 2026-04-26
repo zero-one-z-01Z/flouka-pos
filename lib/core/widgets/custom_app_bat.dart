@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../features/home/presentation/providers/home_provider.dart';
+import '../../features/language/presentation/provider/language_provider.dart';
 import '../constants/app_images.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -12,6 +13,7 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of(context);
+    final LanguageProvider languageProvider = Provider.of(context);
     return Container(
       padding: EdgeInsets.only(top: 2.h, bottom: 2.h, left: 2.w, right: 2.w),
       decoration: const BoxDecoration(
@@ -60,29 +62,32 @@ class CustomAppBar extends StatelessWidget {
           SizedBox(width: 2.w),
 
           // Language Selector
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 1.5.w, vertical: 1.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8F9FD),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Text(
-                  'En',
-                  style: TextStyle(
-                    fontSize: 9.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+          GestureDetector(
+            onTap: () => languageProvider.showLanguageDialog(),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 1.5.w, vertical: 1.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8F9FD),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    languageProvider.appLocal.languageCode == 'ar' ? 'Ar' : 'En',
+                    style: TextStyle(
+                      fontSize: 9.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-                SizedBox(width: 0.5.w),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Color(0xFF9E9E9E),
-                  size: 20,
-                ),
-              ],
+                  SizedBox(width: 0.5.w),
+                  const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Color(0xFF9E9E9E),
+                    size: 20,
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(width: 1.w),

@@ -32,7 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
-
+arch_warning.md
 # Symbolication related
 app.*.symbols
 

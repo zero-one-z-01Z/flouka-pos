@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAP2QuP_EGF-wvmXyPqKQ69yO__9ZSVfqg',
-    appId: '1:612261818702:android:df76b8c28e13425515ae1f',
-    messagingSenderId: '612261818702',
-    projectId: 'flouka-pos',
-    storageBucket: 'flouka-pos.firebasestorage.app',
+    apiKey: 'AIzaSyDM1aKyaVQJpLSyiXqNq6vzEWb9CGlTniw',
+    appId: '1:284237387262:android:119324c442fd5c7bf71caf',
+    messagingSenderId: '284237387262',
+    projectId: 'flouka-8213d',
+    storageBucket: 'flouka-8213d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC62uYN1_H9Edvl6GCCgSJ4OJQtk5fVsJQ',
-    appId: '1:612261818702:ios:a5712b9aa3ed72aa15ae1f',
-    messagingSenderId: '612261818702',
-    projectId: 'flouka-pos',
-    storageBucket: 'flouka-pos.firebasestorage.app',
-    iosBundleId: 'com.example.floukaPos',
+    apiKey: 'AIzaSyC2QWXMnHYZOZRgvmQ2RarzMtjDNdHK1UA',
+    appId: '1:284237387262:ios:8694cdeb434090d4f71caf',
+    messagingSenderId: '284237387262',
+    projectId: 'flouka-8213d',
+    storageBucket: 'flouka-8213d.firebasestorage.app',
+    iosBundleId: 'com.zeroonez.flouka.pos',
   );
 }

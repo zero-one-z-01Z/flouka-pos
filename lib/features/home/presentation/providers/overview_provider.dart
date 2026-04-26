@@ -14,6 +14,7 @@ class OverviewProvider extends ChangeNotifier {
       svgImage: Images.products,
       backgroundColor: const Color(0xfffff5e0),
       svgBackgroundColor: const Color(0xfffe9bc),
+      navigationTarget: 'Products',
     ),
     InfoCardEntity(
       title: LanguageProvider.translate('global', 'support'),
@@ -35,6 +36,7 @@ class OverviewProvider extends ChangeNotifier {
       svgImage: Images.homeOrders,
       backgroundColor: const Color(0xfffceae4),
       svgBackgroundColor: const Color(0xffff8d4c8),
+      navigationTarget: 'Orders',
     ),
   ];
   List<StatsCardEntity> statsCards = [

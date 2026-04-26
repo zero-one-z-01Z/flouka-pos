@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,13 @@ class LoginView extends StatelessWidget {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
           appBar: AppBar(
+            backgroundColor: Colors.white.withValues(alpha: 0.6),
+            title: Text(
+              'POS SYSTEM V 0.1',
+              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+            ),
             actions: [
               Padding(
                 padding: EdgeInsets.only(bottom: 5.h),
@@ -30,7 +37,13 @@ class LoginView extends StatelessWidget {
                         color: const Color(0xff828282),
                       ).copyWith(fontSize: 12.sp),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: 1.w),
+                    Switch(
+                      value: !LanguageProvider.isAr(),
+                      onChanged: (value) {
+                        // LanguageProvider.changeLanguage(value);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -51,12 +64,14 @@ class LoginView extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   ButtonWidget(
-                    onTap: () {
-                      homeProvider.goToHomeView();
+                    borderRadius: 12.sp,
+                    onTap: () async {
+                      await authProvider.login();
                     },
                     text: LanguageProvider.translate('buttons', 'Login'),
                   ),
                   SizedBox(height: 2.h),
+                  const HaveAccountSection(isLogin: true),
                 ],
               ),
             ),

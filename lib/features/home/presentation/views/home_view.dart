@@ -1,3 +1,6 @@
+import 'package:flouka_pos/features/home/presentation/views/tabs/settings_tab.dart';
+import 'package:flouka_pos/features/products/presentation/views/add_product_view.dart';
+import 'package:flouka_pos/features/video/presentation/views/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_app_bat.dart';
@@ -51,13 +54,18 @@ class HomeView extends StatelessWidget {
       case 'Products':
         return const ProductsTab();
       case 'Settings':
-        return const Center(child: Text('Settings Tab'));
+        return const SettingsTab();
       case 'Orders':
         return const OrderTab();
-      case 'Performance':
-        return const PerformanceTab();
       case 'Messages':
         return const Center(child: Text('Messages Tab'));
+      case 'add_products':
+        return const AddProductView();
+      case 'Performance':
+        return const PerformanceTab();
+      case 'video':
+        return const VideosPage();
+
       default:
         return const OverviewTab();
     }

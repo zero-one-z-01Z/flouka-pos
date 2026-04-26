@@ -37,9 +37,7 @@ class AuthUseCase {
     return await userRepo.updateProfile(data);
   }
 
-  Future<Either<DioException, String>> sendOtp(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Either<DioException, String>> sendOtp(Map<String, dynamic> data) async {
     return await userRepo.sendOtpCode(data);
   }
 
@@ -48,9 +46,14 @@ class AuthUseCase {
   ) async {
     return await userRepo.checkCode(data);
   }
-    Future<Either<DioException, UserEntity>> login(
+
+  Future<Either<DioException, UserEntity>> login(Map<String, dynamic> data) async {
+    return await userRepo.login(data);
+  }
+
+  Future<Either<DioException, UserEntity>> register(
     Map<String, dynamic> data,
   ) async {
-    return await userRepo.login(data);
+    return await userRepo.register(data);
   }
 }

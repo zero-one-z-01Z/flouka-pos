@@ -19,7 +19,7 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await delay(100);
-      Provider.of<SplashProvider>(context, listen: false).startApp();
+      Provider.of<SplashProvider>(context, listen: false).startApp(context);
     });
   }
 
@@ -32,7 +32,9 @@ class _SplashViewState extends State<SplashView> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [LogoWidget(isWhite: true, fit: BoxFit.fitWidth, width: 40.w)],
+            children: [
+              LogoWidget(isWhite: true, fit: BoxFit.fitWidth, width: 40.w),
+            ],
           ),
         ),
       ),

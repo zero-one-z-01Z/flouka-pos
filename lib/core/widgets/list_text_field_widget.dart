@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
 import '../config/app_styles.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
 import '../constants/constants.dart';
@@ -20,90 +21,109 @@ class ListTextFieldWidget extends StatelessWidget {
     this.borderRadius = 15,
     this.borderWidth = .7,
   });
+
   final List<TextFieldModel> inputs;
   final TextStyle? style;
   final bool? isGradient;
   final double? borderRadius;
   final double? borderWidth;
-  final Color? borderColor, errorStyleColor, textColor, color;
+  final Color? borderColor;
+  final Color? errorStyleColor;
+  final Color? textColor;
+  final Color? color;
 
   @override
-  Widget build(BuildContext context) {
-    List<String> telInputs = ['phone', 'whats'];
-    return SizedBox(
-      width: double.infinity,
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        children: List.generate(inputs.length, (index) {
-          TextFieldWidget textFieldWidget = TextFieldWidget(
-            borderRadius: borderRadius ?? 3.w,
-            borderWidth: borderWidth,
-            titleWidget: Builder(
-              builder: (ctx) {
-                if (inputs[index].titleWidgets != null) {
-                  return Row(children: [...inputs[index].titleWidgets!]);
-                }
-                if (inputs[index].title != null) {
-                  return inputs[index].title!;
-                }
-                if (inputs[index].editTextString != null) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        inputs[index].editTextString!,
-                        style: TextStyleClass.normalStyle(color: Colors.black),
-                      ),
-                      SizedBox(width: 1.w),
-                    ],
-                  );
-                }
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (inputs[index].image != null)
-                      SvgWidget(
-                        svg: inputs[index].image!,
-                        width: Constants.isTablet ? 5.w : null,
-                        color: textColor,
-                      ),
-                    if (inputs[index].image != null) SizedBox(width: 2.w),
-                    if (inputs[index].label != null)
-                      Text(
-                        LanguageProvider.translate('inputs', inputs[index].label!),
-                        style:
-                            style ??
-                            TextStyleClass.normalStyle(
-                              color: textColor ?? Colors.black,
-                            ).copyWith(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                      ),
-                  ],
-                );
-              },
-            ),
+Widget build(BuildContext context) {
+  final parentWidth = MediaQuery.of(context).size.width;
 
-            color: color,
-            borderColor: borderColor,
-            isLabel: inputs[index].isLabel ?? false,
-            maxLength: telInputs.contains(inputs[index].key) ? 10 : null,
-            controller: inputs[index].controller,
-            keyboardType: inputs[index].textInputType,
-            next: inputs.length - 1 != index,
-            hintText: inputs[index].hint,
-            onTextTap: inputs[index].onTap,
-            minLines: inputs[index].min,
-            maxLines: inputs[index].max,
-            validator: inputs[index].validator,
-            obscureText: inputs[index].obscureText,
-            suffix: inputs[index].suffix,
-            prefix: inputs[index].prefix,
-            readOnly: inputs[index].readOnly,
-            width: inputs[index].width,
-            contentPadding: inputs[index].contentPadding,
+  // Since RegisterView has horizontal padding of 6.w
+  final horizontalPadding = 12.w; // 6.w left + 6.w right
+  final spacing = 4.w;
+
+  final availableWidth = parentWidth - horizontalPadding;
+  final fieldWidth = (availableWidth - spacing) / 2;
+
+  return SizedBox(
+    width: double.infinity,
+    child: Center( // 🔥 THIS FIXES THE SHIFT
+      child: Wrap(
+        spacing: spacing,
+        runSpacing: 2.h,
+        alignment: WrapAlignment.center, // 🔥 Important
+        children: inputs.map((input) {
+          return SizedBox(
+            width: fieldWidth,
+            child: TextFieldWidget(
+              borderRadius: borderRadius ?? 3.w,
+              borderWidth: borderWidth,
+              titleWidget: _buildTitle(context, input),
+              color: color,
+              borderColor: borderColor,
+              isLabel: input.isLabel ?? false,
+              controller: input.controller,
+              keyboardType: input.textInputType,
+              next: inputs.last != input,
+              hintText: input.hint,
+              validator: input.validator,
+              obscureText: input.obscureText,
+              suffix: input.suffix,
+              prefix: input.prefix,
+              readOnly: input.readOnly,
+              contentPadding: input.contentPadding,
+            ),
           );
-          return textFieldWidget;
-        }),
+        }).toList(),
       ),
+    ),
+  );
+}
+
+
+  /// Builds dynamic title widget safely and cleanly
+  Widget _buildTitle(BuildContext context, TextFieldModel input) {
+    if (input.titleWidgets != null) {
+      return Row(children: input.titleWidgets!);
+    }
+
+    if (input.title != null) {
+      return input.title!;
+    }
+
+    if (input.editTextString != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            input.editTextString!,
+            style: TextStyleClass.normalStyle(color: Colors.black),
+          ),
+          SizedBox(width: 1.w),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (input.image != null)
+          SvgWidget(
+            svg: input.image!,
+            width: Constants.isTablet ? 5.w : null,
+            color: textColor,
+          ),
+        if (input.image != null) SizedBox(width: 2.w),
+        if (input.label != null)
+          Text(
+            LanguageProvider.translate('inputs', input.label!),
+            style: style ??
+                TextStyleClass.normalStyle(
+                  color: textColor ?? Colors.black,
+                ).copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+      ],
     );
   }
 }

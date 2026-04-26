@@ -1,11 +1,12 @@
 import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:jwt_decode/jwt_decode.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 // import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../constants/constants.dart';
 import 'convert.dart';
 import 'helper_function.dart';
@@ -37,7 +38,7 @@ class ApiHandel {
         headers: {
           "lang": lang ?? "ar",
           'Content-Type': 'application/json',
-          "Authorization": token,
+          "Authorization": {'Bearer $token'},
         },
       ),
     );
@@ -66,7 +67,7 @@ class ApiHandel {
       baseUrl: Constants.domain,
       // baseUrl: Constants.domain,
       headers: {
-        "Authorization": token,
+        "Authorization": {'Bearer $token'},
         "lang": lang ?? "ar",
         'Content-Type': 'application/json',
       },
@@ -85,17 +86,52 @@ class ApiHandel {
         queryParameters: data,
         cancelToken: cancelToken,
       );
-      if (response.statusCode == 200 && response.data['code'] == 200) {
+      if (response.statusCode == 200) {
         return Right(response);
       }
-      debugPrint('error1');
+      log('error1');
+      log(path.toString());
       return Left(dioException(response));
     } on DioException catch (e) {
       log(e.response?.data.toString() ?? "");
       return Left(e.response == null ? e : dioException(e.response!));
     } catch (e) {
-      debugPrint('error3');
-      // print(e.toString());
+      log('error3');
+      log(path.toString());
+      return Left(
+        DioException(
+          requestOptions: RequestOptions(baseUrl: Constants.domain, path: path),
+          message: 'Server Error',
+        ),
+      );
+    }
+  }
+
+  Future<Either<DioException, Response>> delete(
+    path, [
+    Map<String, dynamic>? data,
+  ]) async {
+    try {
+      await reLogin(path);
+      cancelToken = CancelToken();
+      Response response = await dio.delete(
+        path,
+        queryParameters: data,
+        cancelToken: cancelToken,
+      );
+      if (response.statusCode == 200) {
+        return Right(response);
+      }
+      log('error1');
+      log(path.toString());
+      return Left(dioException(response));
+    } on DioException catch (e) {
+      log(e.response?.data.toString() ?? "");
+      return Left(e.response == null ? e : dioException(e.response!));
+    } catch (e) {
+      log('error3');
+      log(path.toString());
+
       return Left(
         DioException(
           requestOptions: RequestOptions(baseUrl: Constants.domain, path: path),
@@ -119,21 +155,23 @@ class ApiHandel {
         data: FormData.fromMap(data),
         cancelToken: cancelToken,
       );
-      if (response.statusCode == 200 &&
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
           ((!response.data.containsKey('code')) || response.data['code'] == 200)) {
         return Right(response);
       }
-      debugPrint('error1');
+      log('error1');
+      log(path.toString());
       return Left(dioException(response));
     } on DioException catch (e) {
       log(e.response?.data.toString() ?? "");
       // print(" ON $e");
-      debugPrint('error2');
+      log('error2');
       return Left(e.response == null ? e : dioException(e.response!));
     } catch (e, line) {
-      debugPrint(line.toString());
-      debugPrint('error3');
-      debugPrint(e.toString());
+      log(line.toString());
+      log('error3');
+      log(e.toString());
       // print("dioException ON ${e}");
 
       return Left(
@@ -197,13 +235,15 @@ class ApiHandel {
   }
 
   Future reLogin(String url) async {
-    String? token = ApiHandel.getInstance.dio.options.headers['Authorization'];
-    if ((url.contains('user')) &&
-        !url.contains('social') &&
-        token != null &&
-        token.isNotEmpty &&
-        Jwt.isExpired(token)) {
-      // await Provider.of<AuthProvider>(Constants.globalContext(), listen: false,).refreshToken();
-    }
+    // String? token = sharedPreferences.getString('token');
+    // if (!url.contains('refresh-token') &&
+    //     token != null &&
+    //     token.isNotEmpty &&
+    //     JwtDecoder.isExpired(token)) {
+    //   await Provider.of<AuthProvider>(
+    //     Constants.globalContext(),
+    //     listen: false,
+    //   ).refreshToken();
+    // }
   }
 }

@@ -8,6 +8,8 @@
     "nearest_available": "أقرب متاح",
     "payment_method": "طريقة الدفع",
     "order_time": "وقت الطلب",
+    "compaany_info_subtitle": "يرجى تقديم معلومات شركتك",
+    "complete_registration": "أكمل التسجيل",
     "items_count": "عدد العناصر",
     "order_status": "حالة الطلب",
     "processing": "قيد التنفيذ",
@@ -15,6 +17,8 @@
     "item_summary": "ملخص الطلب",
     "delivery_address": "عنوان التوصيل",
     "username": "اسم المستخدم",
+    "create_account": "إنشاء حساب",
+    "personal_info": "المعلومات الشخصية",
     "store_status": "حالة المتجر",
     "Order ID": "رقم الطلب",
     "customer_name": "اسم العميل",
@@ -33,6 +37,10 @@
     "active": "نشط",
     "low_sales": "مبيعات منخفضة",
     "performance": "الأداء",
+    "login": "تسجيل الدخول",
+    "register": "تسجيل",
+    "have_account": "لديك حساب",
+    "dont_have_account": "ليس لديك حساب",
     "image_label": "الصورة",
     "yes": "نعم",
     "no": "لا",
@@ -81,7 +89,14 @@
     "location": "هناك خطأ بتحديد الموقع",
     "open_gps": "برجاء فتح خدمات الموقع لاكمال العملية"
   },
-  "inputs": {},
+  "inputs": {
+    "first_name": "الاسم الاول",
+    "last_name": "الاسم الاخير",
+    "email": "البريد الالكتروني",
+    "phone_number": "رقم الهاتف",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور"
+  },
   "time": {
     "ago": "منذ",
     "year": "عام",
@@ -96,6 +111,8 @@
   "buttons": {
     "accept": "قبول",
     "selected": "محدد",
+    "add_products": "أضف منتجات",
+    "next_step": "الخطوة التالية",
     "remove": "حذف",
     "reset": "إعادة ضبط"
   },

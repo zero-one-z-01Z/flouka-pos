@@ -25,6 +25,12 @@ abstract class Images {
   static const String overView = 'assets/images/navigation/over_view.svg';
   static const String products = 'assets/images/navigation/produts.svg';
   static const String settings = 'assets/images/navigation/settings.svg';
+  static const String addProduct = 'assets/images/navigation/add_product.svg';
+  static const String video = 'assets/images/navigation/video.svg';
+
+  //products
+  static const String edit = 'assets/images/products/edit.svg';
+  static const String delete = 'assets/images/products/delete.svg';
 
   // Test
   static const String macBook = 'assets/images/test/mac_book.png';

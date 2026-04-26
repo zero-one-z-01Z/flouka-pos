@@ -17,6 +17,7 @@ class CategoryFilterItem extends StatelessWidget {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
+        margin: EdgeInsets.only(right: 1.w),
         padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xff00a8e1) : const Color(0xffeaeaea),

@@ -45,9 +45,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<DioException, UserEntity>> checkCode(
-    Map<String, dynamic> data,
-  ) {
+  Future<Either<DioException, UserEntity>> checkCode(Map<String, dynamic> data) {
     return userRemoteDatasource.checkCode(data);
   }
 
@@ -60,5 +58,9 @@ class AuthRepoImpl implements AuthRepo {
   Future<Either<DioException, UserEntity>> login(Map<String, dynamic> data) {
     return userRemoteDatasource.login(data);
   }
- 
+
+  @override
+  Future<Either<DioException, UserEntity>> register(Map<String, dynamic> data) {
+    return userRemoteDatasource.register(data);
+  }
 }

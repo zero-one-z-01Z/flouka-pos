@@ -19,4 +19,7 @@ abstract class AuthRepo {
   );
 
   Future<Either<DioException, UserEntity>> login(Map<String, dynamic> data);
+  Future<Either<DioException, UserEntity>> register(
+    Map<String, dynamic> data,
+  );
 }

@@ -23,12 +23,7 @@ class LoadingAnimationWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(height: topPadding ?? 12.h),
-        Lottie.asset(
-          gif,
-          fit: BoxFit.cover,
-          width: width,
-          height: height,
-        ),
+        Lottie.asset(gif, fit: BoxFit.cover, width: width, height: height),
         SizedBox(height: 5.h),
         Text(
           LanguageProvider.translate("global", "loading"),

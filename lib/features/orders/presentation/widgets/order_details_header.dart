@@ -1,15 +1,18 @@
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/config/app_color.dart';
 import '../../../../core/widgets/button_widget.dart';
+import '../providers/order_details_provider.dart';
 
 class OrderDetailsHeader extends StatelessWidget {
   const OrderDetailsHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
     return Row(
       children: [
         Expanded(
@@ -26,7 +29,7 @@ class OrderDetailsHeader extends StatelessWidget {
                 ),
               ),
               Text(
-                "${LanguageProvider.translate('global', 'order_id_label')} : 2342342",
+                "${LanguageProvider.translate('global', 'order_id_label')} : ${orderDetailsProvider.orderDetailsEntity?.id}",
                 style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
               ),
             ],

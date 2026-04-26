@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
+import '../../../../core/dialog/snack_bar.dart';
+import '../../domain/entity/order_entity.dart';
+import '../../domain/use_case/order_use_case.dart';
 
 class OrdersProvider extends ChangeNotifier {
+  final OrderUseCase orderUseCase;
+
+  OrdersProvider(this.orderUseCase);
+
+  List<OrderEntity>? data;
   List<String> get tabs => [
     LanguageProvider.translate('global', 'all'),
     LanguageProvider.translate('global', 'new'),
     LanguageProvider.translate('global', 'ongoing'),
     LanguageProvider.translate('global', 'completed'),
   ];
+  Future getData() async {
+    final result = await orderUseCase.getOrders({});
+
+    result.fold((l) => showToast(l.message ?? "Failed to load orders"), (r) {
+      data = r;
+      notifyListeners();
+    });
+  }
 
   late String selectedTab = tabs.first;
 

@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/splash/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,6 @@ import 'core/config/app_theme.dart';
 import 'core/constants/constants.dart';
 import 'features/language/domain/entities/app_localizations.dart';
 import 'features/language/presentation/provider/language_provider.dart';
-import 'features/splash/views/splash_view.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

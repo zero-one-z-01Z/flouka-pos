@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUri = "https://raval.zeroonez.com/";
+  static const String baseUri = "https://floka.devalm.com/";
   static const String domain = '${baseUri}api/';
   //! for navigation
   static final GlobalKey<NavigatorState> navState = GlobalKey<NavigatorState>();
@@ -10,7 +10,7 @@ class Constants {
   static bool isTablet = false;
 
   static const String webSocketLink =
-      'wss://raval.zeroonez.com/app/d6jhrfdqa5ssnhnfoymoraval?protocol=7&client=js&version=8.4.0&flash=false ';
+      'wss://floka.devalm.com/app/d6jhrfdqa5ssnhnfoymoraval?protocol=7&client=js&version=8.4.0&flash=false ';
 
   static BuildContext globalContext() {
     return navState.currentContext!;

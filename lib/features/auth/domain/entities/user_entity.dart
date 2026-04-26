@@ -1,21 +1,15 @@
 class UserEntity {
-  final int id;
-  String? phone;
-  String? email;
-  String? image;
-  String? firstName;
-  String? lastName;
-  num wallet;
-  String? token;
+  final int? id;
+  final double? lat;
+  final double? lng;
+  final String? phone;
+  final String? token;
 
   UserEntity({
     required this.id,
+    required this.lat,
+    required this.lng,
     required this.phone,
-    required this.email,
-    required this.image,
-    required this.firstName,
-    required this.lastName,
-    required this.wallet,
-    this.token,
+    required this.token,
   });
 }

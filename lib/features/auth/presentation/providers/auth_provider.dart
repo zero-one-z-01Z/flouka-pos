@@ -2,8 +2,12 @@
 
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flouka_pos/features/home/presentation/views/home_view.dart';
+import 'package:flouka_pos/features/orders/presentation/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/dialog/confirm_dialog.dart';
 import '../../../../core/dialog/confirm_pop_up_dialog.dart';
 import '../../../../core/dialog/snack_bar.dart';
@@ -132,18 +136,18 @@ class AuthProvider extends ChangeNotifier {
 
   List<TextFieldModel> loginTextFieldList = [
     TextFieldModel(
-      label: LanguageProvider.translate("inputs", "User"),
-      key: "name",
+      label: LanguageProvider.translate("inputs", "phone_number"),
+      key: "phone",
       controller: TextEditingController(),
-      textInputType: TextInputType.name,
+      textInputType: TextInputType.phone,
       validator: (value) => validatePhone(value),
     ),
     TextFieldModel(
       label: LanguageProvider.translate("inputs", "Password"),
       controller: TextEditingController(),
-      textInputType: const TextInputType.numberWithOptions(),
+      textInputType: TextInputType.visiblePassword,
       validator: (value) => validatePassword(value),
-      key: "phone",
+      key: "password",
     ),
   ];
 
@@ -162,20 +166,31 @@ class AuthProvider extends ChangeNotifier {
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
 
   Future<void> login() async {
+    if (!loginFormKey.currentState!.validate()) return;
+
     Map<String, dynamic> data = {};
-    data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
+    // data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
+
     for (var element in loginTextFieldList) {
       data[element.key] = element.controller.text.trim();
     }
+
     loading();
     final result = await userUseCase.login(data);
     navPop();
+
     result.fold(
       (l) {
         showToast(l.message!);
       },
       (r) {
+        userEntity = r;
         loginSuccess(r);
+        Provider.of<OrdersProvider>(
+          Constants.globalContext(),
+          listen: false,
+        ).getData();
+        navPR(const HomeView());
       },
     );
   }

@@ -4,9 +4,11 @@ import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/custom_star_rating_widget.dart';
 import '../../../../core/widgets/price_widget.dart';
+import '../../domain/entity/order_details_entity.dart';
 
 class OrderDetailsItemWidget extends StatelessWidget {
-  const OrderDetailsItemWidget({super.key});
+  const OrderDetailsItemWidget({super.key, required this.item});
+  final OrderItemEntity item;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +29,7 @@ class OrderDetailsItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Lenovo Yoga 920 13/Core i7/16GB/SSD 1TB",
+                  item.title,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: TextStyleClass.smallStyle()
@@ -38,7 +40,7 @@ class OrderDetailsItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   spacing: 4,
                   children: [
-                    const PriceWidget(price: 999, isGreen: false, isBold: true),
+                    PriceWidget(price: item.price!, isGreen: false, isBold: true),
                     Expanded(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -47,7 +49,7 @@ class OrderDetailsItemWidget extends StatelessWidget {
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
-                              "153,254",
+                              item.avgRating.toString(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleClass.smallStyle(
                                 color: Colors.grey,

@@ -55,7 +55,7 @@ class LoginView extends StatelessWidget {
               key: authProvider.loginFormKey,
               child: Column(
                 children: [
-                  SizedBox(height: 28.h),
+                  SizedBox(height: 22.h),
                   Image.asset(Images.floukaLogo, width: 15.w),
                   SizedBox(height: 3.h),
                   ListTextFieldWidget(

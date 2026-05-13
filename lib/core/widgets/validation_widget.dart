@@ -26,7 +26,7 @@ class ValidationWidget extends StatelessWidget {
             if (state.hasError)
               Text(
                 state.errorText!,
-                style: TextStyleClass.normalStyle().copyWith(color: Colors.red),
+                style: TextStyleClass.smallStyle().copyWith(color: Colors.red),
               ),
           ],
         );

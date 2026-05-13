@@ -45,35 +45,31 @@ Widget build(BuildContext context) {
 
   return SizedBox(
     width: double.infinity,
-    child: Center( // 🔥 THIS FIXES THE SHIFT
-      child: Wrap(
-        spacing: spacing,
-        runSpacing: 2.h,
-        alignment: WrapAlignment.center, // 🔥 Important
-        children: inputs.map((input) {
-          return SizedBox(
-            width: fieldWidth,
-            child: TextFieldWidget(
-              borderRadius: borderRadius ?? 3.w,
-              borderWidth: borderWidth,
-              titleWidget: _buildTitle(context, input),
-              color: color,
-              borderColor: borderColor,
-              isLabel: input.isLabel ?? false,
-              controller: input.controller,
-              keyboardType: input.textInputType,
-              next: inputs.last != input,
-              hintText: input.hint,
-              validator: input.validator,
-              obscureText: input.obscureText,
-              suffix: input.suffix,
-              prefix: input.prefix,
-              readOnly: input.readOnly,
-              contentPadding: input.contentPadding,
-            ),
-          );
-        }).toList(),
-      ),
+    child: Wrap(
+      spacing: spacing,
+      runSpacing: 2.h,
+      // alignment: WrapAlignment.center,
+      children: inputs.map((input) {
+        return TextFieldWidget(
+          borderRadius: borderRadius ?? 3.w,
+          borderWidth: borderWidth,
+          titleWidget: _buildTitle(context, input),
+          color: color,
+          borderColor: borderColor,
+          isLabel: input.isLabel ?? false,
+          controller: input.controller,
+          keyboardType: input.textInputType,
+          width: input.width,
+          next: inputs.last != input,
+          hintText: input.hint,
+          validator: input.validator,
+          obscureText: input.obscureText,
+          suffix: input.suffix,
+          prefix: input.prefix,
+          readOnly: input.readOnly,
+          contentPadding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+        );
+      }).toList(),
     ),
   );
 }

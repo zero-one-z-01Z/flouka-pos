@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/widgets/validation_widget.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/register_step_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ class RegisterPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerProvider = context.read<RegisterProvider>();
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 6.w),
@@ -44,23 +44,26 @@ class RegisterPage1 extends StatelessWidget {
               SizedBox(height: 4.h),
               _buildTitleSection(),
               SizedBox(height: 3.h),
-
-              ListTextFieldWidget(
-                color: Colors.white,
-                inputs: registerProvider.registerTextFieldList,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Column(
+                  children: [
+                    ListTextFieldWidget(
+                      color: Colors.white,
+                      inputs: registerProvider.registerTextFieldList,
+                    ),
+                    SizedBox(height: 4.h),
+                    const AccountTypeSelector(),
+                  ],
+                ),
               ),
-
-              SizedBox(height: 4.h),
-              const AccountTypeSelector(),
-
               SizedBox(height: 4.h),
               ButtonWidget(
                 width: 30.w,
                 borderRadius: 12.sp,
                 onTap: () {
-                  if (registerProvider.registerFormKey.currentState
-                          ?.validate() ??
-                      false) {
+                  if ((registerProvider.registerFormKey.currentState?.validate() ?? false)  &&
+                      registerProvider.selectedAccountType != null) {
                     registerProvider.nextStep();
                   }
                 },

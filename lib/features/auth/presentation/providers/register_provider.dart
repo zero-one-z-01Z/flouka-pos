@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/auth/domain/entities/user_entity.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../core/dialog/snack_bar.dart';
 import '../../../../core/helper_function/loading.dart';
 import '../../../../core/models/text_field_model.dart';
@@ -40,61 +41,13 @@ class RegisterProvider extends ChangeNotifier {
   }
 
   // ── Page 1 persistent controllers ─────────────────────────────────────────
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
 
   // Page 1 field models — getter labels are fine (lazy), controllers are persistent
-  List<TextFieldModel> get registerTextFieldList => [
-    TextFieldModel(
-      key: 'first_name',
-      label: LanguageProvider.translate('inputs', 'first_name'),
-      controller: firstNameController,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter first name' : null,
-    ),
-    TextFieldModel(
-      key: 'last_name',
-      label: LanguageProvider.translate('inputs', 'last_name'),
-      controller: lastNameController,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter last name' : null,
-    ),
-    TextFieldModel(
-      key: 'phone',
-      label: LanguageProvider.translate('inputs', 'phone_number'),
-      controller: phoneController,
-      textInputType: TextInputType.phone,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter phone number' : null,
-    ),
-    TextFieldModel(
-      key: 'email',
-      label: LanguageProvider.translate('inputs', 'email'),
-      controller: emailController,
-      textInputType: TextInputType.emailAddress,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter email' : null,
-    ),
-    TextFieldModel(
-      key: 'password',
-      label: LanguageProvider.translate('inputs', 'password'),
-      controller: passwordController,
-      textInputType: TextInputType.visiblePassword,
-      validator: (v) => (v == null || v.length < 6) ? 'Min 6 characters' : null,
-    ),
-    TextFieldModel(
-      key: 'password_confirmation',
-      label: LanguageProvider.translate('inputs', 'confirm_password'),
-      controller: confirmPasswordController,
-      textInputType: TextInputType.visiblePassword,
-      validator: (v) =>
-          v != passwordController.text ? 'Passwords do not match' : null,
-    ),
-  ];
+  List<TextFieldModel> registerTextFieldList = [];
 
   // ── Account type ───────────────────────────────────────────────────────────
   final List<String> accountTypes = ["company", "personal"];
+
   String? selectedAccountType;
 
   void setAccountType(String type) {
@@ -116,23 +69,27 @@ class RegisterProvider extends ChangeNotifier {
       key: 'national_id',
       label: 'National ID Number',
       controller: nationalIdController,
+      width: 25.w,
       validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter ID number' : null,
     ),
     TextFieldModel(
       key: 'city',
       label: 'City',
       controller: cityController,
+      width: 25.w,
       validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter city' : null,
     ),
     TextFieldModel(
       key: 'address',
       label: 'Address',
+      width: 25.w,
       controller: addressController,
       validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter address' : null,
     ),
     TextFieldModel(
       key: 'company_name',
       label: 'Company Name',
+      width: 25.w,
       controller: companyNameController,
       validator: (v) =>
           (v == null || v.trim().isEmpty) ? 'Enter company name' : null,
@@ -141,10 +98,12 @@ class RegisterProvider extends ChangeNotifier {
       key: 'bank_account',
       label: 'Bank Account Number',
       controller: bankAccountController,
+      width: 25.w,
     ),
     TextFieldModel(
       key: 'business_license',
       label: 'Business License',
+      width: 25.w,
       controller: businessLicenseController,
     ),
   ];
@@ -166,12 +125,6 @@ class RegisterProvider extends ChangeNotifier {
   // ── Build data map from persistent controllers ─────────────────────────────
   Future<Map<String, dynamic>> buildRegisterDataMap() async {
     final Map<String, dynamic> data = {
-      'first_name': firstNameController.text.trim(),
-      'last_name': lastNameController.text.trim(),
-      'phone': phoneController.text.trim(),
-      'email': emailController.text.trim(),
-      'password': passwordController.text.trim(),
-      'password_confirmation': confirmPasswordController.text.trim(),
       'national_id_number': nationalIdController.text.trim(),
       'city_id': 1,
       'address': addressController.text.trim(),
@@ -179,6 +132,10 @@ class RegisterProvider extends ChangeNotifier {
       'bank_account_number': bankAccountController.text.trim(),
       // 'business_license': businessLicenseController.text.trim(),
     };
+
+    for (var element in registerTextFieldList) {
+      data[element.key] = element.controller.text;
+    }
 
     if (selectedAccountType != null) {
       data['type'] = "company";
@@ -230,6 +187,60 @@ class RegisterProvider extends ChangeNotifier {
   }
 
   void goToRegisterView() {
+    registerTextFieldList = [
+      TextFieldModel(
+          key: 'first_name',
+          label: LanguageProvider.translate('inputs', 'first_name'),
+          controller: TextEditingController(),
+          width: 25.w,
+          validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter first name' : null
+      ),
+      TextFieldModel(
+        key: 'last_name',
+        label: LanguageProvider.translate('inputs', 'last_name'),
+        controller: TextEditingController(),
+        width: 25.w,
+        validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter last name' : null,
+      ),
+      TextFieldModel(
+        key: 'phone',
+        label: LanguageProvider.translate('inputs', 'phone_number'),
+        controller: TextEditingController(),
+        textInputType: TextInputType.phone,
+        width: 25.w,
+        validator: (v) =>
+        (v == null || v.trim().isEmpty) ? 'Enter phone number' : null,
+      ),
+      TextFieldModel(
+        key: 'email',
+        label: LanguageProvider.translate('inputs', 'email'),
+        controller: TextEditingController(),
+        textInputType: TextInputType.emailAddress,
+        width: 25.w,
+        validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter email' : null,
+      ),
+      TextFieldModel(
+        key: 'password',
+        label: LanguageProvider.translate('inputs', 'password'),
+        controller: TextEditingController(),
+        textInputType: TextInputType.visiblePassword,
+        width: 25.w,
+        validator: (v) => (v == null || v.length < 8) ? 'Min 8 characters' : null,
+      ),
+      TextFieldModel(
+        key: 'password_confirmation',
+        label: LanguageProvider.translate('inputs', 'confirm_password'),
+        controller: TextEditingController(),
+        textInputType: TextInputType.visiblePassword,
+        width: 25.w,
+        validator: (v) {
+          if(v != registerTextFieldList.firstWhere((element) => element.key=="password",).controller.text){
+            return 'Passwords do not match';
+          }
+          return null;
+        },
+      ),
+    ];
     navPR(const RegisterView());
   }
 
@@ -237,12 +248,9 @@ class RegisterProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    for(var element in registerTextFieldList){
+      element.controller.dispose();
+    }
     nationalIdController.dispose();
     cityController.dispose();
     addressController.dispose();

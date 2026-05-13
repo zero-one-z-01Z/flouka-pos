@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/widgets/validation_widget.dart';
+import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/register_provider.dart';
 
 class AccountTypeSelector extends StatelessWidget {
@@ -18,44 +20,57 @@ class AccountTypeSelector extends StatelessWidget {
     final spacing = 4.w;
     final fieldWidth = (screenWidth - horizontalPadding - spacing) / 2;
 
-    return Row(
+    return Column(
       children: [
-        SizedBox(
-          width: fieldWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (label != null)
-                Padding(
-                  padding: EdgeInsets.only(bottom: 1.h),
-                  child: Text(
-                    label!,
-                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              GestureDetector(
-                onTap: () => _showAccountTypeSheet(context),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        selected ?? "Select Account Type",
-                        style: TextStyle(fontSize: 12.sp),
+        Row(
+          children: [
+            SizedBox(
+              width: 25.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (label != null)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 1.h),
+                      child: Text(
+                        label!,
+                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
                       ),
-                      const Icon(Icons.arrow_drop_down),
-                    ],
+                    ),
+                  GestureDetector(
+                    onTap: () => _showAccountTypeSheet(context),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selected ?? "Select Account Type",
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
+                          const Icon(Icons.arrow_drop_down),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+        SizedBox(height: 2.h),
+        Row(
+          children: [
+            ValidationWidget(conditions: [
+              {"value": registerProvider.selectedAccountType == null,
+                "text": LanguageProvider.translate("auth", "select_account_type")}
+            ]),
+          ],
         ),
       ],
     );

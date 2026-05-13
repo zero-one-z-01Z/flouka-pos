@@ -25,14 +25,15 @@ class RegisterStepIndicator extends StatelessWidget {
               width: 2.w,
               height: 2.w,
               decoration: BoxDecoration(
-                color: isActive || isCompleted ? Colors.blue : Colors.grey[300],
+                color: isActive || isCompleted ? Colors.blue : Colors.white,
+                border: Border.all(color: isActive || isCompleted ? Colors.blue : Colors.black),
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
               child: Text(
                 stepNum.toString(),
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isActive || isCompleted ? Colors.white : Colors.black,
                   fontSize: 10.sp,
                   fontWeight: FontWeight.bold,
                 ),

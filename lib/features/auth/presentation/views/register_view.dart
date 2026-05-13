@@ -14,10 +14,7 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => RegisterProvider(userUseCase: sl.get()),
-      child: const _RegisterBody(),
-    );
+    return const _RegisterBody();
   }
 }
 

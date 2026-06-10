@@ -6,7 +6,7 @@ class InfoCardEntity {
   final String svgImage;
   final Color backgroundColor;
   final Color svgBackgroundColor;
-  final String? navigationTarget;
+  final VoidCallback? onTap;
 
   InfoCardEntity({
     required this.title,
@@ -14,6 +14,6 @@ class InfoCardEntity {
     required this.svgImage,
     required this.backgroundColor,
     required this.svgBackgroundColor,
-    this.navigationTarget,
+    this.onTap,
   });
 }

@@ -12,6 +12,7 @@ class PriceDetailesList extends StatelessWidget {
   Widget build(BuildContext context) {
     final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
     return Container(
+      width: 23.w,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -32,25 +33,35 @@ class PriceDetailesList extends StatelessWidget {
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "price"),
-            price: orderDetailsProvider.orderDetailsEntity!.subtotal.toString(),
+            price: orderDetailsProvider.orderEntity!.subTotal.toString(),
           ),
-          Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
-          PaymentPriceWidget(
-            fontSize: 16.sp,
-            title: LanguageProvider.translate("global", "Shiping"),
-            price: orderDetailsProvider.orderDetailsEntity!.fees.toString(),
-          ),
+          // Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
+          // PaymentPriceWidget(
+          //   fontSize: 16.sp,
+          //   title: LanguageProvider.translate("global", "Shiping"),
+          //   price: orderDetailsProvider.orderEntity!.tax.toString(),
+          // ),
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 16.sp,
             title: LanguageProvider.translate("global", "Taxes"),
-            price: orderDetailsProvider.orderDetailsEntity!.tax.toString(),
+            price: orderDetailsProvider.orderEntity!.tax.toString(),
           ),
+          if(orderDetailsProvider.orderEntity!.discount !=null && orderDetailsProvider.orderEntity!.discount! >0)...[
+            Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
+            PaymentPriceWidget(
+              fontSize: 15.99.sp,
+              title: LanguageProvider.translate("global", "discount"),
+              price: orderDetailsProvider.orderEntity!.discount.toString(),
+
+            ),
+
+          ],
           Divider(color: Colors.grey.shade400, endIndent: 32, indent: 32),
           PaymentPriceWidget(
             fontSize: 15.99.sp,
             title: LanguageProvider.translate("global", "total"),
-            price: orderDetailsProvider.orderDetailsEntity!.total.toString(),
+            price: orderDetailsProvider.orderEntity!.total.toString(),
 
             isGreen: true,
           ),

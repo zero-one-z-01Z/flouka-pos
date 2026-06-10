@@ -30,11 +30,14 @@ class NavigationItemWidget extends StatelessWidget {
           spacing: 1.w,
           children: [
             SizedBox(width: 2.w),
-            SvgWidget(svg: navigationEntity.svgImage),
-            Text(
-              LanguageProvider.translate(
-                'navbar',
-                navigationEntity.title.toLowerCase(),
+            SvgWidget(svg: navigationEntity.svgImage,width: 2.w,fit: BoxFit.cover,color: isSelected
+                ? Colors.black : Colors.grey,),
+            Expanded(
+              child: Text(
+                LanguageProvider.translate(
+                  'navbar',
+                  navigationEntity.title.toLowerCase(),
+                ),maxLines: 1,
               ),
             ),
           ],

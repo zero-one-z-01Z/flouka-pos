@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/home_provider.dart';
-import '../providers/overview_provider.dart';
 import 'info_card_widget.dart';
 
 class InfoGridWidget extends StatelessWidget {
@@ -11,7 +10,7 @@ class InfoGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final OverviewProvider overviewProvider = Provider.of(context);
+    final AuthProvider authProvider = Provider.of(context);
     final HomeProvider homeProvider = Provider.of(context, listen: false);
     return Container(
       padding: EdgeInsets.all(2.h),
@@ -34,19 +33,15 @@ class InfoGridWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         crossAxisSpacing: 1.w,
         mainAxisSpacing: 1.h,
-        childAspectRatio: 5,
-        children: List.generate(overviewProvider.infoCards.length, (index) {
-          final card = overviewProvider.infoCards[index];
+        childAspectRatio: 4,
+        children: List.generate(authProvider.infoCards.length, (index) {
+          final card = authProvider.infoCards[index];
           return GestureDetector(
-            onTap: card.navigationTarget != null
-                ? () {
-                    final target = homeProvider.navigationList.firstWhere(
-                      (nav) => nav.title == card.navigationTarget,
-                      orElse: () => homeProvider.navigationList.first,
-                    );
-                    homeProvider.setSelectedNavigation(target);
-                  }
-                : null,
+            onTap: () {
+              if(card.onTap !=null){
+                card.onTap!();
+              }
+              },
             child: InfoCardWidget(infoCardEntity: card),
           );
         }),

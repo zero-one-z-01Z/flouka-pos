@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 abstract class DropDownClass<T> {
   String displayedName();
   String? titleName();
+  String labelTitle();
   bool require();
   Widget? displayedWidget();
   String displayedOptionName(T type);

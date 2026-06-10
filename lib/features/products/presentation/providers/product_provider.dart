@@ -1,111 +1,101 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_images.dart';
-import '../../domain/entities/product_entity.dart';
+import '../../../../core/dialog/snack_bar.dart';
+import '../../../../core/models/pagination_class.dart';
+import '../../../../core/models/provider_structure_model.dart';
+import '../../domain/entity/product_entity.dart';
+import '../../domain/user_case/product_use_case.dart';
 
-class ProductProvider extends ChangeNotifier {
-  /// ================= PRODUCTS =================
-  final List<Product> _products = [
-    Product(
-      name: "Apple 13\" MacBook Pro",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 1200,
-      oldPrice: 1500,
-      description: "Powerful Apple laptop with M2 chip and Retina display.",
-      storeName: "Apple Store",
-    ),
-    Product(
-      name: "Samsung Galaxy S22",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 999,
-      oldPrice: 1200,
-      description: "Premium Android smartphone with excellent camera.",
-      storeName: "Samsung Official",
-    ),
-    Product(
-      name: "Apple iPhone 14",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 1100,
-      oldPrice: 1300,
-      description: "Latest iPhone model with advanced camera features.",
-      storeName: "Apple Store",
-    ),
-    Product(
-      name: "Dell XPS 13",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 1050,
-      description: "Compact and powerful ultrabook for professionals.",
-      storeName: "Dell Store",
-    ),
-    Product(
-      name: "Lenovo ThinkPad",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 900,
-      description: "Reliable business laptop with excellent keyboard.",
-      storeName: "Lenovo Official",
-    ),
-    Product(
-      name: "HP Spectre x360",
-      imagePath: Images.macBook,
-      imagePaths: [
-        Images.macBook,
-        Images.macBook,
-        Images.macBook,
-      ],
-      price: 1150,
-      description: "Convertible laptop with high build quality.",
-      storeName: "HP Store",
-    ),
-  ];
+class ProductsProvider extends ChangeNotifier
+    implements ProviderStructureModel<List<ProductEntity>>, PaginationClass {
+  final ProductUseCase productUseCase;
+  ProductsProvider(this.productUseCase);
 
-  List<Product> get products => _products;
+  @override
+  List<ProductEntity>? data;
 
-  /// ================= PREVIEW =================
-  Product? _selectedProduct;
-  bool _isPreviewOpen = false;
+  @override
+  Map? inputs;
 
-  Product? get selectedProduct => _selectedProduct;
-  bool get isPreviewOpen => _isPreviewOpen;
+  @override
+  int pageIndex = 1;
 
-  void openPreview(Product product) {
-    _selectedProduct = product;
-    _isPreviewOpen = true;
+  @override
+  bool paginationFinished = false;
+
+  @override
+  bool paginationStarted = false;
+
+  int? selectedCategoryId;
+  String? searchQuery;
+
+  ScrollController controller = ScrollController();
+
+  @override
+  void clear() {
+    data = null;
+    inputs = null;
+    pageIndex = 1;
+    paginationFinished = false;
+    paginationStarted = false;
     notifyListeners();
   }
 
-  void closePreview() {
-    _selectedProduct = null;
-    _isPreviewOpen = false;
+  @override
+  Future getData() async {
+    Map<String, dynamic> dataToUse = {
+      'page': pageIndex,
+      if (selectedCategoryId != null) 'category_id': selectedCategoryId,
+      if (searchQuery != null && searchQuery!.isNotEmpty) 'search': searchQuery,
+      "skip":20
+    };
+
+    final result = await productUseCase.getProducts(dataToUse);
+    result.fold((l) => showToast(l.message ?? "Error loading products"), (r) {
+      pageIndex++;
+      data ??= [];
+      data!.addAll(r);
+      if (r.isEmpty) paginationFinished = true;
+      notifyListeners();
+    });
+
+    paginationStarted = false;
     notifyListeners();
   }
 
-  /// ================= SWITCH LOGIC =================
-  void toggleProductActive(int index, bool value) {
-    _products[index].isActive = value;
+  @override
+  void pagination() {
+    controller.addListener(() async {
+      if (controller.position.atEdge && controller.position.pixels > 50) {
+        if (!paginationFinished &&
+            !paginationStarted &&
+            (data?.isNotEmpty ?? false)) {
+          paginationStarted = true;
+          await getData();
+        }
+      }
+    });
+  }
+
+  @override
+  Future refresh() async {
+    clear();
+    await getData();
+  }
+
+  @override
+  void goToPage([Map<String, dynamic>? inputs]) {
+
+  }
+
+  void deleteProduct(int id){
+    int index = data!.indexWhere((element) => element.id == id);
+    data!.removeAt(index);
     notifyListeners();
+  }
+
+  void setCategory(int? categoryId) async {
+    selectedCategoryId = categoryId;
+    clear();
+    await getData();
   }
 }

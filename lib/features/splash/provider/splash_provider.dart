@@ -10,7 +10,7 @@ import '../../../core/constants/constants.dart';
 import '../../../core/helper_function/api.dart';
 import '../../../core/helper_function/helper_function.dart';
 import '../../home/presentation/views/home_view.dart';
-import '../../products/presentation/views/add_attributes_view.dart';
+import '../../products/presentation/views/add_variant_view.dart';
 
 class SplashProvider extends ChangeNotifier {
   // void startApp() async {
@@ -40,20 +40,19 @@ class SplashProvider extends ChangeNotifier {
     final token = sharedPreferences.getString('token');
 
     /// No token → Login
-    // if (token == null || token.isEmpty) {
-    authProvider.goToLoginView();
-    // return;
-    // }
+    if (token == null || token.isEmpty) {
+    authProvider.goToUserTypePage();
+    return;
+    }
 
     /// Restore token into API header
-    // ApiHandel.getInstance.updateHeader(token!);
-
-    // try {
-    //   await authProvider.getProfile();
-    //   navP(const HomeView());
-    // } catch (_) {
-    //   await sharedPreferences.remove('token');
-    //   authProvider.goToLoginView();
-    // }
+    ApiHandel.getInstance.updateHeader(token);
+    //
+    try {
+      await authProvider.getProfile();
+    } catch (_) {
+      await sharedPreferences.remove('token');
+      authProvider.goToLoginView();
+    }
   }
 }

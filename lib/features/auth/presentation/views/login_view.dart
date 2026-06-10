@@ -16,83 +16,89 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthProvider authProvider = Provider.of(context);
     final HomeProvider homeProvider = Provider.of(context);
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
-          appBar: AppBar(
-            backgroundColor: Colors.white.withValues(alpha: 0.6),
-            title: Text(
-              'POS SYSTEM V 0.1',
-              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
+      appBar: AppBar(
+        backgroundColor: Colors.white.withValues(alpha: 0.6),
+        title: Text(
+          'POS SYSTEM V 0.1',
+          style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 5.h),
+            child: Row(
+              children: [
+                Text(
+                  "En",
+                  style: TextStyleClass.smallStyle(
+                    color: const Color(0xff828282),
+                  ).copyWith(fontSize: 12.sp),
+                ),
+                SizedBox(width: 1.w),
+                Switch(
+                  value: !LanguageProvider.isAr(),
+                  onChanged: (value) {
+                    // LanguageProvider.changeLanguage(value);
+                  },
+                ),
+              ],
             ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 5.h),
-                child: Row(
+          ),
+        ],
+      ),
+      body: SizedBox(
+        height: 960,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 37.w),
+              child: Form(
+                key: authProvider.loginFormKey,
+                child: Column(
                   children: [
-                    Text(
-                      "En",
-                      style: TextStyleClass.smallStyle(
-                        color: const Color(0xff828282),
-                      ).copyWith(fontSize: 12.sp),
+                    SizedBox(height: 30.h),
+                    Image.asset(Images.floukaLogo, width: 15.w),
+                    SizedBox(height: 3.h),
+                    ListTextFieldWidget(
+                      color: Colors.white,
+                      inputs: authProvider.loginTextFieldList,
                     ),
-                    SizedBox(width: 1.w),
-                    Switch(
-                      value: !LanguageProvider.isAr(),
-                      onChanged: (value) {
-                        // LanguageProvider.changeLanguage(value);
+                    SizedBox(height: 2.h),
+                    ButtonWidget(
+                      borderRadius: 12.sp,
+                      onTap: () async {
+                        await authProvider.login();
                       },
+                      text: LanguageProvider.translate('buttons', 'Login'),
                     ),
+                    SizedBox(height: 2.h),
+                    if(!authProvider.isStore)
+                      const HaveAccountSection(isLogin: true),
                   ],
                 ),
               ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 37.w),
-            child: Form(
-              key: authProvider.loginFormKey,
-              child: Column(
-                children: [
-                  SizedBox(height: 22.h),
-                  Image.asset(Images.floukaLogo, width: 15.w),
-                  SizedBox(height: 3.h),
-                  ListTextFieldWidget(
-                    color: Colors.white,
-                    inputs: authProvider.loginTextFieldList,
-                  ),
-                  SizedBox(height: 2.h),
-                  ButtonWidget(
-                    borderRadius: 12.sp,
-                    onTap: () async {
-                      await authProvider.login();
-                    },
-                    text: LanguageProvider.translate('buttons', 'Login'),
-                  ),
-                  SizedBox(height: 2.h),
-                  const HaveAccountSection(isLogin: true),
-                ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                fit: BoxFit.fill,
+                Images.bottomCircles,
+                width: 37.w,
+                height: 50.h,
               ),
             ),
-          ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image.asset(Images.topCircles, width: 25.w),
+            ),
+
+          ],
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Image.asset(
-            fit: BoxFit.fill,
-            Images.bottomCircles,
-            width: 37.w,
-            height: 50.h,
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: 0,
-          child: Image.asset(Images.topCircles, width: 25.w),
-        ),
-      ],
+      ),
     );
   }
 }

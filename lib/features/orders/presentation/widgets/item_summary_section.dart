@@ -6,6 +6,7 @@ import '../../../../core/config/app_styles.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/order_details_provider.dart';
 import 'order_details_item_widget.dart';
+import 'update_order_widget.dart';
 
 class ItemSummarySection extends StatelessWidget {
   const ItemSummarySection({super.key});
@@ -28,16 +29,20 @@ class ItemSummarySection extends StatelessWidget {
             style: TextStyleClass.smallStyle().copyWith(),
           ),
           SizedBox(height: 2.h),
-          Wrap(
-            spacing: 12.0,
-            runSpacing: 12.0,
-            children: List.generate(
-              orderDetailsProvider.orderDetailsEntity!.items.length,
-              (index) =>  OrderDetailsItemWidget(
-                item: orderDetailsProvider.orderDetailsEntity!.items[index],
-              ),
-            ),
+          UpdateOrderWidget(
+            ordersEntity: orderDetailsProvider.orderEntity!.vendorOrders,
           ),
+
+          // Wrap(
+          //   spacing: 12.0,
+          //   runSpacing: 12.0,
+          //   children: List.generate(
+          //     orderDetailsProvider.orderEntity!.vendorOrders.,
+          //     (index) =>  OrderDetailsItemWidget(
+          //       item: orderDetailsProvider.orderEntity!.vendorOrders[index].items!.first,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

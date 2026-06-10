@@ -5,6 +5,8 @@ import '../../../../../core/constants/constants.dart';
 import '../../../../../core/dialog/custom_alert_dialog.dart';
 import '../../../../../core/helper_function/api.dart';
 import '../../../../../core/helper_function/prefs.dart';
+import '../../../../core/helper_function/navigation.dart';
+import '../../../splash/views/splash_view.dart';
 import '../../domain/use_cases/translate_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,81 +82,8 @@ class LanguageProvider extends ChangeNotifier {
   }
 
   Future afterChangeLanguage() async {
-    // navPARU(const SplashPage());
+    navPARU(const SplashView());
   }
-  // void showLangDialog(){
-  //   var language = Provider.of<LanguageProvider>(Constants.globalContext(),listen: false);
-  //   String oldLang = language.appLocal.languageCode;
-  //   showModalBottomSheet(
-  //     context: Constants.globalContext(),
-  //     backgroundColor: Colors.white,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         topLeft: Radius.circular(36),
-  //         topRight:  Radius.circular(36),
-  //       ),
-  //     ),
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: MediaQuery.of(context).viewInsets,
-  //         child: GestureDetector(
-  //           onTap: (){
-  //             FocusScope.of(context).unfocus();
-  //           },
-  //           child: Container(
-  //             width: 100.w,
-  //             constraints: BoxConstraints(
-  //               maxHeight: 30.h,
-  //               minHeight: 30.h,
-  //             ),
-  //             decoration: const BoxDecoration(
-  //               borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(36),
-  //                 topRight:  Radius.circular(36),
-  //               ),
-  //             ),
-  //             child: SingleChildScrollView(
-  //               child: Padding(
-  //                 padding: EdgeInsets.symmetric(horizontal: 5.w),
-  //                 child: StatefulBuilder(
-  //                   builder: (ctx,setState2){
-  //                     return Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       crossAxisAlignment: CrossAxisAlignment.center,
-  //                       children: <Widget>[
-  //                         SizedBox(height: 3.h,),
-  //                         RadioListTile<String>(value: 'ar', groupValue: oldLang, onChanged: (val){
-  //                           setState2((){
-  //                             oldLang = val!;
-  //                           });
-  //                         },title: Text('العربية 🇸🇦',style: TextStyle(fontSize: 12.sp,
-  //                             height: 1),),
-  //                           contentPadding: EdgeInsets.zero,),
-  //                         RadioListTile<String>(value: 'en', groupValue: oldLang, onChanged: (val){
-  //                           setState2((){
-  //                             oldLang = val!;
-  //                           });
-  //                         },title: Text('English 🇺🇸',style: TextStyle(fontSize: 12.sp),)
-  //                           ,contentPadding: EdgeInsets.zero,),
-  //                         SizedBox(height: 1.h,),
-  //                         ButtonWidget(onTap: (){
-  //                           language.setLanguage(Locale(oldLang),rebuild: true,);
-  //                           language.changeLanguage();
-  //                         }, text: "save"),
-  //                       ],
-  //                     );
-  //                   },
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //     isScrollControlled: true,
-  //   );
-  //
-  // }
 
   void showLanguageDialog() {
     customAlertDialog(

@@ -22,14 +22,13 @@ class ConfirmPopUpWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80.w,
-      height: 27.h,
+      width: 40.w,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.2.h),
-      child: Column(
+      child: Column(mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             title ?? LanguageProvider.translate('popup', 'هل تريد تسجيل الخروج'),
@@ -38,8 +37,7 @@ class ConfirmPopUpWidget extends StatelessWidget {
           SizedBox(height: 4.h),
           BorderButtonWidget(
             onTap: onConfirm ?? () {},
-            text: LanguageProvider.translate('global', 'نعم'),
-            width: 60.w,
+            text: LanguageProvider.translate('global', 'logout'),
             textStyle: TextStyleClass.normalStyle(),
           ),
           SizedBox(height: 3.h),
@@ -48,10 +46,11 @@ class ConfirmPopUpWidget extends StatelessWidget {
             onTap: () {
               navPop();
             },
-            width: 60.w,
-            text: LanguageProvider.translate('global', 'لا'),
+            text: LanguageProvider.translate('global', 'cancel'),
             textStyle: TextStyleClass.normalStyle().copyWith(color: Colors.white),
           ),
+          SizedBox(height: 4.h),
+
         ],
       ),
     );

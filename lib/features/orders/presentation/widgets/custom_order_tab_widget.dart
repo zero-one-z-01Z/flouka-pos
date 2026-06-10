@@ -5,8 +5,8 @@ import 'package:sizer/sizer.dart';
 import '../providers/orders_provider.dart';
 
 class CustomOrderTabWidget extends StatelessWidget {
-  const CustomOrderTabWidget({super.key, required this.tab});
-
+  const CustomOrderTabWidget({super.key, required this.tab, required this.isHome});
+  final bool isHome;
   final String tab;
 
   @override
@@ -15,12 +15,12 @@ class CustomOrderTabWidget extends StatelessWidget {
     final isSelected = ordersProvider.selectedTab == tab;
     return GestureDetector(
       onTap: () {
-        ordersProvider.changeSelectedTab(tab);
+        ordersProvider.changeSelectedTab(tab,isHome: isHome);
       },
       child: Text(
         tab,
         style: TextStyle(
-          fontSize: 10.sp,
+          fontSize: 13.sp,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           color: isSelected ? const Color(0xFF2196F3) : Colors.black54,
         ),

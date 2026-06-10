@@ -19,8 +19,8 @@ class RadioWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: Constants.isTablet ? 5.w : 5.w,
-        height: Constants.isTablet ? 5.w : 5.w,
+        width: Constants.isTablet ? 1.5.w : 5.w,
+        height: Constants.isTablet ? 1.5.w : 5.w,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
@@ -28,7 +28,7 @@ class RadioWidget extends StatelessWidget {
             width: 1.5,
           ),
         ),
-        padding: EdgeInsets.all(0.7.w),
+        padding: EdgeInsets.all(0.3.w),
         child: Container(
           decoration: BoxDecoration(
             color: selected

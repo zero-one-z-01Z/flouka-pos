@@ -4,7 +4,7 @@ import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/custom_star_rating_widget.dart';
 import '../../../../core/widgets/price_widget.dart';
-import '../../domain/entity/order_details_entity.dart';
+import '../../domain/entity/order_entity.dart';
 
 class OrderDetailsItemWidget extends StatelessWidget {
   const OrderDetailsItemWidget({super.key, required this.item});
@@ -29,7 +29,7 @@ class OrderDetailsItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  item.product?.title??"",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: TextStyleClass.smallStyle()
@@ -45,11 +45,11 @@ class OrderDetailsItemWidget extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          CustomStarRatingWidget(itemSize: 11.sp),
+                          CustomStarRatingWidget(itemSize: 11.sp, rate: item.product!.rate!),
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
-                              item.avgRating.toString(),
+                              item.product?.rate.toString()??"",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleClass.smallStyle(
                                 color: Colors.grey,

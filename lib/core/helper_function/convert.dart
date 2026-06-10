@@ -309,7 +309,7 @@ String getDiffTime(DateTime dateTime) {
   if (min == 0 && hours == 0 && days == 0 && years == 0 && month == 0) {
     sec = now.second + 10 - dateTime.second;
   }
-  return '${LanguageProvider.translate('global', 'ago')} ${getTimeNumber(years, month, days, hours, min, sec)} ${getTimeChar(years, month, days, hours, min, sec)}';
+  return ' ${getTimeNumber(years, month, days, hours, min, sec)} ${getTimeChar(years, month, days, hours, min, sec)} ${LanguageProvider.translate('global', 'ago')}';
 }
 
 double convertRgbToHue(int color) {

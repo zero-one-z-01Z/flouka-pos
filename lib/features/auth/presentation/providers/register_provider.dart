@@ -2,11 +2,22 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/dialog/date_dialog.dart';
+import 'package:flouka_pos/core/helper_function/convert.dart';
+import 'package:flouka_pos/core/helper_function/text_form_field_validation.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/otp_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/auth/domain/entities/user_entity.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/dialog/snack_bar.dart';
+import '../../../../core/helper_function/image.dart';
 import '../../../../core/helper_function/loading.dart';
 import '../../../../core/models/text_field_model.dart';
 import '../../../../core/helper_function/navigation.dart';
@@ -26,7 +37,11 @@ class RegisterProvider extends ChangeNotifier {
   // ── Step tracking ──────────────────────────────────────────────────────────
   int currentStep = 1; // 1, 2, 3
 
-  void nextStep() {
+  void nextStep() async{
+    if(currentStep == 1){
+      OtpProvider otpProvider = Provider.of(Constants.globalContext(),listen: false);
+      await otpProvider.sendOtp(isReg: true);
+    }
     if (currentStep < 3) {
       currentStep++;
       notifyListeners();
@@ -55,128 +70,61 @@ class RegisterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Page 2 persistent controllers ─────────────────────────────────────────
-  final TextEditingController nationalIdController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController companyNameController = TextEditingController();
-  final TextEditingController bankAccountController = TextEditingController();
-  final TextEditingController businessLicenseController = TextEditingController();
-
   // Page 2 field models — persistent controllers
-  List<TextFieldModel> get registerPage2TextFields => [
-    TextFieldModel(
-      key: 'national_id',
-      label: 'National ID Number',
-      controller: nationalIdController,
-      width: 25.w,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter ID number' : null,
-    ),
-    TextFieldModel(
-      key: 'city',
-      label: 'City',
-      controller: cityController,
-      width: 25.w,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter city' : null,
-    ),
-    TextFieldModel(
-      key: 'address',
-      label: 'Address',
-      width: 25.w,
-      controller: addressController,
-      validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter address' : null,
-    ),
-    TextFieldModel(
-      key: 'company_name',
-      label: 'Company Name',
-      width: 25.w,
-      controller: companyNameController,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Enter company name' : null,
-    ),
-    TextFieldModel(
-      key: 'bank_account',
-      label: 'Bank Account Number',
-      controller: bankAccountController,
-      width: 25.w,
-    ),
-    TextFieldModel(
-      key: 'business_license',
-      label: 'Business License',
-      width: 25.w,
-      controller: businessLicenseController,
-    ),
-  ];
-
-  // ── ID images ──────────────────────────────────────────────────────────────
-  File? idFront;
-  File? idBack;
-
-  void setIdFront(File? file) {
-    idFront = file;
-    notifyListeners();
-  }
-
-  void setIdBack(File? file) {
-    idBack = file;
-    notifyListeners();
-  }
+  List<TextFieldModel>  registerPage2TextFields = [];
+  TextEditingController controller =TextEditingController();
 
   // ── Build data map from persistent controllers ─────────────────────────────
   Future<Map<String, dynamic>> buildRegisterDataMap() async {
-    final Map<String, dynamic> data = {
-      'national_id_number': nationalIdController.text.trim(),
-      'city_id': 1,
-      'address': addressController.text.trim(),
-      'company_name': companyNameController.text.trim(),
-      'bank_account_number': bankAccountController.text.trim(),
-      // 'business_license': businessLicenseController.text.trim(),
-    };
-
+    final Map<String, dynamic> data = {};
     for (var element in registerTextFieldList) {
+      if(element.key != "password_confirmation"){
+        data[element.key] = element.controller.text;
+      }
+    }
+
+    for (var element in registerPage2TextFields) {
       data[element.key] = element.controller.text;
     }
 
-    if (selectedAccountType != null) {
-      data['type'] = "company";
+    if (logo != null) {
+      data['logo'] = await MultipartFile.fromFile(logo!.path);
+    }
+    if (cover != null) {
+      data['cover'] = await MultipartFile.fromFile(cover!.path);
+    }
+    if (frontIdCard != null) {
+      data['front_id_card'] = await MultipartFile.fromFile(frontIdCard!.path);
+    }
+    if (backIdCard != null) {
+      data['back_id_card'] = await MultipartFile.fromFile(backIdCard!.path);
+    }
+    if (businessLicense != null) {
+      data['business_license'] = await MultipartFile.fromFile(businessLicense!.path);
     }
 
-    if (idFront != null) {
-      data['front_id_card_image'] = await MultipartFile.fromFile(idFront!.path);
-    }
-    if (idBack != null) {
-      data['back_id_card_image'] = await MultipartFile.fromFile(idBack!.path);
-    }
+    OtpProvider otpProvider =Provider.of(Constants.globalContext(),listen: false);
+    data['otp_type'] = "register";
+    data['otp'] = otpProvider.otpController.text;
 
     return data;
   }
 
   // ── Register ───────────────────────────────────────────────────────────────
   Future<void> register() async {
-    // Validate page 2 form first — stop if invalid
-    if (!(registerForm2Key.currentState?.validate() ?? false)) return;
-
-    // Advance to step 3 (loading screen) immediately
-    nextStep();
 
     loading();
     try {
       final dataMap = await buildRegisterDataMap();
 
-      // 🔍 Debug: log everything sent to the register API
-      log('📤 Register payload: $dataMap', name: 'RegisterProvider');
-
-      final result = await userUseCase.register(dataMap);
+      final result = await userUseCase.checkCode(dataMap);
 
       navPop(); // dismiss loading
       result.fold(
         (l) {
           showToast(l.message ?? 'Registration failed');
-          previousStep(); // go back to step 2 on failure
-        },
-        (r) {
-          showToast('Registration successful!');
-          navPR(const LoginView());
+        }, (r) {
+          nextStep();
         },
       );
     } catch (e) {
@@ -189,47 +137,49 @@ class RegisterProvider extends ChangeNotifier {
   void goToRegisterView() {
     registerTextFieldList = [
       TextFieldModel(
-          key: 'first_name',
-          label: LanguageProvider.translate('inputs', 'first_name'),
+          key: 'name',
+          label: "name",
           controller: TextEditingController(),
           width: 25.w,
-          validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter first name' : null
+          validator: (value) => validateName(value),
       ),
       TextFieldModel(
-        key: 'last_name',
-        label: LanguageProvider.translate('inputs', 'last_name'),
+        key: 'bio',
+        label: "bio",
         controller: TextEditingController(),
         width: 25.w,
-        validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter last name' : null,
+        validator: (value) => validateBio(value),
       ),
       TextFieldModel(
         key: 'phone',
-        label: LanguageProvider.translate('inputs', 'phone_number'),
+        label: "phone_number",
         controller: TextEditingController(),
         textInputType: TextInputType.phone,
         width: 25.w,
-        validator: (v) =>
-        (v == null || v.trim().isEmpty) ? 'Enter phone number' : null,
+        validator: (value) => validatePhone(value),
       ),
       TextFieldModel(
         key: 'email',
-        label: LanguageProvider.translate('inputs', 'email'),
+        label: 'email',
         controller: TextEditingController(),
         textInputType: TextInputType.emailAddress,
         width: 25.w,
-        validator: (v) => (v == null || v.trim().isEmpty) ? 'Enter email' : null,
+        validator: (value) => validateEmail(value),
       ),
       TextFieldModel(
         key: 'password',
-        label: LanguageProvider.translate('inputs', 'password'),
+        label: 'password',
         controller: TextEditingController(),
         textInputType: TextInputType.visiblePassword,
+        obscureText: true,
         width: 25.w,
-        validator: (v) => (v == null || v.length < 8) ? 'Min 8 characters' : null,
+        validator: (value) => validatePassword(value),
       ),
       TextFieldModel(
         key: 'password_confirmation',
-        label: LanguageProvider.translate('inputs', 'confirm_password'),
+        label: 'confirm_password',
+        obscureText: true,
+
         controller: TextEditingController(),
         textInputType: TextInputType.visiblePassword,
         width: 25.w,
@@ -239,6 +189,61 @@ class RegisterProvider extends ChangeNotifier {
           }
           return null;
         },
+      ),
+    ];
+    registerPage2TextFields = [
+      TextFieldModel(
+        key: 'address',
+        label: 'Address',
+        width: 25.w,
+        controller: TextEditingController(),
+        validator: (value) =>validateAddress(value) ,
+      ),
+      TextFieldModel(
+          key: 'open_date',
+          label: 'open_date',
+          controller: TextEditingController(),
+          readOnly: true,
+          width: 25.w,
+          validator: (value) => validateOpenDate(value),
+          onTap: (){
+            selectDate().then((value){
+              if(value !=null){
+                registerPage2TextFields.firstWhere((element) => element.key=="open_date",)
+                    .controller.text = convertDateToStringYMD(value);
+              }
+            });
+          }
+      ),
+      TextFieldModel(
+        key: 'admin_name',
+        label: 'admin_name',
+        width: 25.w,
+        controller: TextEditingController(),
+        validator: (value) => validatePhone(value),
+      ),
+      TextFieldModel(
+        key: 'admin_phone',
+        label: 'admin_phone',
+        width: 25.w,
+        validator: (value) => validatePhone(value),
+
+        controller: TextEditingController(),
+      ),
+      TextFieldModel(
+        key: 'national_id',
+        label: 'national_id',
+        controller: TextEditingController(),
+        width: 25.w,
+        validator: (v) =>validateId(v),
+      ),
+      TextFieldModel(
+        key: 'bank_account',
+        label: 'Bank Account Number',
+        controller: TextEditingController(),
+        width: 25.w,
+        validator: (v) =>validateBankAccount(v),
+
       ),
     ];
     navPR(const RegisterView());
@@ -251,12 +256,158 @@ class RegisterProvider extends ChangeNotifier {
     for(var element in registerTextFieldList){
       element.controller.dispose();
     }
-    nationalIdController.dispose();
-    cityController.dispose();
-    addressController.dispose();
-    companyNameController.dispose();
-    bankAccountController.dispose();
-    businessLicenseController.dispose();
+    for(var element in registerPage2TextFields){
+      element.controller.dispose();
+    }
     super.dispose();
   }
+
+
+  XFile? logo;
+  XFile? cover;
+  XFile? frontIdCard;
+  XFile? backIdCard;
+  XFile? businessLicense;
+  bool logoUpdated = false;
+  bool coverUpdated = false;
+  bool frontIdCardUpdated = false;
+  bool backIdCardUpdated=false;
+  bool businessLicenseUpdate=false;
+
+
+  showLogoImage() {
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    if (authProvider.userEntity?.logo != null || logo != null) {
+      if (logo != null) {
+        return FileImage(File(logo!.path));
+      } else {
+        return CachedNetworkImageProvider(authProvider.userEntity!.logo!);
+      }
+    } else {
+      return const AssetImage(Images.floukaLogo);
+    }
+  }
+
+  showCoverImage() {
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    if (authProvider.userEntity?.cover != null || cover != null) {
+      if (cover != null) {
+        return FileImage(File(cover!.path));
+      } else if (authProvider.userEntity?.cover != null) {
+        return CachedNetworkImageProvider(authProvider.userEntity!.cover!);
+      }
+    } else {
+      return const AssetImage(Images.floukaLogo);
+    }
+  }
+  showBackIdCardImage() {
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    if (authProvider.userEntity?.backIdCard != null ||backIdCard != null) {
+      if (backIdCard != null) {
+        return FileImage(File(backIdCard!.path));
+      } else if (authProvider.userEntity?.backIdCard != null) {
+        return CachedNetworkImageProvider(authProvider.userEntity!.backIdCard!);
+      }
+    } else {
+      return const AssetImage(Images.floukaLogo);
+    }
+  }
+
+  showFrontIdCardImage() {
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    if (authProvider.userEntity?.frontIdCard != null ||frontIdCard != null) {
+      if (frontIdCard != null) {
+        return FileImage(File(frontIdCard!.path));
+      } else if (authProvider.userEntity?.frontIdCard != null) {
+        return CachedNetworkImageProvider(authProvider.userEntity!.frontIdCard!);
+      }
+    } else {
+      return const AssetImage(Images.floukaLogo);
+    }
+  }
+
+  showBusinessLicenseImage() {
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    if (authProvider.userEntity?.businessLicense != null ||businessLicense != null) {
+      if (businessLicense != null) {
+        return FileImage(File(businessLicense!.path));
+      } else if (authProvider.userEntity?.businessLicense != null) {
+        return CachedNetworkImageProvider(authProvider.userEntity!.businessLicense!);
+      }
+    } else {
+      return const AssetImage(Images.floukaLogo);
+    }
+  }
+
+  Future selectLogoImage() async {
+    FocusScope.of(Constants.globalContext()).unfocus();
+    XFile? image = await chooseImage();
+    if (image != null) {
+      updateLogo(image);
+    }
+  }
+
+  Future selectFrontIdCardImage() async {
+    FocusScope.of(Constants.globalContext()).unfocus();
+    XFile? image = await chooseImage();
+    if (image != null) {
+      updateFrontIdCard(image);
+    }
+  }
+
+  Future selectBackIdCardImage() async {
+    FocusScope.of(Constants.globalContext()).unfocus();
+    XFile? image = await chooseImage();
+    if (image != null) {
+      updateBackIdCard(image);
+    }
+  }
+
+
+  Future selectCoverImage() async {
+    FocusScope.of(Constants.globalContext()).unfocus();
+    XFile? image = await chooseImage();
+    if (image != null) {
+      updateCover(image);
+    }
+  }
+
+  Future selectBusinessLicenseImage() async {
+    FocusScope.of(Constants.globalContext()).unfocus();
+    XFile? image = await chooseImage();
+    if (image != null) {
+      updateBusinessLicense(image);
+    }
+  }
+  void updateLogo(XFile image) {
+    logoUpdated = true;
+    this.logo = image;
+    notifyListeners();
+  }
+
+  void updateFrontIdCard(XFile image) {
+    frontIdCardUpdated = true;
+    this.frontIdCard = image;
+    notifyListeners();
+  }
+
+  void updateBackIdCard(XFile image) {
+    backIdCardUpdated = true;
+    this.backIdCard = image;
+    notifyListeners();
+  }
+
+  void updateBusinessLicense(XFile image) {
+    businessLicenseUpdate = true;
+    this.businessLicense = image;
+    notifyListeners();
+  }
+
+  void updateCover(XFile image) {
+    coverUpdated = true;
+    this.cover = image;
+    notifyListeners();
+  }
+
+
 }

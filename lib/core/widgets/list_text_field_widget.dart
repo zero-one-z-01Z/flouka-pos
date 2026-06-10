@@ -47,7 +47,7 @@ Widget build(BuildContext context) {
     width: double.infinity,
     child: Wrap(
       spacing: spacing,
-      runSpacing: 2.h,
+      runSpacing: 0.5.h,
       // alignment: WrapAlignment.center,
       children: inputs.map((input) {
         return TextFieldWidget(
@@ -64,10 +64,11 @@ Widget build(BuildContext context) {
           hintText: input.hint,
           validator: input.validator,
           obscureText: input.obscureText,
+          onTextTap: input.onTap,
           suffix: input.suffix,
           prefix: input.prefix,
           readOnly: input.readOnly,
-          contentPadding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+          contentPadding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
         );
       }).toList(),
     ),
@@ -91,7 +92,7 @@ Widget build(BuildContext context) {
         children: [
           Text(
             input.editTextString!,
-            style: TextStyleClass.normalStyle(color: Colors.black),
+            style: TextStyleClass.normalStyle(color: Colors.black).copyWith(fontSize: 10.sp),
           ),
           SizedBox(width: 1.w),
         ],
@@ -115,7 +116,7 @@ Widget build(BuildContext context) {
                 TextStyleClass.normalStyle(
                   color: textColor ?? Colors.black,
                 ).copyWith(
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   fontWeight: FontWeight.bold,
                 ),
           ),

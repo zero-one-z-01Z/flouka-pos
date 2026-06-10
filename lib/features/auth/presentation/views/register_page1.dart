@@ -12,13 +12,14 @@ import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/register_provider.dart';
 import '../widgets/account_type_selector.dart';
 import '../widgets/have_account_section.dart';
+import '../widgets/image_picker_field.dart';
 
 class RegisterPage1 extends StatelessWidget {
   const RegisterPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final registerProvider = context.read<RegisterProvider>();
+    final registerProvider = context.watch<RegisterProvider>();
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 6.w),
@@ -27,7 +28,7 @@ class RegisterPage1 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.h),
               Column(
                 children: [
                   Align(
@@ -41,45 +42,93 @@ class RegisterPage1 extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 4.h),
+              SizedBox(height: 2.h),
               _buildTitleSection(),
-              SizedBox(height: 3.h),
+              SizedBox(height: 2.h),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                padding: EdgeInsets.symmetric(horizontal: 17.w),
                 child: Column(
                   children: [
                     ListTextFieldWidget(
                       color: Colors.white,
                       inputs: registerProvider.registerTextFieldList,
                     ),
+                    SizedBox(height: 1.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ImagePickerField(
+                                label: LanguageProvider.translate("inputs","logo"),
+                                selectedImage: registerProvider.showLogoImage(),
+                                onImageSelected: (file) {
+                                  registerProvider.selectLogoImage();
+                                },
+                              ),
+                              SizedBox(height: 0.5.h,),
+                              ValidationWidget(conditions: [
+                                {"value": registerProvider.logo == null,
+                                  "text": LanguageProvider.translate("validation", "logo")}
+                              ]),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ImagePickerField(
+                                selectedImage: registerProvider.showCoverImage(),
+                                label: LanguageProvider.translate("inputs","cover"),
+                                onImageSelected: (file) {
+                                    registerProvider.selectCoverImage();
+                                },
+                              ),
+                              SizedBox(height: 0.5.h,),
+                              ValidationWidget(conditions: [
+                                {"value": registerProvider.cover == null,
+                                  "text": LanguageProvider.translate("validation", "cover")}
+                              ]),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 4.h),
-                    const AccountTypeSelector(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ButtonWidget(
+                          width: 30.w,
+                          borderRadius: 12,
+                          onTap: () {
+                            if ((registerProvider.registerFormKey.currentState?.validate() ?? false)  &&
+                                registerProvider.logo != null && registerProvider.cover != null) {
+                              registerProvider.nextStep();
+                            }
+                          },
+                          widget: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0.5.w),
+                            child: Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(math.pi),
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                                size: 16.sp,
+                              ),
+                            ),
+                          ),
+                          text: LanguageProvider.translate('buttons', 'next_step'),
+                        ),
+                      ],
+                    ),
+
+
                   ],
                 ),
-              ),
-              SizedBox(height: 4.h),
-              ButtonWidget(
-                width: 30.w,
-                borderRadius: 12.sp,
-                onTap: () {
-                  if ((registerProvider.registerFormKey.currentState?.validate() ?? false)  &&
-                      registerProvider.selectedAccountType != null) {
-                    registerProvider.nextStep();
-                  }
-                },
-                widget: Padding(
-                  padding: EdgeInsets.all(1.w),
-                  child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(math.pi),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 16.sp,
-                    ),
-                  ),
-                ),
-                text: LanguageProvider.translate('buttons', 'next_step'),
               ),
               SizedBox(height: 2.h),
               const HaveAccountSection(isLogin: false),

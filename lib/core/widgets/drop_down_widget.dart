@@ -1,3 +1,5 @@
+import 'package:flouka_pos/core/dialog/snack_bar.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../config/app_styles.dart';
@@ -41,6 +43,10 @@ class DropDownWidgetState extends State<DropDownWidget> {
         InkWell(
           onTap: () {
             FocusScope.of(context).unfocus();
+            if(widget.dropDownClass.list().isEmpty){
+              showToast(LanguageProvider.translate('validation', 'select_high_level_first'));
+              return;
+            }
             if (widget.onTap == null) {
               if (widget.clear != null) {
                 widget.clear!();
@@ -53,7 +59,7 @@ class DropDownWidgetState extends State<DropDownWidget> {
           child: Container(
             width: widget.width ?? 100.w,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 5),
               color: widget.color ?? const Color(0xffF0F0F0),
               border: Border.all(
                 color: widget.borderColor ?? Colors.grey,
@@ -62,7 +68,7 @@ class DropDownWidgetState extends State<DropDownWidget> {
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: 3.w,
+                horizontal: 2.w,
                 vertical: widget.padding ?? 0.7.h,
               ),
               child: Row(
@@ -74,14 +80,16 @@ class DropDownWidgetState extends State<DropDownWidget> {
                     child: Text(
                       dropDownClass.displayedName(),
                       maxLines: 1,
-                      style: TextStyleClass.normalStyle(color: Colors.black),
+                      style: TextStyleClass.captionStyle(color: Colors.black).copyWith(
+                        fontSize: 12.sp,
+                      ),
                     ),
                   ),
                   const Spacer(),
                   Icon(
                     Icons.keyboard_arrow_down_sharp,
                     color: Colors.grey,
-                    size: Constants.isTablet ? 60 : 30,
+                    size: 2.w,
                   ),
                   const SizedBox(height: 10),
                 ],

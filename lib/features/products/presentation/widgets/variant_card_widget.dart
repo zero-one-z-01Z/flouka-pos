@@ -1,10 +1,10 @@
+import 'package:flouka_pos/features/products/domain/entity/variant_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
-import '../../domain/entities/product_variant.dart';
 
 class VariantCardWidget extends StatelessWidget {
-  final ProductVariant variant;
+  final VariantEntity variant;
 
   const VariantCardWidget({
     super.key,
@@ -34,11 +34,11 @@ class VariantCardWidget extends StatelessWidget {
               SizedBox(height: 0.5.h),
               Divider(color: Colors.grey.shade200),
               SizedBox(height: 0.5.h),
-              _buildCardRow("RAM", ": ${variant.ram}"),
+              _buildCardRow("RAM", ": ${variant.stock}"),
               SizedBox(height: 0.5.h),
-              _buildCardRow("Storage", ": ${variant.storage}"),
+              _buildCardRow("Storage", ": ${variant.stock}"),
               SizedBox(height: 0.5.h),
-              _buildCardRow("Color", ": ${variant.color}"),
+              _buildCardRow("Color", ": ${variant.stock}"),
             ],
           ),
           Positioned(

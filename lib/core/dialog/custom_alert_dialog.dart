@@ -29,7 +29,8 @@ void customAlertDialog({
     builder: (BuildContext context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        content: Padding(
+        content: Container(
+          width: 40.w,
           padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 1.h),
           child: Stack(
             alignment: AlignmentDirectional.topStart,
@@ -69,35 +70,11 @@ void customAlertDialog({
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 3.h),
-                  Row(
+                  Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (confirmFound == null)
-                        Expanded(
-                          child: InkWell(
-                            onTap: confirmTap,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 4.w,
-                                vertical: 0.6.h,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: backConfirm ?? AppColor.primaryColor,
-                              ),
-                              child: Text(
-                                LanguageProvider.translate('buttons', confirm),
-                                style: TextStyleClass.normalStyle().copyWith(
-                                  color: confirmTextColor ?? Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (confirmFound == null) SizedBox(width: 1.w),
-                      Expanded(
-                        child: InkWell(
-                          onTap: cancelTap,
+                        InkWell(
+                          onTap: confirmTap,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 4.w,
@@ -105,15 +82,35 @@ void customAlertDialog({
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: backCancel ?? const Color(0xff8E8E8E),
+                              color: backConfirm ?? AppColor.primaryColor,
                             ),
                             child: Text(
-                              LanguageProvider.translate('buttons', cancel),
+                              LanguageProvider.translate('buttons', confirm),
                               style: TextStyleClass.normalStyle().copyWith(
-                                color: cancelTextColor ?? Colors.white,
+                                color: confirmTextColor ?? Colors.white,
                               ),
                               textAlign: TextAlign.center,
                             ),
+                          ),
+                        ),
+                      if (confirmFound == null) SizedBox(width: 1.w),
+                      InkWell(
+                        onTap: cancelTap,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 4.w,
+                            vertical: 1.h,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: backCancel ?? const Color(0xff8E8E8E),
+                          ),
+                          child: Text(
+                            LanguageProvider.translate('buttons', cancel),
+                            style: TextStyleClass.normalStyle().copyWith(
+                              color: cancelTextColor ?? Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),

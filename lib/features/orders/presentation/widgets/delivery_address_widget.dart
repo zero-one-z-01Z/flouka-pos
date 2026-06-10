@@ -1,3 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flouka_pos/core/widgets/button_widget.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flouka_pos/features/chat/presentation/provider/message_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -12,8 +16,10 @@ class DeliveryAddressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
+    AuthProvider authProvider = Provider.of(context);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+      width: 30.w,
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -21,19 +27,51 @@ class DeliveryAddressWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if(orderDetailsProvider.orderEntity?.user?.image != null)
+          Row(
+            children: [
+              Container(
+                width: 4.w,
+                height: 4.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColor.primaryColor),
+                  image: DecorationImage(image: CachedNetworkImageProvider(orderDetailsProvider.orderEntity!.user!.image))
+                ),
+              ),
+              SizedBox(width: 1.w),
+              Expanded(
+                child: Text(orderDetailsProvider.orderEntity!.user!.name,
+                  style: TextStyleClass.smallStyle().copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(width: 1.w),
+              Expanded(child: ButtonWidget(onTap: (){
+                Provider.of<MessageProvider>(context,listen: false)
+                    .goToMessagePage(orderId: orderDetailsProvider.orderEntity!.id,
+                    userId: authProvider.userEntity!.id!);
+              }, text:"chat",width: 6.w,height: 5.h,borderRadius: 3,)),
+            ],
+          ),
           Text(
             LanguageProvider.translate("global", "Delivery Address"),
             style: TextStyleClass.smallStyle().copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 4.h),
           Text(
-            orderDetailsProvider.orderDetailsEntity!.address,
+            orderDetailsProvider.orderEntity!.address.address,
             style: TextStyleClass.smallStyle().copyWith(
               color: const Color(0xff535353),
               fontSize: 13.sp,
             ),
           ),
-          SizedBox(height: 4.h),
+          Text(
+            "${orderDetailsProvider.orderEntity!.address.city.name}, ${orderDetailsProvider.orderEntity!.address.area.name}",
+            style: TextStyleClass.smallStyle().copyWith(
+              color: const Color(0xff535353),
+              fontSize: 13.sp,
+            ),
+          ),
+          SizedBox(height: 0.5.h),
           Row(
             spacing: 1.w,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,7 +84,7 @@ class DeliveryAddressWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                orderDetailsProvider.orderDetailsEntity!.userPhone,
+                orderDetailsProvider.orderEntity!.user?.phone??"",
                 style: TextStyleClass.normalStyle().copyWith(
                   color: AppColor.primaryColor,
                   fontSize: 12.sp,

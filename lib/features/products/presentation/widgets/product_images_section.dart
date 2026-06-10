@@ -1,17 +1,26 @@
 import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/widgets/drop_down_widget.dart';
 import 'package:flouka_pos/core/widgets/upload_image_widget.dart';
 import 'package:flouka_pos/core/widgets/upload_multi_image_widget.dart';
+import 'package:flouka_pos/core/widgets/validation_widget.dart';
+import 'package:flouka_pos/features/categories/presentation/providers/categories_provider.dart';
+import 'package:flouka_pos/features/categories/presentation/providers/subcategory_provider.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flouka_pos/features/products/presentation/providers/add_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../categories/presentation/providers/brands_provider.dart';
+
 class ProductImagesSection extends StatelessWidget {
   const ProductImagesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    CategoryProvider categoryProvider = Provider.of(context);
+    SubcategoryProvider subcategoryProvider = Provider.of(context);
+    BrandsProvider brandsProvider = Provider.of(context);
     return SingleChildScrollView(
       padding: EdgeInsets.all(1.w),
       child: Column(
@@ -37,47 +46,28 @@ class ProductImagesSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      LanguageProvider.translate('product', 'upload_product_image'),
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                      LanguageProvider.translate('product', 'upload_product_images'),
+                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 2.h),
-
-                    // Main Product Image Label
-                    Text(
-                      LanguageProvider.translate('product', 'product_image'),
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    SizedBox(height: 1.h),
-
-                    // Single Image Upload Widget
-                    UploadImageWidget(
-                      image: provider.mainProductImage,
-                      onImageSelected: (image) {
-                        provider.updateMainImage(image);
-                      },
-                      onImageRemoved: () {
-                        provider.updateMainImage(null);
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-
                     // Multiple Images Upload Widget
                     UploadMultiImageWidget(
                       images: provider.productImages,
                       count: 5,
                       deleteImage: (index) {
-                        provider.deleteProductImage(index);
+                        provider.deleteImage(index);
                       },
                       imagesList: (images) {
-                        provider.addProductImages(images);
+                        provider.addToImages(images);
                       },
                       title: 'upload_product_images',
                       translationSection: 'product',
                     ),
+                    SizedBox(height: 1.h,),
+                    ValidationWidget(conditions: [
+                      {"value": provider.productImages.isEmpty,
+                        "text": LanguageProvider.translate("product", "select_product_images")}
+                    ]),
                     SizedBox(height: 2.h),
 
                     // Categories Section
@@ -86,24 +76,27 @@ class ProductImagesSection extends StatelessWidget {
                       style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 2.h),
-
-                    // Product Categories
-                    _buildTextField(
-                      label: LanguageProvider.translate(
-                        'product',
-                        'product_categories',
-                      ),
-                      controller: TextEditingController(
-                        text: LanguageProvider.translate('global', 'mobiles'),
-                      ),
+                    DropDownWidget(dropDownClass:categoryProvider ),
+                    SizedBox(height: 2.h),
+                    DropDownWidget(dropDownClass:subcategoryProvider ),
+                    SizedBox(height: 1.h,),
+                    ValidationWidget(conditions: [
+                      {"value": subcategoryProvider.selectedSubcategory == null||categoryProvider.selectedCategory == null,
+                        "text": LanguageProvider.translate("product", "select_category_subcategory")}
+                    ]),
+                    SizedBox(height: 1.h,),
+                    Text(
+                      LanguageProvider.translate('global', 'select_brand'),
+                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 2.h),
+                    DropDownWidget(dropDownClass:brandsProvider ),
+                    SizedBox(height: 1.h,),
+                    ValidationWidget(conditions: [
+                      {"value": brandsProvider.selectedBrand == null,
+                        "text": LanguageProvider.translate("product", "select_brand")}
+                    ]),
 
-                    // Brand
-                    _buildTextField(
-                      label: LanguageProvider.translate('filter', 'brand'),
-                      controller: TextEditingController(text: 'iPhone'),
-                    ),
                   ],
                 );
               },

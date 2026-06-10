@@ -21,7 +21,9 @@ abstract class Lotties {
       'assets/lottie/notification_loading.json';
   static const String passwordChangeSuccess =
       'assets/lottie/password_change_success.json';
+
   static const String productAnimation = 'assets/lottie/product_animation.json';
+  static const String success = 'assets/lottie/success.json';
   static const String quranLoading = 'assets/lottie/quran_loading.json';
   static const String rate = 'assets/lottie/rate.json';
   static const String rateLoading = 'assets/lottie/rate_loading.json';

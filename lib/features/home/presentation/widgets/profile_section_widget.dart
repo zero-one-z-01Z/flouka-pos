@@ -1,13 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/helper_function/prefs.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 class ProfileSectionWidget extends StatelessWidget {
   const ProfileSectionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of(context);
+    bool isActive = authProvider.userEntity?.active ?? false;
+    bool isStore = sharedPreferences.getBool('isStore') ?? false;
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.only(top: 4.h, left: 4.w, right: 4.w, bottom: 15.h),
@@ -28,69 +36,80 @@ class ProfileSectionWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Profile Image
-          CircleAvatar(
-            radius: 5.h,
-            backgroundColor: const Color(0xFFE0E0E0),
-            child: Icon(Icons.person, size: 5.h, color: Colors.white),
-          ),
-          SizedBox(height: 1.5.h),
-
-          // Name
-          Text(
-            'Moaz Mohamed',
-            style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
-          ),
-          SizedBox(height: 0.5.h),
-
-          // Username
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 1.w),
-            child: Text(
-              '${LanguageProvider.translate('global', 'username')}: mazo.fayd',
-              style: TextStyle(fontSize: 10.sp, color: Colors.black54),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
+          if(!isStore)
+          Container(
+            width: 6.w,height: 6.w,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade200,width: 2),
+              image: DecorationImage(image: CachedNetworkImageProvider(authProvider.userEntity?.logo ?? ''),fit: BoxFit.cover)
             ),
           ),
-          SizedBox(height: 4.h),
-
+          if(isStore)
+            SizedBox(height: 5.w,),
+          SizedBox(height: 1.h),
+          // Name
+          Text(
+            '${authProvider.userEntity?.name}',
+            style: TextStyleClass.smallStyle().copyWith(fontSize: 13.sp),
+          ),
+          Text(
+            '${authProvider.userEntity?.phone}',
+            style: TextStyleClass.smallStyle(color: Colors.grey).copyWith(fontSize: 13.sp),
+          ),
+          SizedBox(height: 1.h),
           // Store Status
           Text(
             LanguageProvider.translate('global', 'store_status'),
-            style: TextStyleClass.smallStyle().copyWith(fontSize: 10.sp),
+            style: TextStyleClass.smallStyle().copyWith(fontSize: 13.sp),
           ),
           SizedBox(height: 1.h),
 
           // Active Status Button
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
-            constraints: BoxConstraints(minWidth: 10.w, maxWidth: 15.w),
-            decoration: BoxDecoration(
-              color: const Color(0xfff1f1f1),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xff41CDFD)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: 1.w),
-                Flexible(
-                  child: Text(
-                    LanguageProvider.translate('buttons', 'Active'),
-                    style: TextStyleClass.smallStyle(
-                      color: const Color(0xff72ca8a),
-                    ).copyWith(fontSize: 10.sp),
-                    overflow: TextOverflow.ellipsis,
+          InkWell(
+            onTap: (){
+              authProvider.updateProfile(updateActive: true);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+              decoration: BoxDecoration(
+                color: const Color(0xfff1f1f1),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: isActive ? const Color(0xff72ca8a) : Colors.red,),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if(isActive)...[
+                    SizedBox(width: 1.w),
+                    CircleAvatar(
+                      radius: 1.5.h,
+                      backgroundColor: const Color(0xff72ca8a),
+                    ),
+                  ],
+
+                  SizedBox(width: 1.w),
+                  Flexible(
+                    child: Text(
+                      LanguageProvider.translate('global',isActive ?"active":"inactive" ),
+                      style: TextStyleClass.smallStyle(
+                        color:isActive ? const Color(0xff72ca8a) : Colors.red,
+                      ).copyWith(fontSize: 13.sp),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                SizedBox(width: 1.w),
-                CircleAvatar(
-                  radius: 1.5.h,
-                  backgroundColor: const Color(0xff72ca8a),
-                ),
-              ],
+                  SizedBox(width: 1.w),
+                  if(!isActive)...[
+                    CircleAvatar(
+                      radius: 1.5.h,
+                      backgroundColor:isActive ? const Color(0xff72ca8a) : Colors.red,
+                    ),
+                    SizedBox(width: 1.w),
+                  ],
+
+                ],
+              ),
             ),
           ),
         ],

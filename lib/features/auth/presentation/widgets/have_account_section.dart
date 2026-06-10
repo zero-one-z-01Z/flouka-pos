@@ -1,4 +1,5 @@
 import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class HaveAccountSection extends StatelessWidget {
             if (isLogin) {
               context.read<RegisterProvider>().goToRegisterView();
             } else {
-              context.read<AuthProvider>().goToLoginView();
+              navPU();
             }
           },
           child: Text(

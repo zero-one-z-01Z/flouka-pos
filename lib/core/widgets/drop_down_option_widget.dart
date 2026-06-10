@@ -36,14 +36,14 @@ class _DropDownOptionWidgetState extends State<DropDownOptionWidget> {
           setState(() {});
         },
         child: Container(
-          width: 90.w,
+          width: 40.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              vertical: Constants.isTablet ? 2.h : 0.1.h,
+              vertical: 2.h,
             ),
             child: ListTile(
               leading: Transform.scale(

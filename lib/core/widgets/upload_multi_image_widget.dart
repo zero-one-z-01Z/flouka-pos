@@ -28,7 +28,7 @@ class UploadMultiImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(2.w),
+      padding: EdgeInsets.all(1.w),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F9FA),
         borderRadius: BorderRadius.circular(12),
@@ -38,9 +38,17 @@ class UploadMultiImageWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Images Grid
-          if (images.isNotEmpty)
+          Text(
+            '${images.length}/$count',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          // if (images.isNotEmpty)
             SizedBox(
-              height: 12.h,
+              height: 10.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: images.length + 1, // +1 for the add button
@@ -55,7 +63,7 @@ class UploadMultiImageWidget extends StatelessWidget {
                         }
                       },
                       child: Container(
-                        width: 12.h,
+                        width: 7.w,
                         height: 12.h,
                         margin: EdgeInsets.only(left: 1.w),
                         decoration: BoxDecoration(
@@ -67,24 +75,10 @@ class UploadMultiImageWidget extends StatelessWidget {
                           ),
                           color: Colors.white,
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_circle_outline,
-                              size: 20.sp,
-                              color: AppColor.primaryColor,
-                            ),
-                            SizedBox(height: 0.5.h),
-                            Text(
-                              LanguageProvider.translate('global', 'add_image'),
-                              style: TextStyle(
-                                color: AppColor.primaryColor,
-                                fontSize: 8.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        child: Icon(
+                          Icons.add_photo_alternate_outlined,
+                          size: 20.sp,
+                          color: AppColor.primaryColor,
                         ),
                       ),
                     );
@@ -94,7 +88,7 @@ class UploadMultiImageWidget extends StatelessWidget {
                   return InkWell(
                     onTap: () => deleteImage(i),
                     child: Container(
-                      width: 12.h,
+                      width: 7.w,
                       height: 12.h,
                       margin: EdgeInsets.only(left: i == 0 ? 0 : 1.w),
                       decoration: BoxDecoration(
@@ -137,75 +131,35 @@ class UploadMultiImageWidget extends StatelessWidget {
                 },
               ),
             )
-          else
-            // Empty state - Add First Image
-            InkWell(
-              onTap: () async {
-                List<XFile>? pickedImages = await chooseImageMulti(context);
-                if (pickedImages != null) {
-                  imagesList(pickedImages);
-                }
-              },
-              child: Container(
-                height: 12.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColor.primaryColor,
-                    width: 2,
-                    style: BorderStyle.solid,
-                  ),
-                  color: Colors.white,
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add_photo_alternate_outlined,
-                        size: 25.sp,
-                        color: AppColor.primaryColor,
-                      ),
-                      SizedBox(height: 1.h),
-                      Text(
-                        LanguageProvider.translate(
-                          translationSection,
-                          title ?? 'upload_image',
-                        ).replaceAll('*count*', count.toString()),
-                        style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          SizedBox(height: 1.5.h),
-
-          // Image Counter
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (images.isNotEmpty)
-                Text(
-                  LanguageProvider.translate('global', 'delete_image'),
-                  style: TextStyle(color: Colors.grey[600], fontSize: 9.sp),
-                )
-              else
-                const SizedBox(),
-              Text(
-                '${images.length}/$count',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+          // else
+          //   // Empty state - Add First Image
+          //   InkWell(
+          //     onTap: () async {
+          //       List<XFile>? pickedImages = await chooseImageMulti(context);
+          //       if (pickedImages != null) {
+          //         imagesList(pickedImages);
+          //       }
+          //     },
+          //     child: Container(
+          //       height: 10.h,
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(12),
+          //         border: Border.all(
+          //           color: AppColor.primaryColor,
+          //           width: 2,
+          //           style: BorderStyle.solid,
+          //         ),
+          //         color: Colors.white,
+          //       ),
+          //       child: Center(
+          //         child: Icon(
+          //           Icons.add_photo_alternate_outlined,
+          //           size: 20.sp,
+          //           color: AppColor.primaryColor,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

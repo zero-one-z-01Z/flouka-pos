@@ -2,23 +2,28 @@ import 'dart:math' as math;
 
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
+import 'package:flouka_pos/features/auth/presentation/widgets/otp_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
+import '../../../../core/widgets/validation_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
+import '../providers/otp_provider.dart';
 import '../providers/register_provider.dart';
 import '../widgets/image_picker_field.dart';
 import '../widgets/register_step_indicator.dart';
+import 'otp_widget.dart';
 
 class RegisterPage2 extends StatelessWidget {
   const RegisterPage2({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<RegisterProvider>();
+    final provider = context.watch<RegisterProvider>();
+    final otpProvider = context.read<OtpProvider>();
 
     return SafeArea(
       child: Form(
@@ -28,9 +33,7 @@ class RegisterPage2 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 4.h),
-
-              SizedBox(height: 2.h),
+              SizedBox(height: 6.h),
               Column(
                 children: [
                   Align(
@@ -50,37 +53,88 @@ class RegisterPage2 extends StatelessWidget {
               SizedBox(height: 4.h),
 
               // ID Uploads (2 in a row)
-              Row(
-                children: [
-                  Expanded(
-                    child: ImagePickerField(
-                      label: "ID Card Front",
-                      onImageSelected: (file) {
-                        provider.setIdFront(file);
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 4.w),
-                  Expanded(
-                    child: ImagePickerField(
-                      label: "ID Card Back",
-                      onImageSelected: (file) {
-                        provider.setIdBack(file);
-                      },
-                    ),
-                  ),
-                ],
-              ),
 
-              SizedBox(height: 3.h),
 
               // Text Fields (2 in a row)
-              ListTextFieldWidget(
-                color: Colors.white,
-                inputs: provider.registerPage2TextFields,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                child: Column(
+                  children: [
+                    ListTextFieldWidget(
+                      color: Colors.white,
+                      inputs: provider.registerPage2TextFields,
+                    ),
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              ImagePickerField(
+                                label: "front_id_card",
+                                selectedImage: provider.showFrontIdCardImage(),
+                                onImageSelected: (file) {
+                                  provider.selectFrontIdCardImage();
+                                },
+                              ),
+                              SizedBox(height: 0.5.h,),
+                              ValidationWidget(conditions: [
+                                {"value": provider.frontIdCard == null,
+                                  "text": LanguageProvider.translate("validation", "front_id_card")}
+                              ]),
+
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              ImagePickerField(
+                                label: "back_id_card",
+                                selectedImage: provider.showBackIdCardImage(),
+                                onImageSelected: (file) {
+                                  provider.selectBackIdCardImage();
+                                },
+                              ),
+                              SizedBox(height: 0.5.h,),
+                              ValidationWidget(conditions: [
+                                {"value": provider.backIdCard == null,
+                                  "text": LanguageProvider.translate("validation", "back_id_card")}
+                              ]),
+
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              ImagePickerField(
+                                label: "business_license",
+                                selectedImage: provider.showBusinessLicenseImage(),
+                                onImageSelected: (file) {
+                                  provider.selectBusinessLicenseImage();
+                                },
+                              ),
+                              SizedBox(height: 0.5.h,),
+                              ValidationWidget(conditions: [
+                                {"value": provider.businessLicense == null,
+                                  "text": LanguageProvider.translate("validation", "business_license")}
+                              ]),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 3.w),
+                      ],
+                    ),
+                    SizedBox(height: 2.h),
+                    const OtpWidget(),
+                    SizedBox(height: 2.h),
+                  ],
+                ),
               ),
 
-              SizedBox(height: 4.h),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +155,13 @@ class RegisterPage2 extends StatelessWidget {
                     width: 30.w,
                     borderRadius: 12.sp,
                     onTap: () {
-                      provider.register();
+                      if(provider.registerForm2Key.currentState!.validate()&&
+                      otpProvider.otpController.text.length==4 &&
+                      provider.frontIdCard != null &&
+                      provider.backIdCard != null &&
+                      provider.businessLicense != null){
+                        provider.register();
+                      }
                     },
                     widget: Padding(
                       padding: EdgeInsets.all(1.w),

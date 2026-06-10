@@ -1,6 +1,8 @@
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../config/app_styles.dart';
 import '../constants/constants.dart';
 import '../helper_function/navigation.dart';
 import '../models/drop_down_class.dart';
@@ -9,81 +11,72 @@ import '../widgets/drop_down_option_widget.dart';
 
 Future showDropDownDialog(DropDownClass dropDownClass) async {
   dynamic selected = dropDownClass.selected();
-  await showModalBottomSheet(
-    context: Constants.globalContext(),
-    backgroundColor: Colors.white.withValues(alpha: 0.8),
-    isDismissible: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(25),
-        topRight: Radius.circular(25),
+
+  showDialog(context: Constants.globalContext(), builder:(context) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
       ),
-    ),
-    builder: (context) {
-      return InkWell(
+      content: InkWell(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          FocusScope.of(Constants.globalContext()).unfocus();
         },
         child: Container(
-          width: 100.w,
-          constraints: BoxConstraints(maxHeight: 45.h, minHeight: 45.h),
+          width: 40.w,height: 60.h,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.8),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
-            ),
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: EdgeInsets.symmetric(vertical: 2.h),
           child: StatefulBuilder(
             builder: (context, setState) {
-              return Stack(
+              return Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 7.h),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 3.h),
-                          ...List.generate(dropDownClass.list().length, (index) {
-                            dynamic data = dropDownClass.list()[index];
-                            return DropDownOptionWidget(
-                              dropDownClass: dropDownClass,
-                              data: data,
-                              selected: selected,
-                              rebuild: () {
-                                if (selected == data) {
-                                  // selected = null;
-                                } else {
-                                  selected = data;
-                                }
-                                // selected = data;
-                                setState(() {});
-                              },
-                            );
-                          }),
-                          SizedBox(height: 4.h),
-                        ],
-                      ),
-                    ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                    child: Text(dropDownClass.labelTitle(),style: TextStyleClass.normalStyle()),
                   ),
-                  Positioned(
-                    bottom: 2.h,
-                    left: 5.w,
-                    right: 5.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ButtonWidget(
-                          onTap: () async {
-                            navPop();
-                            await dropDownClass.onTap(selected);
-                          },
-                          text: 'save',
+                  SizedBox(height: 3.h),
+
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 2.h),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            ...List.generate(dropDownClass.list().length, (index) {
+                              dynamic data = dropDownClass.list()[index];
+                              return Padding(
+                                padding:  EdgeInsets.symmetric(vertical: 1.h),
+                                child: DropDownOptionWidget(
+                                  dropDownClass: dropDownClass,
+                                  data: data,
+                                  selected: selected,
+                                  rebuild: () async {
+                                    if (selected == data) {
+                                      // selected = null;
+                                    } else {
+                                      selected = data;
+                                    }
+                                    // selected = data;
+                                    setState(() {});
+                                    navPop();
+                                    await dropDownClass.onTap(selected);
+                                  },
+                                ),
+                              );
+                            }),
+                            SizedBox(height: 4.h),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -91,8 +84,8 @@ Future showDropDownDialog(DropDownClass dropDownClass) async {
             },
           ),
         ),
-      );
-    },
-    isScrollControlled: true,
-  );
+      ),
+    );
+  },);
+
 }

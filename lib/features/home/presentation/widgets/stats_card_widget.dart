@@ -24,7 +24,7 @@ class StatsCardWidget extends StatelessWidget {
           // Header with icon and title
           Row(
             children: [
-              const SvgWidget(svg: Images.products),
+              Image.asset(entity.icon, width: 3.w, height: 3.w),
               SizedBox(width: .5.w),
               Expanded(
                 child: Text(

@@ -1,16 +1,15 @@
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/home/presentation/widgets/stats_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../providers/overview_provider.dart';
 
 class StatusRowWidget extends StatelessWidget {
   const StatusRowWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final OverviewProvider overviewProvider = Provider.of(context);
+    final AuthProvider authProvider = Provider.of(context);
     return Container(
       padding: EdgeInsets.all(2.h),
       decoration: BoxDecoration(
@@ -29,9 +28,9 @@ class StatusRowWidget extends StatelessWidget {
       child: Row(
         spacing: 2.w,
         children: List.generate(
-          overviewProvider.statsCards.length,
+          authProvider.statsCards.length,
           (index) => Expanded(
-            child: StatsCardWidget(entity: overviewProvider.statsCards[index]),
+            child: StatsCardWidget(entity: authProvider.statsCards[index]),
           ),
         ),
       ),

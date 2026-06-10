@@ -23,7 +23,7 @@ class EmptyAnimation extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (aboveText != null && aboveText!)
+        if (aboveText != null && aboveText!)...[
           Text(
             LanguageProvider.translate("global", title),
             style: TextStyleClass.normalStyle().copyWith(
@@ -31,8 +31,10 @@ class EmptyAnimation extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-        SizedBox(height: 1.h),
-        Lottie.asset(gif, fit: BoxFit.cover, width: width, height: height),
+          SizedBox(height: 1.h),
+
+        ],
+        Lottie.asset(gif, fit: BoxFit.cover, width: width??25.w, height: height),
         SizedBox(height: 1.h),
         if (aboveText == null)
           Text(

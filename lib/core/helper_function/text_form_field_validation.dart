@@ -29,6 +29,100 @@ String? validateName(String? value) {
   return null;
 }
 
+String? validateCouponName(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "coupon_name");
+  }
+  return null;
+}
+
+String? validateOfferName(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "offer_name");
+  }
+  return null;
+}
+
+
+String? validateCouponCode(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "coupon_code");
+  }
+  return null;
+}
+
+String? validateMin(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "min");
+  }
+  return null;
+}
+
+String? validateMax(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "max");
+  }
+  return null;
+}
+
+String? validateCount(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "count");
+  }
+  return null;
+}
+
+String? validateTitle(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "title_required");
+  }
+  return null;
+}
+
+String? validateDescription(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "description_required");
+  }
+  return null;
+}
+
+String? validatePrice(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "price_required");
+  }
+  return null;
+}
+
+String? validateCostPrice(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "price_cost_required");
+  }
+  return null;
+}
+
+String? validateOfferPrice(String? value) {
+  if (value!.isNotEmpty && num.tryParse(value) == null) {
+    return LanguageProvider.translate("validation", "value_invalid");
+  }
+  return null;
+}
+
+
+String? validateSku(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "sku_required");
+  }
+  return null;
+}
+
+String? validateBio(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "bio");
+  }
+  return null;
+}
+
+
 String? validateEmail(String? value) {
   if (!emailValid.hasMatch(value!)) {
     if (value.isEmpty) {
@@ -58,9 +152,43 @@ String validateCity() {
   return LanguageProvider.translate("validation", "government");
 }
 
-String validateAddress() {
-  return LanguageProvider.translate("validation", "address");
+String? validateAddress(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "address");
+  }
+  return null;
+
 }
+String? validateOpenDate(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "open_date");
+  }
+  return null;
+}
+
+String? validateAdminName(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "admin_name");
+  }
+  return null;
+}
+
+String? validateId(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "national_id");
+  }
+  return null;
+}
+
+
+String? validateBankAccount(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "bank_account");
+  }
+  return null;
+}
+
+
 
 String validateArea() {
   return LanguageProvider.translate("validation", "area");
@@ -118,6 +246,14 @@ String? validateConfirmPassword(String? value, String? confirmPassword) {
   }
   if (value != confirmPassword) {
     return LanguageProvider.translate("validation", "confirm_password");
+  }
+  return null;
+}
+
+
+String? validateUserName(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "store_user_name");
   }
   return null;
 }

@@ -21,7 +21,7 @@ class EmptyWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Center(
-          child: Lottie.asset(image, fit: BoxFit.cover, width: width),
+          child: Lottie.asset(image, fit: BoxFit.cover, width: width??25.w),
         ),
         Text(
           LanguageProvider.translate("empty", title),

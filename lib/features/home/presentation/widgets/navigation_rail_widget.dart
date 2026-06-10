@@ -17,7 +17,7 @@ class NavigationRailWidget extends StatelessWidget {
       width: homeProvider.isDrawerOpen ? 17.w : 0,
       child: ClipRect(
         child: OverflowBox(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.topStart,
           maxWidth: 17.w,
           child: Container(
             width: 17.w,
@@ -28,19 +28,21 @@ class NavigationRailWidget extends StatelessWidget {
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 300),
               opacity: homeProvider.isDrawerOpen ? 1.0 : 0.0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 5.h),
-                  LogoWidget(width: 10.w),
-                  SizedBox(height: 5.h),
-                  ...List.generate(
-                    homeProvider.navigationList.length,
-                    (index) => NavigationItemWidget(
-                      navigationEntity: homeProvider.navigationList[index],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 5.h),
+                    LogoWidget(width: 10.w),
+                    SizedBox(height: 5.h),
+                    ...List.generate(
+                      homeProvider.navigationList.length,
+                      (index) => NavigationItemWidget(
+                        navigationEntity: homeProvider.navigationList[index],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

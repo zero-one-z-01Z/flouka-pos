@@ -12,7 +12,7 @@ class LoadingWidget extends StatelessWidget {
       child: Center(
         child: Transform.scale(
           scale: 2,
-          child: CupertinoActivityIndicator(color: Colors.black, radius: 2.5.w),
+          child: CupertinoActivityIndicator(color: Colors.black, radius: 2.w),
         ),
       ),
     );

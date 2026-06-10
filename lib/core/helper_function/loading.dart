@@ -22,14 +22,14 @@ void loading() {
             color: Colors.transparent,
             child: Center(
               child: Container(
-                width: 30.w,
-                height: 30.w,
+                width: 10.w,
+                height: 10.w,
                 padding: EdgeInsets.all(2.w),
                 child: Center(
                   child: Lottie.asset(
                     Lotties.loading,
-                    width: 30.w,
-                    height: 30.w,
+                    width: 10.w,
+                    height: 10.w,
                     fit: BoxFit.fill,
                   ),
                 ),

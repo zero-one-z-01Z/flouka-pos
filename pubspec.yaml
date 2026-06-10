@@ -10,6 +10,7 @@ dependencies:
   awesome_snackbar_content: ^0.1.6
   cached_network_image: ^3.4.1
   camera: ^0.10.5+5
+  toastification: ^3.0.3
   carousel_slider_plus: ^7.1.1
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
@@ -62,6 +63,7 @@ dependencies:
   voice_message_package: ^2.2.1
   web_socket_channel: ^3.0.3
   webview_flutter: ^4.13.0
+  video_thumbnail: ^0.5.3
 
 dependency_overrides:
   record_platform_interface: 1.2.0
@@ -89,4 +91,4 @@ flutter:
   fonts:
     - family: Lato
       fonts:
-        - asset: assets/fonts/Lato-Regular.ttf
+        - asset: assets/fonts/Cairo-Regular.ttf

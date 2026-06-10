@@ -21,14 +21,7 @@ class InfoCardWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: EdgeInsets.all(1.h),
-            decoration: BoxDecoration(
-              color: infoCardEntity.svgBackgroundColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const SvgWidget(svg: Images.products),
-          ),
+          Image.asset(infoCardEntity.svgImage, width: 3.w, height: 3.w),
           SizedBox(width: 1.5.w),
           Expanded(
             child: Column(
@@ -49,7 +42,7 @@ class InfoCardWidget extends StatelessWidget {
                     infoCardEntity.subtitle,
                     style: TextStyleClass.smallStyle(
                       color: const Color(0xff71747d),
-                    ).copyWith(fontSize: 10.sp),
+                    ).copyWith(fontSize: 11.sp),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

@@ -88,8 +88,7 @@ class TextFieldWidget extends StatelessWidget {
                 obscureText: obscureText,
                 onChanged: onChange,
                 controller: controller,
-                onTap:
-                    onTextTap ??
+                onTap: onTextTap ??
                     () {
                       final c = controller;
                       if (c.selection ==

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/add_product_provider.dart';
+import '../providers/add_variant_provider.dart';
 
 class AddProductActionButtons extends StatelessWidget {
-  final AddProductProvider provider;
-
-  const AddProductActionButtons({
-    super.key,
-    required this.provider,
-  });
+  const AddProductActionButtons({super.key,});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AddProductProvider>(context, listen: false);
+    final variantProvider = Provider.of<AddVariantProvider>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        if(provider.product != null)
         OutlinedButton(
-          onPressed: () => provider.addAttributes(),
+          onPressed: () {variantProvider.goToAddVariantView(id: "${provider.product?.category?.id}");},
           style: OutlinedButton.styleFrom(
             padding:
                 EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
@@ -49,7 +49,7 @@ class AddProductActionButtons extends StatelessWidget {
           ),
           child: Text(
             LanguageProvider.translate(
-                'product', 'publish_product'),
+                'product', provider.product != null ? 'update_product' : 'add_product'),
             style: TextStyle(
               color: Colors.white,
               fontSize: 11.sp,

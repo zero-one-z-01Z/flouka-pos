@@ -1,5 +1,9 @@
+import 'package:flouka_pos/core/config/app_styles.dart';
+import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/config/app_color.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/add_product_provider.dart';
@@ -7,17 +11,14 @@ import 'add_product_tax_section.dart';
 import 'add_product_stock_section.dart';
 import 'add_product_action_buttons.dart';
 import 'add_product_text_field.dart';
+import 'tags_widget.dart';
 
 class AddProductBasicDetailsSection extends StatelessWidget {
-  final AddProductProvider provider;
-
-  const AddProductBasicDetailsSection({
-    super.key,
-    required this.provider,
-  });
+  const AddProductBasicDetailsSection({super.key,});
 
   @override
   Widget build(BuildContext context) {
+    final AddProductProvider provider = Provider.of(context);
     return Container(
       padding: EdgeInsets.all(3.w),
       decoration: BoxDecoration(
@@ -48,31 +49,14 @@ class AddProductBasicDetailsSection extends StatelessWidget {
           ),
 
           SizedBox(height: 2.h),
-
-          Row(
-            children: [
-              Expanded(
-                child: AddProductTextField(
-                  label: LanguageProvider.translate(
-                      'product', 'discounted_price'),
-                  controller: provider.discountController,
-                  keyboardType: TextInputType.number,
-                  prefix:
-                      '${LanguageProvider.translate('global', 'currency_symbol')} ',
-                ),
-              ),
-              SizedBox(width: 3.w),
-              const Expanded(child: AddProductTaxSection()),
-            ],
-          ),
-
+          if(provider.tags.isNotEmpty)
+          const TagsWidget(),
+          ButtonWidget(color: AppColor.primaryColor.withOpacity(0.7),onTap: (){
+            provider.showAddWidget();
+          }, text: "add_tags"),
           SizedBox(height: 2.h),
-
-          const AddProductStockSection(),
-
-          SizedBox(height: 3.h),
-
-          AddProductActionButtons(provider: provider),
+          const AddProductActionButtons(),
+          SizedBox(height: 2.h),
         ],
       ),
     );

@@ -8,6 +8,7 @@ import 'package:voice_message_package/voice_message_package.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/dialog/snack_bar.dart';
+import '../../../../core/helper_function/helper_function.dart';
 import '../../../../core/helper_function/image.dart';
 import '../../../../core/helper_function/navigation.dart';
 import '../../../../core/widgets/img_preview_widget.dart';
@@ -112,6 +113,10 @@ class TicketMessageProvider extends ChangeNotifier{
   bool isShowTicket = false;
   void setIsShowTicket(bool value) {
     isShowTicket = value;
+    if(!value){
+      clear();
+      closeConnection();
+    }
     notifyListeners();
   }
   void goToMessagePage({required TicketEntity selectedChatEntity}) {
@@ -146,7 +151,7 @@ class TicketMessageProvider extends ChangeNotifier{
       }else{
         ticketEntity = r;
       }
-      // startSocketConnection();
+      startSocketConnection();
       notifyListeners();
 
     }
@@ -162,15 +167,14 @@ class TicketMessageProvider extends ChangeNotifier{
     isSocketConnected = true;
     socket.stream.listen((event) {
       try {
-
         final data = jsonDecode(event);
         if (data["event"] == "new_message") {
           final messageData = jsonDecode(data["data"]);
-          if(messageData['sender'] =="admin"){
+          if(messageData['sender'] == "admin"){
             ticketEntity?.messages?.insert(0, TicketMessageModel(id: 0, ticketId: 0, message: messageData["message"],
               type: messageData['type'], sender: 'admin', isFile: false, createdAt: DateTime.now(), duration: null,
               voiceController: null, updatedAt: DateTime.now(),));
-          notifyListeners();}
+            notifyListeners();}
         }
         if (data["event"] == "pusher:connection_established") {
           final subscribeData = {
@@ -184,11 +188,24 @@ class TicketMessageProvider extends ChangeNotifier{
           socket.sink.add(jsonEncode(pongResponse));
         }
       } catch (e) {}
-    }, onError: (error) {
+    }, onError: (error) async{
       isSocketConnected = false;
-    }, onDone: () {
+      closeConnection();
+      debugPrint('socket error ');
+      debugPrint(error.toString());
+      if(isShowTicket){
+        await delay(1000);
+        startSocketConnection();
+      }
+    }, onDone: () async{
       isSocketConnected = false;
-    });
+      closeConnection();
+      debugPrint('socket error ');
+      if(isShowTicket){
+        await delay(1000);
+        startSocketConnection();
+      }
+    },cancelOnError: true,);
   }
 
   bool checkMessageOfThisChat(int id) {

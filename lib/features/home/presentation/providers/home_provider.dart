@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_images.dart';
 import '../../../categories/presentation/providers/categories_provider.dart';
+import '../../../chat/presentation/provider/message_provider.dart';
 import '../../../coupons/presentation/providers/coupons_operations_provider.dart';
 import '../../../coupons/presentation/providers/coupons_provider.dart';
 import '../../../offers/presentation/providers/offers_operations_provider.dart';
@@ -24,6 +25,7 @@ import '../../../sections/presentation/providers/sections_provider.dart';
 import '../../../settings/presentation/provider/settings_provider.dart';
 import '../../../story/presentation/providers/stories_operations_provider.dart';
 import '../../../story/presentation/providers/stories_provider.dart';
+import '../../../tickets/presentation/provider/ticket_message_provider.dart';
 import '../../../tickets/presentation/provider/tickets_provider.dart';
 import '../../../vendor_stores/presentation/providers/store_operations_provider.dart';
 import '../../../vendor_stores/presentation/providers/vendor_stores_provider.dart';
@@ -131,9 +133,16 @@ class HomeProvider extends ChangeNotifier {
   List<NavigationEntity> navigationList = [];
   late NavigationEntity selectedNavigation = navigationList.first;
   void setSelectedNavigation(NavigationEntity navigation) {
-    selectedNavigation = navigation;
-    navigation.onTap();
-    notifyListeners();
+    if(navigation.title!=selectedNavigation.title){
+      MessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
+      messageProvider.setIsShowChat(false);
+      TicketMessageProvider ticketMessageProvider = Provider.of(Constants.globalContext(),listen:false);
+      ticketMessageProvider.setIsShowTicket(false);
+      selectedNavigation = navigation;
+      navigation.onTap();
+      notifyListeners();
+    }
+
   }
   void setAddProductNavigation(NavigationEntity navigation) {
     selectedNavigation = navigation;

@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voice_message_package/voice_message_package.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/dialog/snack_bar.dart';
+import '../../../../core/helper_function/helper_function.dart';
 import '../../../../core/helper_function/image.dart';
 import '../../../../core/helper_function/loading.dart';
 import '../../../../core/helper_function/navigation.dart';
@@ -61,7 +65,6 @@ class MessageProvider extends ChangeNotifier {
 
   void clear() {
     stopAllControllers('');
-    setIsShowChat(false);
     chatEntity = null;
     controller.clear();
   }
@@ -82,38 +85,38 @@ class MessageProvider extends ChangeNotifier {
     data['type'] = type;
 
     controller.clear();
-    chatEntity?.messages.insert(
-        0,
-        MessageModel(
-          sender: 'store',
-          message: file?.path ?? data['message'],
-          date: DateTime.now(),
-          id: 0,
-          chatId: chatEntity!.id,
-          type: type,
-          isFile: true,
-          duration: sec?.toDouble() ?? 0,
-          voiceController: type != "audio"
-              ? null
-              : VoiceController(
-            audioSrc: file!.path,
-            onComplete: () {
-              /// do something on complete
-            },
-            onPause: () {
-              /// do something on pause
-            },
-            onPlaying: () {
-              stopAllControllers(file!.path);
-            },
-            onError: (err) {
-              /// do something on error
-            },
-            isFile: true,
-            maxDuration: Duration(seconds: (sec ?? 0).toInt()),
-          ),
-          fromAdmin: false,
-        ));
+    // chatEntity?.messages.insert(
+    //     0,
+    //     MessageModel(
+    //       sender: 'store',
+    //       message: file?.path ?? data['message'],
+    //       date: DateTime.now(),
+    //       id: 0,
+    //       chatId: chatEntity!.id,
+    //       type: type,
+    //       isFile: true,
+    //       duration: sec?.toDouble() ?? 0,
+    //       voiceController: type != "audio"
+    //           ? null
+    //           : VoiceController(
+    //         audioSrc: file!.path,
+    //         onComplete: () {
+    //           /// do something on complete
+    //         },
+    //         onPause: () {
+    //           /// do something on pause
+    //         },
+    //         onPlaying: () {
+    //           stopAllControllers(file!.path);
+    //         },
+    //         onError: (err) {
+    //           /// do something on error
+    //         },
+    //         isFile: true,
+    //         maxDuration: Duration(seconds: (sec ?? 0).toInt()),
+    //       ),
+    //       fromAdmin: false,
+    //     ));
     notifyListeners();
     response = await ChatUseCases(sl()).createMessage(data);
     response.fold((l) {
@@ -146,6 +149,7 @@ class MessageProvider extends ChangeNotifier {
       showToast(l.message!);
     }, (r) {
       chatEntity = r;
+      startSocketConnection();
       notifyListeners();
     });
   }
@@ -158,6 +162,10 @@ class MessageProvider extends ChangeNotifier {
   bool isShowChat=false;
   void setIsShowChat(bool value) {
     isShowChat = value;
+    if(!value){
+      clear();
+      closeConnection();
+    }
     notifyListeners();
   }
 
@@ -172,5 +180,69 @@ class MessageProvider extends ChangeNotifier {
 
   void rebuild() {
     notifyListeners();
+  }
+  late WebSocketChannel socket;
+  bool isSocketConnected = false;
+
+
+  void startSocketConnection() {
+    if (isSocketConnected) return;
+
+    socket = WebSocketChannel.connect(
+      Uri.parse(Constants.webSocketLink,),
+    );
+    isSocketConnected = true;
+    socket.stream.listen((event) {
+      // log('سسسسسسسسسسسس${event}');
+      try {
+
+        final data = jsonDecode(event);
+        if (data["event"] == "new_message") {
+          final messageData = jsonDecode(data["data"])["message"];
+          chatEntity?.messages.insert(0, MessageModel.fromJson(messageData));
+          notifyListeners();
+        }
+        if (data["event"] == "pusher:connection_established") {
+          // socketTimer = Timer.periodic(const Duration(seconds: 25), (_) {
+          //   socket.sink.add(jsonEncode({"event": "pusher:ping"}));
+          // });
+          final subscribeData = {
+            "event": "pusher:subscribe",
+            "data": {"channel": "chat_${chatEntity?.id}"}
+          };
+          socket.sink.add(jsonEncode(subscribeData));
+        }
+        if (data["event"] == "pusher:ping") {
+          final pongResponse = {"event": "pusher:pong"};
+          socket.sink.add(jsonEncode(pongResponse));
+        }
+      } catch (e) {}
+    }, onError: (error)async {
+      isSocketConnected = false;
+      closeConnection();
+      debugPrint('socket error ');
+      debugPrint(error.toString());
+      if(isShowChat){
+        await delay(1000);
+        startSocketConnection();
+      }
+    }, onDone: () async{
+      isSocketConnected = false;
+      closeConnection();
+      debugPrint('socket error ');
+      if(isShowChat){
+        await delay(1000);
+        startSocketConnection();
+      }
+    },cancelOnError: true);
+  }
+
+
+  void closeConnection() {
+    // socketTimer?.cancel();
+    if (isSocketConnected) {
+      socket.sink.close(1000);
+      isSocketConnected = false;
+    }
   }
 }

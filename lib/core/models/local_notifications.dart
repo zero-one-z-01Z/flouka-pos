@@ -1,12 +1,22 @@
 import 'dart:convert';
+
+import 'package:flouka_pos/core/helper_function/navigation.dart';
+import 'package:flouka_pos/features/home/presentation/providers/home_provider.dart';
+import 'package:flouka_pos/features/orders/presentation/providers/order_details_provider.dart';
+import 'package:flouka_pos/features/orders/presentation/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
+import '../../features/chat/presentation/provider/message_provider.dart';
+import '../../features/tickets/presentation/provider/ticket_message_provider.dart';
+import '../../features/tickets/presentation/provider/tickets_provider.dart';
+import '../constants/constants.dart';
 import '../helper_function/convert.dart';
 import '../helper_function/helper_function.dart';
 
 class NotificationLocalClass {
   static final FlutterLocalNotificationsPlugin notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
   static Future notificationDet() async {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
@@ -44,18 +54,16 @@ class NotificationLocalClass {
   }
 
   static Future init({bool initScheduled = false}) async {
-    const settings = InitializationSettings(
-      android: AndroidInitializationSettings('logo'),
+    final settings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(
-        requestSoundPermission: true,
-        requestBadgePermission: true,
-        requestAlertPermission: true,
-        defaultPresentBadge: true,
-        // onDidReceiveLocalNotification: (id,title,body,pay)async{
-
-        //   clickNoti(pay!);
-
-        // }
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+          defaultPresentBadge: true,
+          onDidReceiveLocalNotification: (id,title,body,pay)async{
+            clickNoti(pay!);
+          }
       ),
     );
     await notificationsPlugin.initialize(
@@ -70,43 +78,66 @@ class NotificationLocalClass {
 
 void clickNoti(String pay) async {
   Map payload = jsonDecode(pay);
-  // if(AuthProvider.isLogin()){
+
   if (payload.containsKey('message_type_')) {
     if (payload['message_type_'] == "chat") {
       Map message = jsonDecode(payload['data_']);
-      message['chat'];
-      // MessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
-      // bool check = messageProvider.checkMessageOfThisChat(convertStringToInt(message['chat']['id']));
-      // if(!check){
-      //   int sellerId = convertStringToInt(chat['seller_id']);
-      //   int buyerId = convertStringToInt(chat['buyer_id']);
-      //   int addId = convertStringToInt(chat['add_id']);
-      //
-      //   if(messageProvider.chatEntity==null){
-      //     messageProvider.goToMessagePage(sellerId: sellerId,buyerId: buyerId, adId: addId,);
-      //   }else{
-      //     messageProvider.getMessages(sellerId: sellerId,buyerId: buyerId, adId: addId,);
-      //   }
+      MessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
+      if(messageProvider.chatEntity==null){
+        messageProvider.goToMessagePage(orderId: message['order_id'],userId: message['store_id']);
+      }else{
+        messageProvider.getMessages(orderId: message['order_id'],userId: message['store_id']);
+      }
     }
   } else if (payload['message_type_'] == "order") {
-    convertStringToInt(jsonDecode(payload['data_']));
-    // OrderDetailsProvider orderDetailsProvider = Provider.of(Constants.globalContext(),listen: false);
-    // if(orderDetailsProvider.ordersDetails!=null&&orderDetailsProvider.ordersDetails!.id!=orderId){
-    //   orderDetailsProvider.getOrderDetailsData(id: orderId);
+    navPU();
+    var homeProvider = Constants.globalContext().read<HomeProvider>();
+    int index = homeProvider.navigationList.indexWhere((e)=>e.title=='Orders');
+    homeProvider.setSelectedNavigation(homeProvider.navigationList[index]);
+    OrdersProvider ordersProvider = Constants.globalContext().read();
+    ordersProvider.refresh();
+    try{
+      int orderId = convertStringToInt(jsonDecode(payload['data_']));
+      OrderDetailsProvider orderProvider = Constants.globalContext().read();
+      orderProvider.goToOrderDetailsView(orderId);
+    }catch(e){
+
+    }
+    // if(orderProvider.data==null){
+    //   orderProvider.goToPage();
     // }
-    // if(orderDetailsProvider.ordersDetails==null){
-    //   orderDetailsProvider.goToOrderDetailsHome(id: orderId);
-    // }
-  } else if (payload['message_type_'] == "comment") {
-    convertStringToInt(jsonDecode(payload['data_']));
-    // OrderDetailsProvider orderDetailsProvider = Provider.of(Constants.globalContext(),listen: false);
-    // if(orderDetailsProvider.ordersDetails!=null&&orderDetailsProvider.ordersDetails!.id!=adId){
-    //   orderDetailsProvider.refresh(adId);
-    // }
-    // if(orderDetailsProvider.ordersDetails==null){
-    //   orderDetailsProvider.goToOrderDetailsHome(id: adId);
-    // }
-    // }
-    // }
+  }else if(payload['message_type_']=="ticket"){
+
+    navPU();
+    var homeProvider = Constants.globalContext().read<HomeProvider>();
+    int index = homeProvider.navigationList.indexWhere((e)=>e.title=='support');
+    homeProvider.setSelectedNavigation(homeProvider.navigationList[index]);
+
+    TicketsProvider ticketsProvider = Provider.of(Constants.globalContext(),listen: false);
+    ticketsProvider.refresh();
+
+    Map message = jsonDecode(payload['data_']);
+    TicketMessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
+    if(messageProvider.ticketEntity==null){
+      messageProvider.getTicketDetails(id: message['ticket_id']);
+    }else{
+      messageProvider.getTicketDetails(id: message['ticket_id']);
+    }
+  }else if(payload['message_type_']=="ticket_status"){
+    navPU();
+    var homeProvider = Constants.globalContext().read<HomeProvider>();
+    int index = homeProvider.navigationList.indexWhere((e)=>e.title=='support');
+    homeProvider.setSelectedNavigation(homeProvider.navigationList[index]);
+
+    TicketsProvider ticketsProvider = Provider.of(Constants.globalContext(),listen: false);
+    ticketsProvider.refresh();
+
+    Map message = jsonDecode(payload['data_']);
+    TicketMessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
+    if(messageProvider.ticketEntity==null){
+      messageProvider.getTicketDetails(id: message['ticket_id']);
+    }else{
+      messageProvider.getTicketDetails(id: message['ticket_id']);
+    }
   }
 }

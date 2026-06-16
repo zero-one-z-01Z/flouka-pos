@@ -38,16 +38,16 @@ class SettingsProvider extends ChangeNotifier {
         ).showLanguageDialog();
       },
     ),
-    ProfileSettingsEntity(
-      text: "support",
-      color: const Color(0xff254AA5),
-      onTap: () {
-        Provider.of<TicketsProvider>(
-          Constants.globalContext(),
-          listen: false,
-        ).goToTicketsPage();
-      },
-    ),
+    // ProfileSettingsEntity(
+    //   text: "support",
+    //   color: const Color(0xff254AA5),
+    //   onTap: () {
+    //     Provider.of<TicketsProvider>(
+    //       Constants.globalContext(),
+    //       listen: false,
+    //     ).goToTicketsPage();
+    //   },
+    // ),
     ProfileSettingsEntity(
       text: "privacy_policy",
       color: const Color(0xff70C090),

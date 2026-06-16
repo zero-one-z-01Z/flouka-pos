@@ -21,7 +21,10 @@ class OrderDetailsProvider extends ChangeNotifier {
     MessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
     messageProvider.clear();
     getData(id);
-    navP(const OrderDetailsView());
+    navP(const OrderDetailsView(),then: (val){
+      MessageProvider messageProvider = Provider.of(Constants.globalContext(),listen: false);
+      messageProvider.setIsShowChat(false);
+    });
   }
 
   Future getData(int id) async {

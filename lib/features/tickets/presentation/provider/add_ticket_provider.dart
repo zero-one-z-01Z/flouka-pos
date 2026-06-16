@@ -25,9 +25,9 @@ class AddTicketProvider extends ChangeNotifier{
 
   void goToAddTicketPage(){
     TicketsCategoryProvider ticketsCategoryCubit = Provider.of(Constants.globalContext(),listen:false);
-    TicketMessageProvider ticketMessageProvider = Provider.of(Constants.globalContext(),listen:false);
     ticketsCategoryCubit.getCategories();
     setIsAddTicket(true);
+    TicketMessageProvider ticketMessageProvider = Provider.of(Constants.globalContext(),listen:false);
     ticketMessageProvider.setIsShowTicket(false);
     ticketInputs = [
       TextFieldModel(

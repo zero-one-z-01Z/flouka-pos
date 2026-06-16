@@ -4,14 +4,18 @@ import 'dart:math' show atan2, cos, pi, pow, sin, sqrt;
 
 // Position? globalPosition;
 String? currentLocationAddress;
-
+LatLng? defaultLocation;
 Future<LatLng> determinePosition({
   bool showMessage = true,
   bool fromHome = false,
 }) async {
   // await  delay(2000);
   LocationPermission permission;
-  LatLng defaultLatLngq = const LatLng(24.7136, 46.6753);
+  LatLng defaultLatLngq = const LatLng(36.806389, 10.181667);
+  return defaultLatLngq;
+  if(defaultLocation!=null){
+    return defaultLocation!;
+  }
   // return defaultLatLngq;
   // تحقق من إذن الموقع
   try {
@@ -40,6 +44,7 @@ Future<LatLng> determinePosition({
       Position position = await Geolocator.getCurrentPosition();
 
       LatLng latLng = LatLng(position.latitude, position.longitude);
+      defaultLocation = latLng;
       return latLng;
     } catch (e) {
       if (showMessage) {

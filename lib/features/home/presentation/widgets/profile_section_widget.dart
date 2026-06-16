@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/helper_function/prefs.dart';
+import 'package:flouka_pos/core/widgets/button_widget.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/register_provider.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,7 @@ class ProfileSectionWidget extends StatelessWidget {
     bool isStore = sharedPreferences.getBool('isStore') ?? false;
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 4.h, left: 4.w, right: 4.w, bottom: 15.h),
+      padding: EdgeInsets.only(top: 4.h, left: 3.w, right: 3.w, bottom: 14.h),
       decoration: BoxDecoration(
         boxShadow: [
           const BoxShadow(
@@ -66,51 +68,66 @@ class ProfileSectionWidget extends StatelessWidget {
           SizedBox(height: 1.h),
 
           // Active Status Button
-          InkWell(
-            onTap: (){
-              authProvider.updateProfile(updateActive: true);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
-              decoration: BoxDecoration(
-                color: const Color(0xfff1f1f1),
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: isActive ? const Color(0xff72ca8a) : Colors.red,),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if(isActive)...[
-                    SizedBox(width: 1.w),
-                    CircleAvatar(
-                      radius: 1.5.h,
-                      backgroundColor: const Color(0xff72ca8a),
-                    ),
-                  ],
+          SizedBox(
+            width: 13.w,
+            child: InkWell(
+              onTap: (){
+                authProvider.updateProfile(updateActive: true);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xfff1f1f1),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: isActive ? const Color(0xff72ca8a) : Colors.red,),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if(isActive)...[
+                      SizedBox(width: 1.w),
+                      CircleAvatar(
+                        radius: 1.5.h,
+                        backgroundColor: const Color(0xff72ca8a),
+                      ),
+                    ],
 
-                  SizedBox(width: 1.w),
-                  Flexible(
-                    child: Text(
-                      LanguageProvider.translate('global',isActive ?"active":"inactive" ),
-                      style: TextStyleClass.smallStyle(
-                        color:isActive ? const Color(0xff72ca8a) : Colors.red,
-                      ).copyWith(fontSize: 13.sp),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(width: 1.w),
-                  if(!isActive)...[
-                    CircleAvatar(
-                      radius: 1.5.h,
-                      backgroundColor:isActive ? const Color(0xff72ca8a) : Colors.red,
-                    ),
                     SizedBox(width: 1.w),
-                  ],
+                    SizedBox(
+                      width: 6.w,
+                      child: Text(
+                        LanguageProvider.translate('global',isActive ?"active":"inactive" ),
+                        style: TextStyleClass.smallStyle(
+                          color:isActive ? const Color(0xff72ca8a) : Colors.red,
+                        ).copyWith(fontSize: 13.sp),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if(!isActive)...[
+                      CircleAvatar(
+                        radius: 1.5.h,
+                        backgroundColor:isActive ? const Color(0xff72ca8a) : Colors.red,
+                      ),
+                      SizedBox(width: 1.w),
+                    ],
 
-                ],
+                  ],
+                ),
               ),
             ),
+          ),
+          SizedBox(height: 1.h),
+          InkWell(
+            onTap: (){
+              if(isStore){
+                context.read<RegisterProvider>().showPasswordDialog(isDismissible: true);
+              }else{
+                context.read<RegisterProvider>().goToRegisterView();
+              }
+            },
+            child: Text(LanguageProvider.translate('auth',isStore?'change_password': 'update_profile'),
+            style: TextStyleClass.smallStyle(color: Colors.grey).copyWith(decoration: TextDecoration.underline),),
           ),
         ],
       ),

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 // import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../features/language/presentation/provider/language_provider.dart';
 import '../constants/constants.dart';
 import 'convert.dart';
 import 'helper_function.dart';
@@ -28,7 +29,7 @@ class ApiHandel {
   }
 
   Future<void> init() async {
-    lang = sharedPreferences.getString('language_code') ?? "ar";
+    lang = sharedPreferences.getString('language_code') ?? "fr";
     token = sharedPreferences.getString('token');
     dio = Dio(
       BaseOptions(
@@ -36,21 +37,21 @@ class ApiHandel {
         // will not throw errors
         validateStatus: (status) => true,
         headers: {
-          "lang": lang ?? "ar",
+          "lang": lang ?? "fr",
           'Content-Type': 'application/json',
           "Authorization": {'Bearer $token'},
         },
       ),
     );
-    // await Future.wait([
-    //   for (var i in LanguageProvider.languages) Dio().get('${Constants.baseUri}app_languages/user/${i.languageCode}.json'),
-    // ]).then((value) {
-    //   Map data = {};
-    //   for (int i = 0; i < LanguageProvider.languages.length; i++) {
-    //     data[LanguageProvider.languages[i].languageCode] = value[i].data;
-    //   }
-    //   languages = data;
-    // });
+    await Future.wait([
+      for (var i in LanguageProvider.languages) Dio().get('${Constants.baseUri}app_languages/vendor/${i.languageCode}.json'),
+    ]).then((value) {
+      Map data = {};
+      for (int i = 0; i < LanguageProvider.languages.length; i++) {
+        data[LanguageProvider.languages[i].languageCode] = value[i].data;
+      }
+      languages = data;
+    });
   }
 
   Map languages = {};
@@ -68,7 +69,7 @@ class ApiHandel {
       // baseUrl: Constants.domain,
       headers: {
         "Authorization": {'Bearer $token'},
-        "lang": lang ?? "ar",
+        "lang": lang ?? "fr",
         'Content-Type': 'application/json',
       },
     );

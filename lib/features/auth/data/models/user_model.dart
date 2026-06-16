@@ -1,4 +1,5 @@
 import 'package:flouka_pos/core/helper_function/convert.dart';
+import 'package:flouka_pos/features/vendor_stores/data/models/store_model.dart';
 
 import '../../domain/entities/user_entity.dart';
 
@@ -28,9 +29,14 @@ class UserModel extends UserEntity {
     super.adminPhone,
     super.businessLicense,
     super.token,
+    super.storeEntity,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    StoreModel? storeModel;
+    if(json.containsKey('store')&&json['store']!=null){
+      storeModel = StoreModel.fromJson(json['store']);
+    }
     return UserModel(
       id: json['id'],
       name: json['name'],
@@ -58,6 +64,7 @@ class UserModel extends UserEntity {
           : null,
       businessLicense: json['business_license'],
       token: json['token'],
+      storeEntity: storeModel,
     );
   }
 }

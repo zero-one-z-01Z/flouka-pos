@@ -77,7 +77,7 @@ class QuantityEntity extends Equatable{
   final int id;
   final int storeProductID;
   final int? productVariantID;
-  final num quantity;
+  final int quantity;
   QuantityEntity({
     required this.id,
     required this.storeProductID,

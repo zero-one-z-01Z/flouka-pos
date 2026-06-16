@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -6,21 +7,30 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flouka_pos/core/constants/app_images.dart';
 import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/dialog/custom_snack_bar.dart';
 import 'package:flouka_pos/core/dialog/date_dialog.dart';
+import 'package:flouka_pos/core/dialog/success_dialog.dart';
 import 'package:flouka_pos/core/helper_function/convert.dart';
 import 'package:flouka_pos/core/helper_function/text_form_field_validation.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/account_type_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/otp_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/auth/domain/entities/user_entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/config/app_styles.dart';
+import '../../../../core/dialog/drop_down_dialog.dart';
 import '../../../../core/dialog/snack_bar.dart';
 import '../../../../core/helper_function/image.dart';
 import '../../../../core/helper_function/loading.dart';
+import '../../../../core/helper_function/location.dart';
 import '../../../../core/models/text_field_model.dart';
 import '../../../../core/helper_function/navigation.dart';
+import '../../../../core/widgets/button_widget.dart';
+import '../../../../core/widgets/text_field_widget.dart';
 import '../../domain/usecases/user_usecases.dart';
 import '../views/login_view.dart';
 import '../views/register_view.dart';
@@ -37,10 +47,13 @@ class RegisterProvider extends ChangeNotifier {
   // ── Step tracking ──────────────────────────────────────────────────────────
   int currentStep = 1; // 1, 2, 3
 
+  LatLng? latlng;
+
   void nextStep() async{
-    if(currentStep == 1){
+    if(currentStep == 1 && !AuthProvider.isLogin()){
       OtpProvider otpProvider = Provider.of(Constants.globalContext(),listen: false);
       await otpProvider.sendOtp(isReg: true);
+
     }
     if (currentStep < 3) {
       currentStep++;
@@ -82,7 +95,10 @@ class RegisterProvider extends ChangeNotifier {
         data[element.key] = element.controller.text;
       }
     }
-
+    if(latlng!=null){
+      data['lat'] = latlng!.latitude;
+      data['lng'] = latlng!.longitude;
+    }
     for (var element in registerPage2TextFields) {
       data[element.key] = element.controller.text;
     }
@@ -103,9 +119,11 @@ class RegisterProvider extends ChangeNotifier {
       data['business_license'] = await MultipartFile.fromFile(businessLicense!.path);
     }
 
-    OtpProvider otpProvider =Provider.of(Constants.globalContext(),listen: false);
-    data['otp_type'] = "register";
-    data['otp'] = otpProvider.otpController.text;
+    if(!AuthProvider.isLogin()){
+      OtpProvider otpProvider =Provider.of(Constants.globalContext(),listen: false);
+      data['otp_type'] = "register";
+      data['otp'] = otpProvider.otpController.text;
+    }
 
     return data;
   }
@@ -124,7 +142,10 @@ class RegisterProvider extends ChangeNotifier {
         (l) {
           showToast(l.message ?? 'Registration failed');
         }, (r) {
-          nextStep();
+          // nextStep();
+        successDialog(msg: LanguageProvider.translate('auth', 'account_under_review'),then: (){
+          navPU();
+        });
         },
       );
     } catch (e) {
@@ -134,26 +155,85 @@ class RegisterProvider extends ChangeNotifier {
     }
   }
 
-  void goToRegisterView() {
+
+
+  void updateProfile() async {
+
+    loading();
+    try {
+      final dataMap = await buildRegisterDataMap();
+
+      final result = await userUseCase.updateProfile(dataMap);
+
+      navPop();
+      result.fold(
+            (l) {
+          showToast(l.message ?? 'Registration failed');
+        }, (r) {
+        successDialog(then: (){
+          navPU();
+        });
+      },
+      );
+    } catch (e) {
+      navPop();
+      showToast('Something went wrong: $e');
+      previousStep(); // go back to step 2 on error
+    }
+  }
+
+  void onCameraMoveEnd() {
+    notifyListeners();
+  }
+  Timer? _timer;
+  void onCameraMove(CameraPosition position) {
+    latlng = position.target;
+    if (_timer?.isActive ?? false) return;
+
+    _timer = Timer(
+      const Duration(milliseconds: 200),
+          () => notifyListeners(),
+    );
+  }
+
+  void goToRegisterView() async{
+    latlng = null;
+    currentStep = 1;
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    AccountTypeProvider accountTypeProvider = Provider.of(Constants.globalContext(),listen: false);
+    accountTypeProvider.clear();
+    UserEntity? userEntity = authProvider.userEntity;
+    if(userEntity!=null){
+      if(userEntity!.storeEntity?.lat!=null){
+        latlng = LatLng(userEntity.storeEntity!.lat!, userEntity.storeEntity!.lng!);
+      }
+      accountTypeProvider.onTap(userEntity!.accountType);
+    }else{
+      loading();
+      print('1');
+      latlng = await determinePosition();
+      print('2');
+      navPop();
+    }
     registerTextFieldList = [
       TextFieldModel(
           key: 'name',
           label: "name",
-          controller: TextEditingController(),
+          controller: TextEditingController(text: userEntity?.name),
           width: 25.w,
           validator: (value) => validateName(value),
       ),
       TextFieldModel(
         key: 'bio',
         label: "bio",
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.bio),
         width: 25.w,
         validator: (value) => validateBio(value),
       ),
       TextFieldModel(
         key: 'phone',
         label: "phone_number",
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.phone),
         textInputType: TextInputType.phone,
         width: 25.w,
         validator: (value) => validatePhone(value),
@@ -161,7 +241,7 @@ class RegisterProvider extends ChangeNotifier {
       TextFieldModel(
         key: 'email',
         label: 'email',
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.email),
         textInputType: TextInputType.emailAddress,
         width: 25.w,
         validator: (value) => validateEmail(value),
@@ -173,41 +253,63 @@ class RegisterProvider extends ChangeNotifier {
         textInputType: TextInputType.visiblePassword,
         obscureText: true,
         width: 25.w,
-        validator: (value) => validatePassword(value),
-      ),
-      TextFieldModel(
-        key: 'password_confirmation',
-        label: 'confirm_password',
-        obscureText: true,
-
-        controller: TextEditingController(),
-        textInputType: TextInputType.visiblePassword,
-        width: 25.w,
-        validator: (v) {
-          if(v != registerTextFieldList.firstWhere((element) => element.key=="password",).controller.text){
-            return 'Passwords do not match';
+        validator: (value) {
+          if(userEntity!=null){
+            return null;
           }
-          return null;
+          return validatePassword(value);
         },
       ),
+      if(!AuthProvider.isLogin())TextFieldModel(
+          key: 'account_type',
+          label: 'account_type',
+          controller: TextEditingController(text: accountTypeProvider.displayedName()),
+          readOnly: true,
+          width: 25.w,
+          onTap: (){
+            showDropDownDialog(accountTypeProvider).then((value){
+              accountTypeProvider = Provider.of(Constants.globalContext(),listen: false);
+              int index = registerTextFieldList.indexWhere((e)=>e.key=='account_type');
+              if(index!=-1){
+                registerTextFieldList[index].controller.text = accountTypeProvider.displayedName();
+                notifyListeners();
+              }
+            });
+          }
+      ),
+      // TextFieldModel(
+      //   key: 'password_confirmation',
+      //   label: 'confirm_password',
+      //   obscureText: true,
+      //
+      //   controller: TextEditingController(),
+      //   textInputType: TextInputType.visiblePassword,
+      //   width: 25.w,
+      //   validator: (v) {
+      //     if(v != registerTextFieldList.firstWhere((element) => element.key=="password",).controller.text){
+      //       return 'Passwords do not match';
+      //     }
+      //     return null;
+      //   },
+      // ),
     ];
     registerPage2TextFields = [
       TextFieldModel(
         key: 'address',
         label: 'Address',
         width: 25.w,
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.address),
         validator: (value) =>validateAddress(value) ,
       ),
       TextFieldModel(
           key: 'open_date',
           label: 'open_date',
-          controller: TextEditingController(),
+          controller: TextEditingController(text: userEntity?.openDate),
           readOnly: true,
           width: 25.w,
           validator: (value) => validateOpenDate(value),
           onTap: (){
-            selectDate().then((value){
+            selectDate(dateTime: userEntity?.openDate==null?null:DateTime.parse(userEntity!.openDate!)).then((value){
               if(value !=null){
                 registerPage2TextFields.firstWhere((element) => element.key=="open_date",)
                     .controller.text = convertDateToStringYMD(value);
@@ -219,7 +321,7 @@ class RegisterProvider extends ChangeNotifier {
         key: 'admin_name',
         label: 'admin_name',
         width: 25.w,
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.adminName),
         validator: (value) => validatePhone(value),
       ),
       TextFieldModel(
@@ -228,25 +330,25 @@ class RegisterProvider extends ChangeNotifier {
         width: 25.w,
         validator: (value) => validatePhone(value),
 
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.adminPhone),
       ),
       TextFieldModel(
         key: 'national_id',
         label: 'national_id',
-        controller: TextEditingController(),
+        controller: TextEditingController(text: userEntity?.nationalId),
         width: 25.w,
         validator: (v) =>validateId(v),
       ),
       TextFieldModel(
         key: 'bank_account',
-        label: 'Bank Account Number',
-        controller: TextEditingController(),
+        label: 'bank_account',
+        controller: TextEditingController(text: userEntity?.bankNumber),
         width: 25.w,
         validator: (v) =>validateBankAccount(v),
 
       ),
     ];
-    navPR(const RegisterView());
+    navP(const RegisterView());
   }
 
   RegisterProvider({required this.userUseCase});
@@ -268,11 +370,13 @@ class RegisterProvider extends ChangeNotifier {
   XFile? frontIdCard;
   XFile? backIdCard;
   XFile? businessLicense;
-  bool logoUpdated = false;
-  bool coverUpdated = false;
-  bool frontIdCardUpdated = false;
-  bool backIdCardUpdated=false;
-  bool businessLicenseUpdate=false;
+
+
+  // bool logoUpdated = false;
+  // bool coverUpdated = false;
+  // bool frontIdCardUpdated = false;
+  // bool backIdCardUpdated=false;
+  // bool businessLicenseUpdate=false;
 
 
   showLogoImage() {
@@ -380,33 +484,104 @@ class RegisterProvider extends ChangeNotifier {
     }
   }
   void updateLogo(XFile image) {
-    logoUpdated = true;
+    // logoUpdated = true;
     this.logo = image;
     notifyListeners();
   }
 
   void updateFrontIdCard(XFile image) {
-    frontIdCardUpdated = true;
+    // frontIdCardUpdated = true;
     this.frontIdCard = image;
     notifyListeners();
   }
 
   void updateBackIdCard(XFile image) {
-    backIdCardUpdated = true;
+    // backIdCardUpdated = true;
     this.backIdCard = image;
     notifyListeners();
   }
 
   void updateBusinessLicense(XFile image) {
-    businessLicenseUpdate = true;
+    // businessLicenseUpdate = true;
     this.businessLicense = image;
     notifyListeners();
   }
 
   void updateCover(XFile image) {
-    coverUpdated = true;
+    // coverUpdated = true;
     this.cover = image;
     notifyListeners();
+  }
+
+
+
+  TextEditingController passwordController = TextEditingController();
+  void showPasswordDialog({bool isDismissible =false}){
+    showDialog(
+      context: Constants.globalContext(),
+      barrierDismissible: isDismissible,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.zero,
+          // contentPadding: const EdgeInsets.all(20),
+          child: InkWell(
+            onTap: (){
+              FocusScope.of(context).unfocus();
+            },
+            child: Container(
+              width: 40.w,height: 40.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 2.h),
+              child: Column(mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    LanguageProvider.translate("auth", "assign_password"),
+                    textAlign: TextAlign.center,
+                    style: TextStyleClass.semiHeadStyle(),
+                  ),
+                  SizedBox(height: 2.h,),
+                  TextFieldWidget(controller: passwordController, color: Colors.grey.shade200,
+                    borderColor: Colors.grey.shade200,width: 30.w,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
+                    child: ButtonWidget(
+                      onTap: (){
+                        if(passwordController.text.isNotEmpty && passwordController.text.length>5){
+                          updatePassword();
+                        }else{
+                          showToast(LanguageProvider.translate("validation", "enter_pass"));
+                        }
+                      },
+                      text:  "save",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        );
+      },
+    );
+  }
+
+  Future updatePassword() async {
+    Map<String, dynamic> data = {};
+    data['password']= passwordController.text;
+    loading();
+    var login = await userUseCase.updateProfile(data);
+    navPop();
+    login.fold((l) {
+      showToast(l.message!);
+    }, (r) async {
+      navPop();
+      successDialog();
+      // sharedPreferences.setString('checker_pass', passwordController.text);
+    });
   }
 
 

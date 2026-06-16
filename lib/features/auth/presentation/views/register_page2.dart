@@ -1,9 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flouka_pos/core/widgets/button_widget.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/account_type_provider.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/otp_field_widget.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
@@ -23,6 +28,7 @@ class RegisterPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<RegisterProvider>();
+    final accountType = context.read<AccountTypeProvider>();
     final otpProvider = context.read<OtpProvider>();
 
     return SafeArea(
@@ -77,11 +83,13 @@ class RegisterPage2 extends StatelessWidget {
                                   provider.selectFrontIdCardImage();
                                 },
                               ),
-                              SizedBox(height: 0.5.h,),
-                              ValidationWidget(conditions: [
-                                {"value": provider.frontIdCard == null,
-                                  "text": LanguageProvider.translate("validation", "front_id_card")}
-                              ]),
+                              if(!AuthProvider.isLogin())...[
+                                SizedBox(height: 0.5.h,),
+                                ValidationWidget(conditions: [
+                                  {"value": provider.frontIdCard == null,
+                                    "text": LanguageProvider.translate("validation", "front_id_card")}
+                                ]),
+                              ],
 
                             ],
                           ),
@@ -97,44 +105,80 @@ class RegisterPage2 extends StatelessWidget {
                                   provider.selectBackIdCardImage();
                                 },
                               ),
-                              SizedBox(height: 0.5.h,),
-                              ValidationWidget(conditions: [
-                                {"value": provider.backIdCard == null,
-                                  "text": LanguageProvider.translate("validation", "back_id_card")}
-                              ]),
+                              if(!AuthProvider.isLogin())...[
+                                SizedBox(height: 0.5.h,),
+                                ValidationWidget(conditions: [
+                                  {"value": provider.backIdCard == null,
+                                    "text": LanguageProvider.translate("validation", "back_id_card")}
+                                ]),
+                              ],
 
                             ],
                           ),
                         ),
                         SizedBox(width: 3.w),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              ImagePickerField(
-                                label: "business_license",
-                                selectedImage: provider.showBusinessLicenseImage(),
-                                onImageSelected: (file) {
-                                  provider.selectBusinessLicenseImage();
-                                },
-                              ),
-                              SizedBox(height: 0.5.h,),
-                              ValidationWidget(conditions: [
-                                {"value": provider.businessLicense == null,
-                                  "text": LanguageProvider.translate("validation", "business_license")}
-                              ]),
-                            ],
+                        if(accountType.value()=='company')...[
+                          Expanded(
+                            child: Column(
+                              children: [
+                                ...[
+                                  ImagePickerField(
+                                    label: "business_license",
+                                    selectedImage: provider.showBusinessLicenseImage(),
+                                    onImageSelected: (file) {
+                                      provider.selectBusinessLicenseImage();
+                                    },
+                                  ),
+                                  if(!AuthProvider.isLogin())...[
+                                    SizedBox(height: 0.5.h,),
+                                    ValidationWidget(conditions: [
+                                      {"value": provider.businessLicense == null,
+                                        "text": LanguageProvider.translate("validation", "business_license")}
+                                    ]),
+                                  ],
+                                ]
+
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 3.w),
+                          SizedBox(width: 3.w),
+                        ],
                       ],
                     ),
-                    SizedBox(height: 2.h),
-                    const OtpWidget(),
+                    if(!AuthProvider.isLogin())...[
+                      SizedBox(height: 2.h),
+                      const OtpWidget(),
+                    ],
                     SizedBox(height: 2.h),
                   ],
                 ),
               ),
 
+              if(accountType.value()!='company')SizedBox(width: double.infinity,height: 40.h,
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: provider.latlng??const LatLng(36.806389, 10.181667),
+                        zoom: 14,
+                      ),
+                      gestureRecognizers: {
+                        Factory<OneSequenceGestureRecognizer>(
+                              () => EagerGestureRecognizer(),
+                        ),
+                      },
+                      onCameraIdle: () => provider.onCameraMoveEnd(),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      onCameraMove: (pos) => provider.onCameraMove(pos),
+                    ),
+                    Center(
+                      child: Icon(Icons.location_on,size: 2.w,color: Colors.red,),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 4.h),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -158,9 +202,16 @@ class RegisterPage2 extends StatelessWidget {
                       if(provider.registerForm2Key.currentState!.validate()&&
                       otpProvider.otpController.text.length==4 &&
                       provider.frontIdCard != null &&
-                      provider.backIdCard != null &&
-                      provider.businessLicense != null){
-                        provider.register();
+                      provider.backIdCard != null
+                      ){
+                        if(provider.businessLicense == null && accountType.value()=='company'){
+                          return ;
+                        }
+                        if(AuthProvider.isLogin()){
+                          provider.updateProfile();
+                        }else{
+                          provider.register();
+                        }
                       }
                     },
                     widget: Padding(
@@ -180,8 +231,10 @@ class RegisterPage2 extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 3.h),
-              const HaveAccountSection(isLogin: false),
-              SizedBox(height: 3.h),
+              if(!AuthProvider.isLogin())...[
+                const HaveAccountSection(isLogin: false),
+                SizedBox(height: 3.h),
+              ],
             ],
           ),
         ),
@@ -193,7 +246,7 @@ class RegisterPage2 extends StatelessWidget {
     return Column(
       children: [
         Text(
-          LanguageProvider.translate('global', 'complete_registration'),
+          LanguageProvider.translate('global',AuthProvider.isLogin() ? "update_account": 'complete_registration'),
           style: TextStyleClass.headStyle().copyWith(fontSize: 16.sp),
         ),
         SizedBox(height: 1.h),

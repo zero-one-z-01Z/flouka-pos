@@ -37,6 +37,11 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider(this.userUseCase);
 
+
+  static bool isLogin(){
+    return sharedPreferences.getString('token') != null;
+  }
+
   void goToLoginView() {
     bool isStore = sharedPreferences.getBool('isStore') ?? true;
     if(isStore){
@@ -49,7 +54,7 @@ class AuthProvider extends ChangeNotifier {
           validator: (value) => validateUserName(value),
         ),
         TextFieldModel(
-          label: LanguageProvider.translate("inputs", "Password"),
+          label: "password",
           controller: TextEditingController(),
           textInputType: TextInputType.visiblePassword,
           validator: (value) => validatePassword(value),
@@ -66,7 +71,7 @@ class AuthProvider extends ChangeNotifier {
           validator: (value) => validatePhone(value),
         ),
         TextFieldModel(
-          label: LanguageProvider.translate("inputs", "Password"),
+          label: "password",
           controller: TextEditingController(),
           textInputType: TextInputType.visiblePassword,
           validator: (value) => validatePassword(value),
@@ -368,7 +373,7 @@ class AuthProvider extends ChangeNotifier {
     Map<String, dynamic> data = {};
     loading();
     if(updateActive){
-      data['active'] =! (userEntity?.active ?? false) ;
+      data['active'] =! (userEntity?.active ?? false)?1:0 ;
     }else{
     }
     final result = await userUseCase.updateProfile(data);

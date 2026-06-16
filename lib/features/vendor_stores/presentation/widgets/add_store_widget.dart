@@ -16,35 +16,36 @@ class AddStoreWidget extends StatelessWidget {
       key: storeOperationsProvider.formKey,
       child: Column(
         children: [
+          SizedBox(width: double.infinity,height: 20.h,
+            child: Stack(
+              children: [
+                GoogleMap(
+                  // style: storeOperationsProvider.mapStyleString,
+                  initialCameraPosition: CameraPosition(
+                    target: storeOperationsProvider.center??const LatLng(36.806389, 10.181667),
+                    zoom: storeOperationsProvider.zoom,
+                  ),
+                  onMapCreated: (c) {
+                    storeOperationsProvider.onMapCreated(c);
+                  },
+                  onCameraIdle: () => storeOperationsProvider.onCameraMoveEnd(),
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  markers: storeOperationsProvider.markers,
+                  onCameraMove: (pos) => storeOperationsProvider.onCameraMove(pos),
+                ),
+                Center(
+                  child: Icon(Icons.location_on,size: 2.w,color: Colors.red,),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 1.h,),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(width: double.infinity,height: 20.h,
-                    child: Stack(
-                      children: [
-                        GoogleMap(
-                          // style: storeOperationsProvider.mapStyleString,
-                          initialCameraPosition: CameraPosition(
-                            target: storeOperationsProvider.center??const LatLng(36.806389, 10.181667),
-                            zoom: storeOperationsProvider.zoom,
-                          ),
-                          onMapCreated: (c) {
-                            storeOperationsProvider.onMapCreated(c);
-                          },
-                          onCameraIdle: () => storeOperationsProvider.onCameraMoveEnd(),
-                          myLocationEnabled: false,
-                          myLocationButtonEnabled: false,
-                          markers: storeOperationsProvider.markers,
-                          onCameraMove: (pos) => storeOperationsProvider.onCameraMove(pos),
-                        ),
-                        Center(
-                          child: Icon(Icons.location_on,size: 2.w,color: Colors.red,),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 1.h,),
+
                   ListTextFieldWidget(inputs: storeOperationsProvider.addStoreInputs),
                 ],
               ),

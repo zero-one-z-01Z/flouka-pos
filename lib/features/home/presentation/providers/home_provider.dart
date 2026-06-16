@@ -1,6 +1,7 @@
 import 'package:flouka_pos/core/constants/constants.dart';
 import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/core/helper_function/prefs.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/home/presentation/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class HomeProvider extends ChangeNotifier {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(Constants.globalContext(), listen: false);
     settingsProvider.getSettings();
     prepareNavigationList();
-    navPR(const HomeView());
+    navPARU(const HomeView());
   }
   void rebuild() {
     notifyListeners();
@@ -63,6 +64,7 @@ class HomeProvider extends ChangeNotifier {
       Provider.of<TagsOptionsProvider>(Constants.globalContext(), listen: false).getTags();
       Provider.of<CategoryProvider>(Constants.globalContext(), listen: false).refresh();
       Provider.of<ProductOptionsProvider>(Constants.globalContext(), listen: false).getVendorProductsOption();
+      var auth = Provider.of<AuthProvider>(Constants.globalContext(), listen: false);
 
       navigationList = [
         NavigationEntity(title: "Overview", svgImage: Images.overView, onTap: (){
@@ -87,6 +89,9 @@ class HomeProvider extends ChangeNotifier {
           Provider.of<ReelsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<ReelsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
+
+
+
         NavigationEntity(title: "stories", svgImage: Images.video, onTap: (){
           Provider.of<StoriesOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<StoriesProvider>(Constants.globalContext(), listen: false).refresh();
@@ -96,7 +101,7 @@ class HomeProvider extends ChangeNotifier {
           Provider.of<OffersProvider>(Constants.globalContext(), listen: false).refresh();
 
         }),
-        NavigationEntity(title: "vendor_stores", svgImage: Images.home, onTap: (){
+        if(auth.userEntity!.accountType=='company')NavigationEntity(title: "vendor_stores", svgImage: Images.home, onTap: (){
           Provider.of<StoreOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<VendorStoresProvider>(Constants.globalContext(), listen: false).refresh();
         }),
@@ -104,8 +109,11 @@ class HomeProvider extends ChangeNotifier {
           Provider.of<CouponsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<CouponsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
-        if(sharedPreferences.getBool('isStore')??false)NavigationEntity(title: "tickets", svgImage: Images.support, onTap: (){
-          Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).goToTicketsPage();
+        // if(sharedPreferences.getBool('isStore')??false)NavigationEntity(title: "tickets", svgImage: Images.support, onTap: (){
+        //   Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).goToTicketsPage();
+        // }),
+        if(auth.userEntity!.accountType=='individual')NavigationEntity(title: "support", svgImage: Images.tickets, onTap: (){
+          Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
         NavigationEntity(title: "Settings", svgImage: Images.settings, onTap: (){}),
       ];

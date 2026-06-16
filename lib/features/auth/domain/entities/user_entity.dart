@@ -1,3 +1,5 @@
+import 'package:flouka_pos/features/vendor_stores/domain/entity/store_entity.dart';
+
 class UserEntity {
   final int? id;
   final String? name;
@@ -23,6 +25,7 @@ class UserEntity {
   final String? businessLicense;
   final String? token;
   final VendorStatisticsEntity? vendorStatistics;
+  final StoreEntity? storeEntity;
 
   UserEntity({
     this.id,
@@ -49,6 +52,7 @@ class UserEntity {
     this.adminPhone,
     this.businessLicense,
     this.token,
+    this.storeEntity,
   });
 }
 

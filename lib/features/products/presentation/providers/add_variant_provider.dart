@@ -16,6 +16,7 @@ import '../../../../core/dialog/success_dialog.dart';
 import '../../../../core/helper_function/loading.dart';
 import '../../../../core/helper_function/navigation.dart';
 import '../../../../core/models/provider_structure_model.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../categories/domain/entity/category_attributes_entity.dart';
 import '../../../categories/domain/usecases/category_usecase.dart';
 import '../../domain/entity/product_entity.dart';
@@ -37,6 +38,16 @@ class AddVariantProvider extends ChangeNotifier implements ProviderStructureMode
   }
 
   void initField({VariantEntity?variant}){
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+    int? stock;
+    if(variant!=null){
+      if(variant.stock is int){
+        stock = variant.stock;
+      }else if(variant.stock is QuantityEntity){
+        stock = (variant.stock as QuantityEntity).quantity;
+      }
+    }
+
     variantInputs=[
       TextFieldModel(key: 'name',label: 'name',
           validator: (val)=> validateName(val),
@@ -48,6 +59,12 @@ class AddVariantProvider extends ChangeNotifier implements ProviderStructureMode
       TextFieldModel(key: 'offer_price',validator: (val)=> null,
           label: LanguageProvider.translate("product", "discounted_price"),
           controller:TextEditingController(text: variant?.offerPrice.toString()??""),width: 30.w),
+      if(authProvider.userEntity!.accountType=='individual')TextFieldModel(
+        label: LanguageProvider.translate('product', 'stock'),
+        controller: TextEditingController(text: stock?.toString() ?? ""),
+        validator: (val) => validateStock(val),
+        key: 'stock',width: 30.w,
+      ),
     ];
 
   }

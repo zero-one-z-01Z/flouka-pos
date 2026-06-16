@@ -24,7 +24,8 @@ class VariantModel extends VariantEntity{
         images: images,
         name: data['name']??"",
         offerPrice: convertDataToNum(data['offer_price']),
-        sku: data['sku'], combination: combination,stock:data['stock'] ==null ? null: data['stock'] is Map<String,dynamic>?
+        sku: data['sku'], combination: combination,
+        stock:data['stock'] ==null ? null: data['stock'] is Map<String,dynamic>?
             QuantityModel.fromJson(data['stock']):
         convertStringToInt(data['stock']));
   }

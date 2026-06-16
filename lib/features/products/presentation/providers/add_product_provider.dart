@@ -7,6 +7,7 @@ import 'package:flouka_pos/core/helper_function/loading.dart';
 import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/core/helper_function/text_form_field_validation.dart';
 import 'package:flouka_pos/core/models/text_field_model.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/categories/presentation/providers/brands_provider.dart';
 import 'package:flouka_pos/features/categories/presentation/providers/subcategory_provider.dart';
 import 'package:flouka_pos/features/home/presentation/providers/home_provider.dart';
@@ -32,6 +33,7 @@ class AddProductProvider extends ChangeNotifier {
 
   void initFields({ ProductEntity? product}){
     if(product == null) this.product =null;
+    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
     addProductTextFields = [
       TextFieldModel(
         label: LanguageProvider.translate('product', 'product_title'),
@@ -64,6 +66,12 @@ class AddProductProvider extends ChangeNotifier {
         controller: TextEditingController(text: product?.offerPrice?.toString() ?? ""),
         validator: (val) => validateOfferPrice(val),
         key: 'offer_price',
+      ),
+      if(authProvider.userEntity!.accountType=='individual')TextFieldModel(
+        label: LanguageProvider.translate('product', 'stock'),
+        controller: TextEditingController(text: product?.stock?.quantity?.toString() ?? ""),
+        // validator: (val) => validateStock(val),
+        key: 'stock',
       ),
       TextFieldModel(
         label: LanguageProvider.translate('product', 'product_sku'),

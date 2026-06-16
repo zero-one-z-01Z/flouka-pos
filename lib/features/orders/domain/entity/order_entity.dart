@@ -370,6 +370,7 @@ enum VendorOrderStatus {
 class OrderItemEntity {
   final int? id;
   final int? productId;
+  final int? storeId;
   final ProductEntity? product;
   final OrderVariantEntity? variant;
   final int? productVariantId;
@@ -383,6 +384,7 @@ class OrderItemEntity {
   OrderItemEntity({
     this.id,
     this.productId,
+    this.storeId,
     this.product,
     this.variant,
     this.productVariantId,

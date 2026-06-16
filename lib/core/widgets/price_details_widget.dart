@@ -23,7 +23,7 @@ class PriceDetailesList extends StatelessWidget {
         spacing: 4,
         children: [
           Text(
-            LanguageProvider.translate("global", "Total Price"),
+            LanguageProvider.translate("global", "total_price"),
             style: TextStyleClass.normalStyle().copyWith(
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,

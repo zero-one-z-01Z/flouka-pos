@@ -25,7 +25,7 @@ class ItemSummarySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            LanguageProvider.translate("global", "Item Summary"),
+            LanguageProvider.translate("global", "item_summary"),
             style: TextStyleClass.smallStyle().copyWith(),
           ),
           SizedBox(height: 2.h),

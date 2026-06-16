@@ -106,6 +106,15 @@ String? validateOfferPrice(String? value) {
   }
   return null;
 }
+String? validateStock(String? value) {
+  if (value!.isEmpty) {
+    return LanguageProvider.translate("validation", "stock");
+  }
+  if (value.isNotEmpty && num.tryParse(value) == null) {
+    return LanguageProvider.translate("validation", "stock");
+  }
+  return null;
+}
 
 
 String? validateSku(String? value) {

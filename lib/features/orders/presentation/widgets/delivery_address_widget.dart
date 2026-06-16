@@ -16,7 +16,7 @@ class DeliveryAddressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
-    AuthProvider authProvider = Provider.of(context);
+    // AuthProvider authProvider = Provider.of(context);
     return Container(
       width: 30.w,
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
@@ -46,15 +46,15 @@ class DeliveryAddressWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 1.w),
-              Expanded(child: ButtonWidget(onTap: (){
+              ButtonWidget(onTap: (){
                 Provider.of<MessageProvider>(context,listen: false)
                     .goToMessagePage(orderId: orderDetailsProvider.orderEntity!.id,
-                    userId: authProvider.userEntity!.id!);
-              }, text:"chat",width: 6.w,height: 5.h,borderRadius: 3,)),
+                    userId: orderDetailsProvider.orderEntity!.vendorOrders.items!.first.storeId??0);
+              }, text:"chat",takeSmallestWidth: true,height: 5.h,borderRadius: 3,),
             ],
           ),
           Text(
-            LanguageProvider.translate("global", "Delivery Address"),
+            LanguageProvider.translate("global", "delivery_address"),
             style: TextStyleClass.smallStyle().copyWith(fontWeight: FontWeight.bold),
           ),
           Text(

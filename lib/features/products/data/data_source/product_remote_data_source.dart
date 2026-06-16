@@ -23,7 +23,7 @@ import '../models/variant_model.dart';
 
   Future<Either<DioException, List<ProductEntity>>> getProducts(Map<String, dynamic> data,) async {
     bool isStore =sharedPreferences.getBool('isStore') ?? false;
-    String userType =isStore ? 'store/get_store_products' : 'get_vendor_products';
+    String userType =isStore ? 'store/get_store_products' : 'vendor/get_vendor_products';
     var response = await ApiHandel.getInstance.get('$userType', data);
     List<ProductModel> productModels = [];
     return response.fold((l) => Left(l), (r) {

@@ -132,6 +132,7 @@ class OrderItemModel extends OrderItemEntity {
   OrderItemModel({
     super.id,
     super.productId,
+    super.storeId,
     super.product,
     super.variant,
     super.productVariantId,
@@ -148,6 +149,7 @@ class OrderItemModel extends OrderItemEntity {
     return OrderItemModel(
       id: json['id'],
       productId: json['product_id'],
+      storeId: json['store_id'],
       product: json['product'] != null
           ? ProductModel.fromJson(json['product'])
           : null,

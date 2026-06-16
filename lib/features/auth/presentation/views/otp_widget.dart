@@ -36,7 +36,7 @@ class OtpWidget extends StatelessWidget {
                       duration: const Duration(milliseconds: 700),
                       child: Text(
                         " ${LanguageProvider.translate("global", "resend")}",
-                        style: TextStyleClass.normalStyle(
+                        style: TextStyleClass.smallStyle(
                             color: registerProvider.counter == 0? AppColor.primaryColor : Colors.grey),
                       ),
                     ),

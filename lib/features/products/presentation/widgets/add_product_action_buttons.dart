@@ -49,7 +49,7 @@ class AddProductActionButtons extends StatelessWidget {
           ),
           child: Text(
             LanguageProvider.translate(
-                'product', provider.product != null ? 'update_product' : 'add_product'),
+                'buttons', provider.product != null ? 'update_product' : 'add_product'),
             style: TextStyle(
               color: Colors.white,
               fontSize: 11.sp,

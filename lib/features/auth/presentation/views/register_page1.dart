@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flouka_pos/core/constants/app_images.dart';
 import 'package:flouka_pos/core/widgets/validation_widget.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/register_step_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,11 +67,13 @@ class RegisterPage1 extends StatelessWidget {
                                   registerProvider.selectLogoImage();
                                 },
                               ),
-                              SizedBox(height: 0.5.h,),
-                              ValidationWidget(conditions: [
-                                {"value": registerProvider.logo == null,
-                                  "text": LanguageProvider.translate("validation", "logo")}
-                              ]),
+                              if(!AuthProvider.isLogin())...[
+                                SizedBox(height: 0.5.h,),
+                                ValidationWidget(conditions: [
+                                  {"value": registerProvider.logo == null,
+                                    "text": LanguageProvider.translate("validation", "logo")}
+                                ]),
+                              ],
                             ],
                           ),
                         ),
@@ -85,11 +88,13 @@ class RegisterPage1 extends StatelessWidget {
                                     registerProvider.selectCoverImage();
                                 },
                               ),
-                              SizedBox(height: 0.5.h,),
-                              ValidationWidget(conditions: [
-                                {"value": registerProvider.cover == null,
-                                  "text": LanguageProvider.translate("validation", "cover")}
-                              ]),
+                              if(!AuthProvider.isLogin())...[
+                                SizedBox(height: 0.5.h,),
+                                ValidationWidget(conditions: [
+                                  {"value": registerProvider.cover == null,
+                                    "text": LanguageProvider.translate("validation", "cover")}
+                                ]),
+                              ],
 
                             ],
                           ),
@@ -104,8 +109,10 @@ class RegisterPage1 extends StatelessWidget {
                           width: 30.w,
                           borderRadius: 12,
                           onTap: () {
-                            if ((registerProvider.registerFormKey.currentState?.validate() ?? false)  &&
-                                registerProvider.logo != null && registerProvider.cover != null) {
+                            if ((registerProvider.registerFormKey.currentState?.validate() ?? false)) {
+                              if((registerProvider.logo == null || registerProvider.cover == null) && !AuthProvider.isLogin()){
+                                return;
+                              }
                               registerProvider.nextStep();
                             }
                           },
@@ -131,8 +138,10 @@ class RegisterPage1 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 2.h),
-              const HaveAccountSection(isLogin: false),
-              SizedBox(height: 3.h),
+              if(!AuthProvider.isLogin())...[
+                const HaveAccountSection(isLogin: false),
+                SizedBox(height: 3.h),
+              ],
             ],
           ),
         ),
@@ -141,10 +150,11 @@ class RegisterPage1 extends StatelessWidget {
   }
 
   Widget _buildTitleSection() {
+
     return Column(
       children: [
         Text(
-          LanguageProvider.translate('global', 'create_account'),
+          LanguageProvider.translate('global', AuthProvider.isLogin()? 'update_account' : 'create_account'),
           style: TextStyleClass.headStyle().copyWith(fontSize: 16.sp),
         ),
         SizedBox(height: 1.h),

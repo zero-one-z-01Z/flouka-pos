@@ -132,7 +132,7 @@ class QuantityModel extends QuantityEntity {
       id: json['id'],
       storeProductID: json['store_product_id'],
       productVariantID: convertStringToInt(json['product_variant_id']),
-      quantity: convertDataToNum(json['quantity'])??0,
+      quantity: convertStringToInt(json['quantity'])??0,
     );
   }
 }

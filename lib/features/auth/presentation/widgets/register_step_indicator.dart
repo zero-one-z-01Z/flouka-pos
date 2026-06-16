@@ -1,3 +1,4 @@
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -13,7 +14,7 @@ class RegisterStepIndicator extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      children: List.generate(3, (index) {
+      children: List.generate(AuthProvider.isLogin()?2: 3, (index) {
         final stepNum = index + 1;
         final isActive = stepNum == currentStep;
         final isCompleted = stepNum < currentStep;

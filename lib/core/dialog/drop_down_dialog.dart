@@ -12,7 +12,7 @@ import '../widgets/drop_down_option_widget.dart';
 Future showDropDownDialog(DropDownClass dropDownClass) async {
   dynamic selected = dropDownClass.selected();
 
-  showDialog(context: Constants.globalContext(), builder:(context) {
+  await showDialog(context: Constants.globalContext(), builder:(context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -66,9 +66,9 @@ Future showDropDownDialog(DropDownClass dropDownClass) async {
                                       selected = data;
                                     }
                                     // selected = data;
+                                    dropDownClass.onTap(selected);
                                     setState(() {});
                                     navPop();
-                                    await dropDownClass.onTap(selected);
                                   },
                                 ),
                               );

@@ -61,12 +61,12 @@ class _RegisterBody extends StatelessWidget {
         Positioned(
           top: 0,
           left: 0,
-          child: Image.asset(Images.topCircles, width: 25.w),
+          child: IgnorePointer(child: Image.asset(Images.topCircles, width: 25.w)),
         ),
         Positioned(
           bottom: 0,
           right: 0,
-          child: Image.asset(Images.bottomCircles, width: 25.w),
+          child: IgnorePointer(child: Image.asset(Images.bottomCircles, width: 25.w)),
         ),
       ],
     );

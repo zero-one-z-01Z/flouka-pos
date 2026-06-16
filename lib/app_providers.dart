@@ -1,6 +1,7 @@
 import 'package:flouka_pos/features/products/presentation/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'features/auth/presentation/providers/account_type_provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/auth/presentation/providers/otp_provider.dart';
 import 'features/auth/presentation/providers/register_provider.dart';
@@ -52,6 +53,7 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => language),
         ChangeNotifierProvider(create: (_) => SplashProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => AccountTypeProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => CategoryProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => OtpProvider()),

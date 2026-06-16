@@ -236,6 +236,7 @@ class ApiHandel {
 
   Future reLogin(String url) async {
     String? token = sharedPreferences.getString('token');
+    print("hamza token :$token");
     if (!url.contains('refresh_token') && token != null && token.isNotEmpty && JwtDecoder.isExpired(token)) {
       await Provider.of<AuthProvider>(Constants.globalContext(), listen: false,).refreshToken();
     }

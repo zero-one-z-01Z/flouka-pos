@@ -15,7 +15,7 @@ void confirmDialog(
     context: Constants.globalContext(),
     barrierDismissible: isDismiss ?? false,
     builder: (BuildContext context) => Transform.scale(
-      scale: Constants.isTablet ? 2 : 1,
+      scale:  1,
       child: CupertinoAlertDialog(
         title: Text(title, style: const TextStyle(color: Colors.black)),
         actions: <CupertinoDialogAction>[

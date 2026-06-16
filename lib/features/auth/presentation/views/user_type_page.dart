@@ -10,6 +10,7 @@ import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../home/presentation/providers/home_provider.dart';
+import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/auth_provider.dart';
 
 class UserTypePage extends StatelessWidget {
@@ -27,6 +28,9 @@ class UserTypePage extends StatelessWidget {
               'POS SYSTEM V 0.1',
               style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
             ),
+            actions: [
+              const LanguageWidget(),
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(

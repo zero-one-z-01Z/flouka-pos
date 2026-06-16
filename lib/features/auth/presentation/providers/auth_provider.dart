@@ -87,6 +87,7 @@ class AuthProvider extends ChangeNotifier {
   }
   void goToUserTypePage() {
     changeUserType(isStore: isStore);
+    sharedPreferences.remove('token');
     navPR(const UserTypePage());
   }
 

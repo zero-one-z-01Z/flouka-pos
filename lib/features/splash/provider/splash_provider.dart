@@ -45,8 +45,6 @@ class SplashProvider extends ChangeNotifier {
     return;
     }
 
-    /// Restore token into API header
-    ApiHandel.getInstance.updateHeader(token);
     //
     try {
       await authProvider.getProfile();

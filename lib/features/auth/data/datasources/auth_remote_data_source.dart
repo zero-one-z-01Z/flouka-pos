@@ -56,7 +56,7 @@ class AuthRemoteDataSource {
   Future<Either<DioException, String>> refreshToken(
     Map<String, dynamic> data,
   ) async {
-    var response = await apiHandel.get('refresh_token', data);
+    var response = await apiHandel.post('refresh_token', data);
     return response.fold((l) => Left(l), (r) => Right(r.data['token']));
   }
 

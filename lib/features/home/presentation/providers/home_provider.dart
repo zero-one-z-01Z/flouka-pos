@@ -77,12 +77,12 @@ class HomeProvider extends ChangeNotifier {
         NavigationEntity(title: "add_products", svgImage: Images.addProduct, onTap: (){
           Provider.of<AddProductProvider>(Constants.globalContext(), listen: false).initFields();
         }),
-        NavigationEntity(title: "popular_categories", svgImage: Images.popularCategories, onTap: (){
-          Provider.of<PopularCategoryProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
-        NavigationEntity(title: "sections", svgImage: Images.sections, onTap: (){
-          Provider.of<SectionsProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
+        // NavigationEntity(title: "popular_categories", svgImage: Images.popularCategories, onTap: (){
+        //   Provider.of<PopularCategoryProvider>(Constants.globalContext(), listen: false).refresh();
+        // }),
+        // NavigationEntity(title: "sections", svgImage: Images.sections, onTap: (){
+        //   Provider.of<SectionsProvider>(Constants.globalContext(), listen: false).refresh();
+        // }),
         NavigationEntity(title: "video", svgImage: Images.video, onTap: (){
           Provider.of<ReelsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<ReelsProvider>(Constants.globalContext(), listen: false).refresh();
@@ -103,6 +103,9 @@ class HomeProvider extends ChangeNotifier {
         NavigationEntity(title: "coupons", svgImage: Images.coupons, onTap: (){
           Provider.of<CouponsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<CouponsProvider>(Constants.globalContext(), listen: false).refresh();
+        }),
+        if(sharedPreferences.getBool('isStore')??false)NavigationEntity(title: "tickets", svgImage: Images.support, onTap: (){
+          Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).goToTicketsPage();
         }),
         NavigationEntity(title: "Settings", svgImage: Images.settings, onTap: (){}),
       ];

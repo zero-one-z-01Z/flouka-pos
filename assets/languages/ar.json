@@ -1,6 +1,7 @@
 {
   "on_boarding": {},
   "global": {
+    "delivery": "التوصيل",
     "set_delivery_time": "تعيين وقت التوصيل",
     "select_nearest_delivery_time": "اختر أقرب وقت شحن متاح لهذا الطلب",
     "order_details": "تفاصيل الطلب",

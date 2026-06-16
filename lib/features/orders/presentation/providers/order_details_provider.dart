@@ -180,21 +180,23 @@ class OrderDetailsProvider extends ChangeNotifier {
           updateVendorOrderStatus(status: VendorOrderStatus.readyToShip);
         },
       };
-    }else if(status == VendorOrderStatus.readyToShip){
-      return {
-        'title': 'order_shipped',
-        'onTap': (){
-          updateVendorOrderStatus(status: VendorOrderStatus.shipped);
-        },
-      };
-    }else if(status == VendorOrderStatus.shipped){
-      return {
-        'title': 'order_delivered',
-        'onTap': (){
-          updateVendorOrderStatus(status: VendorOrderStatus.delivered);
-        },
-      };
-    }else{
+    }
+    // else if(status == VendorOrderStatus.readyToShip){
+    //   return {
+    //     'title': 'order_shipped',
+    //     'onTap': (){
+    //       updateVendorOrderStatus(status: VendorOrderStatus.shipped);
+    //     },
+    //   };
+    // }else if(status == VendorOrderStatus.shipped){
+    //   return {
+    //     'title': 'order_delivered',
+    //     'onTap': (){
+    //       updateVendorOrderStatus(status: VendorOrderStatus.delivered);
+    //     },
+    //   };
+    // }
+    else{
       return {};
     }
   }

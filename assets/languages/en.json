@@ -88,6 +88,7 @@
     "filter": "Filter"
   },
   "global": {
+    "delivery": "Delivery",
     "settings": "Settings",
     "no_notifications": "No Notifications",
     "notifications": "Notifications",

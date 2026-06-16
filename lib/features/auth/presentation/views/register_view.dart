@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../injection_container.dart';
+import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/register_provider.dart';
 import 'register_page3.dart';
 
@@ -51,6 +52,9 @@ class _RegisterBody extends StatelessWidget {
               'POS SYSTEM V 0.1',
               style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
             ),
+            actions: [
+              const LanguageWidget(),
+            ],
           ),
           body: page,
         ),

@@ -8,6 +8,7 @@ import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../home/presentation/providers/home_provider.dart';
+import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/auth_provider.dart';
 
 class LoginView extends StatelessWidget {
@@ -26,26 +27,7 @@ class LoginView extends StatelessWidget {
           style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 5.h),
-            child: Row(
-              children: [
-                Text(
-                  "En",
-                  style: TextStyleClass.smallStyle(
-                    color: const Color(0xff828282),
-                  ).copyWith(fontSize: 12.sp),
-                ),
-                SizedBox(width: 1.w),
-                Switch(
-                  value: !LanguageProvider.isAr(),
-                  onChanged: (value) {
-                    // LanguageProvider.changeLanguage(value);
-                  },
-                ),
-              ],
-            ),
-          ),
+          const LanguageWidget(),
         ],
       ),
       body: SizedBox(

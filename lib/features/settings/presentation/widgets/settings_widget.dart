@@ -16,51 +16,46 @@ class SettingsWidget extends StatelessWidget {
   final bool isLast;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
+      width: (100.w/2)-10.w,
       child: Column(
         children: [
           InkWell(
             onTap: settingsEntity.onTap,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 1.w),
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            LanguageProvider.translate(
-                              "settings",
-                              settingsEntity.text,
-                            ),
-                            style: TextStyleClass.normalStyle(),
-                          ),
-                        ],
+              padding: EdgeInsets.symmetric(horizontal: 1.w),
+              child: Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      LanguageProvider.translate(
+                        "settings",
+                        settingsEntity.text,
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 4.w,
-                        color: const Color(0xffA5A5A5),
-                      ),
-                    ],
-                  ),
-                ],
+                      style: TextStyleClass.smallStyle(),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           if (!isLast)
-            Row(
-              children: [
-                Expanded(
-                  child: Container(color: const Color(0xffEFEFEF), height: 0.15.h),
-                ),
-              ],
-            ),
+            Divider(thickness: 0.15.h,color: const Color(0xffEFEFEF),),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Container(color: const Color(0xffEFEFEF), height: 0.15.h),
+            //     ),
+            //   ],
+            // ),
         ],
       ),
     );

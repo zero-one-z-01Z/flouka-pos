@@ -26,11 +26,16 @@ class SettingsView extends StatelessWidget {
                 //   child: const SettingsHeaderWidget(),
                 // ),
                 SizedBox(height: 4.h),
-                Wrap(
-                  children: List.generate(
-                    settingsProvider.settingsList.length,
-                    (index) => SettingsWidget(
-                      settingsEntity: settingsProvider.settingsList[index],
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    spacing: 3.w,
+                    runSpacing: 0.h,
+                    children: List.generate(
+                      settingsProvider.settingsList.length,
+                      (index) => SettingsWidget(
+                        settingsEntity: settingsProvider.settingsList[index],
+                      ),
                     ),
                   ),
                 ),

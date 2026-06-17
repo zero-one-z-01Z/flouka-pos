@@ -105,17 +105,19 @@ class UserTypePage extends StatelessWidget {
         Positioned(
           bottom: 0,
           right: 0,
-          child: Image.asset(
-            fit: BoxFit.fill,
-            Images.bottomCircles,
-            width: 37.w,
-            height: 50.h,
+          child: IgnorePointer(
+            child: Image.asset(
+              fit: BoxFit.fill,
+              Images.bottomCircles,
+              width: 37.w,
+              height: 50.h,
+            ),
           ),
         ),
         Positioned(
           top: 0,
           left: 0,
-          child: Image.asset(Images.topCircles, width: 25.w),
+          child: IgnorePointer(child: Image.asset(Images.topCircles, width: 25.w)),
         ),
       ],
     );

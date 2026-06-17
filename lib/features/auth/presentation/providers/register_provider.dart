@@ -309,7 +309,8 @@ class RegisterProvider extends ChangeNotifier {
           width: 25.w,
           validator: (value) => validateOpenDate(value),
           onTap: (){
-            selectDate(dateTime: userEntity?.openDate==null?null:DateTime.parse(userEntity!.openDate!)).then((value){
+            selectDate(dateTime: userEntity?.openDate==null?null:
+            DateTime.parse(userEntity!.openDate!),firstDate: DateTime(1900)).then((value){
               if(value !=null){
                 registerPage2TextFields.firstWhere((element) => element.key=="open_date",)
                     .controller.text = convertDateToStringYMD(value);

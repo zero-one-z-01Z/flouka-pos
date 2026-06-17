@@ -104,11 +104,11 @@ class AddVariantView extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 1.h,),
-                                ValidationWidget(conditions: [
-                                  {"value": addVariantProvider.productImages.isEmpty,
-                                    "text": LanguageProvider.translate("product", "select_variant_images")}
-                                ]),
-                                SizedBox(height: 1.h,),
+                                // ValidationWidget(conditions: [
+                                //   {"value": addVariantProvider.productImages.isEmpty,
+                                //     "text": LanguageProvider.translate("product", "select_variant_images")}
+                                // ]),
+                                // SizedBox(height: 1.h,),
                                 Wrap(
                                   children: List.generate(addVariantProvider.attributes.length, (index) {
                                     final attribute = addVariantProvider.attributes[index];

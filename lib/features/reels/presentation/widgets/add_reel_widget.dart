@@ -54,10 +54,10 @@ class AddReelWidget extends StatelessWidget {
                   SizedBox(height: 1.h,),
                   DropDownWidget(dropDownClass:productOptionsProvider ),
                   SizedBox(height: 1.h,),
-                  ValidationWidget(conditions: [
-                    {"value": productOptionsProvider.productOptionEntity == null,
-                      "text": LanguageProvider.translate("global", "select_product")}
-                  ]),
+                  // ValidationWidget(conditions: [
+                  //   {"value": productOptionsProvider.productOptionEntity == null,
+                  //     "text": LanguageProvider.translate("global", "select_product")}
+                  // ]),
                 ],
               ),
             ),
@@ -66,7 +66,7 @@ class AddReelWidget extends StatelessWidget {
           ButtonWidget(onTap: (){
             if(reelsOperationsProvider.formKey.currentState!.validate()
                 && reelsOperationsProvider.video != null
-                && productOptionsProvider.productOptionEntity != null){
+            ){
               reelsOperationsProvider.addReel();
             }
           }, text: "add_store"),

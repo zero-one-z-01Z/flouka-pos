@@ -30,68 +30,74 @@ class ProductsTab extends StatelessWidget {
           controller: productProvider.controller,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 2.w),
-          child: Builder(
-            builder: (context) {
-              if (productProvider.data == null) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 20.h),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }else if (productProvider.data!.isEmpty) {
-                return const EmptyAnimation(title: "", gif: Lotties.noSearch);
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            children: [
+              SizedBox(height: 2.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(height: 4.h),
-
-                  // // Categories
-                  // const CategoriesListWidget(),
-                  SizedBox(height: 2.h),
-
-                  // Products header + add button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        LanguageProvider.translate('global', 'products'),
-                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                      ),
-                      if(!(sharedPreferences.getBool('isStore') ?? false))
-                      ButtonWidget(
-                        onTap: () {
-                          navProvider.setSelectedNavigation(
-                            navProvider.navigationList.firstWhere(
-                                  (nav) => nav.title == 'add_products',
-                            ),
-                          );
-                        },
-                        text: LanguageProvider.translate('buttons', 'add_products'),
-                        width: 15.w,
-                        height: 5.h,
-                        borderRadius: 9.sp,
-                      ),
-                    ],
+                  Text(
+                    LanguageProvider.translate('global', 'products'),
+                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 2.h),
-
-                  // Products Grid
-
-                  Wrap(
-                    spacing: 2.w,
-                    runSpacing: 2.h,
-                    children: List.generate(productProvider.data!.length, (index) {
-                      final product = productProvider.data![index];
-                      return ProductItemWidget(product: product);
-                    }),
-                  ),
-                  SizedBox(height: 2.h),
-                  if (productProvider.paginationStarted) const LoadingWidget(),
+                  if(!(sharedPreferences.getBool('isStore') ?? false))
+                    ButtonWidget(
+                      onTap: () {
+                        navProvider.setSelectedNavigation(
+                          navProvider.navigationList.firstWhere(
+                                (nav) => nav.title == 'add_products',
+                          ),
+                        );
+                      },
+                      text: LanguageProvider.translate('buttons', 'add_products'),
+                      width: 15.w,
+                      height: 5.h,
+                      borderRadius: 9.sp,
+                    ),
                 ],
-              );
-            }
+              ),
+              SizedBox(height: 2.h),
+              Builder(
+                builder: (context) {
+                  if (productProvider.data == null) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 20.h),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }else if (productProvider.data!.isEmpty) {
+                    return const EmptyAnimation(title: "", gif: Lotties.noSearch);
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 4.h),
+
+                      // // Categories
+                      // const CategoriesListWidget(),
+                      SizedBox(height: 2.h),
+
+                      // Products header + add button
+
+
+                      // Products Grid
+
+                      Wrap(
+                        spacing: 2.w,
+                        runSpacing: 2.h,
+                        children: List.generate(productProvider.data!.length, (index) {
+                          final product = productProvider.data![index];
+                          return ProductItemWidget(product: product);
+                        }),
+                      ),
+                      SizedBox(height: 2.h),
+                      if (productProvider.paginationStarted) const LoadingWidget(),
+                    ],
+                  );
+                }
+              ),
+            ],
           ),
         ),
       ),

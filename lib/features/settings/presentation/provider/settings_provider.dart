@@ -28,16 +28,16 @@ class SettingsProvider extends ChangeNotifier {
         Provider.of<NotificationProvider>(Constants.globalContext(), listen: false,).goToNotificationPage();
       },
     ),
-    ProfileSettingsEntity(
-      text: "language",
-      color: const Color(0xff144B86),
-      onTap: () {
-        Provider.of<LanguageProvider>(
-          Constants.globalContext(),
-          listen: false,
-        ).showLanguageDialog();
-      },
-    ),
+    // ProfileSettingsEntity(
+    //   text: "language",
+    //   color: const Color(0xff144B86),
+    //   onTap: () {
+    //     Provider.of<LanguageProvider>(
+    //       Constants.globalContext(),
+    //       listen: false,
+    //     ).showLanguageDialog();
+    //   },
+    // ),
     // ProfileSettingsEntity(
     //   text: "support",
     //   color: const Color(0xff254AA5),

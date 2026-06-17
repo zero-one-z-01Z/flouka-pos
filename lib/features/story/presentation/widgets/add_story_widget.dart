@@ -59,10 +59,10 @@ class AddStoryWidget extends StatelessWidget {
                   SizedBox(height: 1.h,),
                   DropDownWidget(dropDownClass:productOptionsProvider ),
                   SizedBox(height: 1.h,),
-                  ValidationWidget(conditions: [
-                    {"value": productOptionsProvider.productOptionEntity == null,
-                      "text": LanguageProvider.translate("global", "select_product")}
-                  ]),
+                  // ValidationWidget(conditions: [
+                  //   {"value": productOptionsProvider.productOptionEntity == null,
+                  //     "text": LanguageProvider.translate("global", "select_product")}
+                  // ]),
                 ],
               ),
             ),

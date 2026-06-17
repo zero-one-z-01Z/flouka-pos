@@ -19,7 +19,7 @@ import 'auth_provider.dart';
 
 class OtpProvider extends ChangeNotifier {
   String? hashedCode;
-  int counter = 60;
+  int counter = 60*5;
   Timer? timer;
   TextEditingController otpController = TextEditingController();
 
@@ -55,7 +55,7 @@ class OtpProvider extends ChangeNotifier {
   }
 
   void startTimer() {
-    counter = 60;
+    counter = 60*5;
     timer?.cancel();
     timer = Timer.periodic(const Duration(seconds: 1), (e) {
       if (timer?.isActive ?? false) {

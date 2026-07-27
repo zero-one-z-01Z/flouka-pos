@@ -16,7 +16,7 @@ ThemeData defaultTheme = ThemeData(
   dividerColor: Colors.transparent,
   radioTheme: radioThemeData,
   appBarTheme: appBarTheme,
-  fontFamily: "Lato",
+  fontFamily: "Cairo",
   splashColor: Colors.transparent,
 );
 
@@ -29,7 +29,7 @@ AppBarTheme appBarTheme = AppBarTheme(
   iconTheme: const IconThemeData(color: Colors.black),
   systemOverlayStyle: barColor(),
   titleTextStyle: TextStyle(
-    fontFamily: "Lato",
+    fontFamily: "Cairo",
     fontWeight: FontWeight.bold,
     fontSize: 16.sp,
     color: Colors.black,

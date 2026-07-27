@@ -13,17 +13,9 @@ class StatusRowWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(2.h),
       decoration: BoxDecoration(
-        boxShadow: [
-          const BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-            spreadRadius: -5,
-            offset: Offset(0, 6),
-          ),
-        ],
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: const Color(0xffE7ECF3)),
       ),
       child: Row(
         spacing: 2.w,

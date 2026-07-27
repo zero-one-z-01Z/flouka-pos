@@ -161,9 +161,9 @@ class OrdersProvider extends ChangeNotifier implements PaginationClass{
       homeOrders?[j].vendorOrders.status = status;
       if(status == VendorOrderStatus.delivered){
         if(isPartiallyFulfilled) {
-          homeOrders?[i].status = OrderStatus.partiallyFulfilled;
+          homeOrders?[j].status = OrderStatus.partiallyFulfilled;
         }else{
-          homeOrders?[i].status = OrderStatus.fulfilled;
+          homeOrders?[j].status = OrderStatus.fulfilled;
         }
       }
       notifyListeners();

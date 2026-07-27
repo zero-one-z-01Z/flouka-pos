@@ -83,7 +83,7 @@ class OrderCardWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
-                      color: orderEntity.status.color,
+                      color: orderEntity.vendorOrders.status.color,
                     ),
                   ),
                 ),

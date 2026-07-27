@@ -54,11 +54,11 @@ class HomeProvider extends ChangeNotifier {
         NavigationEntity(title: "Overview", svgImage: Images.overView, onTap: (){
           ordersProvider.changeSelectedTab(ordersProvider.tabs.first,isHome: true);
         }),
-        NavigationEntity(title: "Products", svgImage: Images.products, onTap: (){
-          Provider.of<ProductsProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
         NavigationEntity(title: "Orders", svgImage: Images.orders, onTap: (){
           ordersProvider.changeSelectedTab(ordersProvider.tabs.first);
+        }),
+        NavigationEntity(title: "Products", svgImage: Images.products, onTap: (){
+          Provider.of<ProductsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
         NavigationEntity(title: "support", svgImage: Images.tickets, onTap: (){
           Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).refresh();
@@ -76,11 +76,11 @@ class HomeProvider extends ChangeNotifier {
         NavigationEntity(title: "Overview", svgImage: Images.overView, onTap: (){
           ordersProvider.changeSelectedTab(ordersProvider.tabs.first,isHome: true);
         }),
-        NavigationEntity(title: "Products", svgImage: Images.products, onTap: (){
-          Provider.of<ProductsProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
         NavigationEntity(title: "Orders", svgImage: Images.orders, onTap: (){
           ordersProvider.changeSelectedTab(ordersProvider.tabs.first);
+        }),
+        NavigationEntity(title: "Products", svgImage: Images.products, onTap: (){
+          Provider.of<ProductsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
         NavigationEntity(title: "add_products", svgImage: Images.addProduct, onTap: (){
           Provider.of<AddProductProvider>(Constants.globalContext(), listen: false).initFields();
@@ -95,9 +95,6 @@ class HomeProvider extends ChangeNotifier {
           Provider.of<ReelsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<ReelsProvider>(Constants.globalContext(), listen: false).refresh();
         }),
-
-
-
         NavigationEntity(title: "stories", svgImage: Images.video, onTap: (){
           Provider.of<StoriesOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<StoriesProvider>(Constants.globalContext(), listen: false).refresh();

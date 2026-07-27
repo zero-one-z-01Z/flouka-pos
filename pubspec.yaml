@@ -88,8 +88,9 @@ flutter:
     - assets/languages/
     - assets/lottie/
     - assets/images/products/
+    - assets/brand/
 
   fonts:
-    - family: Lato
+    - family: Cairo
       fonts:
-        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Variable.ttf

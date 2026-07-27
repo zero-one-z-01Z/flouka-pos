@@ -17,14 +17,9 @@ class InfoGridWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          const BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-            spreadRadius: -5,
-            offset: Offset(0, 6),
-          ),
-        ],
+        border: const Border(
+          bottom: BorderSide(color: Color(0xffE7ECF3)),
+        ),
       ),
       child: GridView.count(
         padding: EdgeInsets.zero,

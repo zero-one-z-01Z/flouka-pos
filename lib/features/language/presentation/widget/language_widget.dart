@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
+import '../../../../core/config/app_color.dart';
 import '../provider/language_provider.dart';
 
 class LanguageWidget extends StatelessWidget {
@@ -9,30 +9,31 @@ class LanguageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LanguageProvider languageProvider = Provider.of(context,listen: false);
+    final LanguageProvider languageProvider =
+        Provider.of(context, listen: false);
     return GestureDetector(
       onTap: () => languageProvider.showLanguageDialog(),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 1.5.w, vertical: 1.h),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9FD),
-          borderRadius: BorderRadius.circular(8),
+          color: AppColor.canvas,
+          borderRadius: BorderRadius.circular(9),
         ),
         child: Row(
           children: [
             Text(
               languageProvider.appLocal.languageCode == 'ar' ? 'Ar' : 'En',
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff344054),
               ),
             ),
-            SizedBox(width: 0.5.w),
-            Icon(
+            const SizedBox(width: 4),
+            const Icon(
               Icons.keyboard_arrow_down,
-              color:const Color(0xFF9E9E9E),
-              size: 2.5.w,
+              color: AppColor.textFaint,
+              size: 13,
             ),
           ],
         ),

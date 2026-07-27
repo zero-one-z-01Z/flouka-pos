@@ -22,17 +22,9 @@ class ProfileSectionWidget extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.only(top: 4.h, left: 3.w, right: 3.w, bottom: 14.h),
       decoration: BoxDecoration(
-        boxShadow: [
-          const BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-            spreadRadius: -5,
-            offset: Offset(0, 6),
-          ),
-        ],
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: const Color(0xffE7ECF3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

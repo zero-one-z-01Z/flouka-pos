@@ -96,6 +96,7 @@
     "filter": "تصفية"
   },
   "global": {
+    "pending_withdraw": "معلقه",
     "currency": "TND",
     "this_month": "هذا الشهر",
     "last_month": "الشهر السابق",

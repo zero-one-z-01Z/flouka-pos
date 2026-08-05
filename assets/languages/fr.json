@@ -95,6 +95,7 @@
     "filter": "Filtrer"
   },
   "global": {
+    "pending_withdraw": "En attente",
     "currency": "TND",
     "this_month": "Ce mois-ci",
     "last_month": "Le mois dernier",

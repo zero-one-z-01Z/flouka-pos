@@ -39,8 +39,8 @@ class WalletSummaryWidget extends StatelessWidget {
     return Row(
       children: [
         _card(LanguageProvider.translate("global", "wallet"), summary.wallet, Colors.green),
-        _card(LanguageProvider.translate("global", "pending"), summary.pending, Colors.amber),
-        _card(LanguageProvider.translate("global", "withdraw"), summary.withdraw, Colors.blueGrey),
+        _card(LanguageProvider.translate("global", "pending_withdraw"), summary.pending, Colors.amber),
+        _card(LanguageProvider.translate("navbar", "withdraw"), summary.withdraw, Colors.blueGrey),
         _card(LanguageProvider.translate("global", "total"), summary.total, Colors.blue),
       ],
     );

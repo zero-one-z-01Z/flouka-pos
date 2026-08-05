@@ -1,3 +1,4 @@
+import 'package:flouka_pos/core/dialog/snack_bar.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -11,7 +12,10 @@ import '../widgets/drop_down_option_widget.dart';
 
 Future showDropDownDialog(DropDownClass dropDownClass) async {
   dynamic selected = dropDownClass.selected();
-
+  if(dropDownClass.list().isEmpty){
+    showToast(LanguageProvider.translate('global', 'loading'));
+    return ;
+  }
   await showDialog(context: Constants.globalContext(), builder:(context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flouka_pos/core/helper_function/contact.dart';
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/chat/presentation/provider/message_provider.dart';
@@ -51,6 +52,10 @@ class DeliveryAddressWidget extends StatelessWidget {
                     .goToMessagePage(orderId: orderDetailsProvider.orderEntity!.id,
                     userId: orderDetailsProvider.orderEntity!.vendorOrders.items!.first.storeId??0);
               }, text:"chat",takeSmallestWidth: true,height: 5.h,borderRadius: 3,),
+              SizedBox(width: 1.w),
+              InkWell(onTap: (){
+                callPhone(orderDetailsProvider.orderEntity!.user!.fullPhone);
+              },child: Icon(Icons.call,size: 3.w,),),
             ],
           ),
           Text(

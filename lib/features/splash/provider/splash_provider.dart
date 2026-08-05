@@ -3,6 +3,8 @@
 import 'package:flouka_pos/core/helper_function/navigation.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/products/presentation/views/add_product_view.dart';
+import 'package:flouka_pos/features/settings/presentation/provider/settings_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/city_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/helper_function/prefs.dart';
@@ -35,6 +37,10 @@ class SplashProvider extends ChangeNotifier {
 
     // Use the context passed directly from the widget tree — avoids a null-check
     // crash on navState.currentContext which may not be mounted yet at splash time.
+      await Future.wait([
+      Provider.of<SettingsProvider>(context, listen: false).getSettings(),
+      Provider.of<CityProvider>(context, listen: false).getCities(),
+      ]);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     final token = sharedPreferences.getString('token');

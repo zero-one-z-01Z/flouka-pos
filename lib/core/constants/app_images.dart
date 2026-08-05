@@ -45,4 +45,12 @@ abstract class Images {
 
   // Test
   static const String macBook = 'assets/images/test/mac_book.png';
+
+  static const String exGood = 'assets/images/test/ex_good.png';
+  static const String exBad = 'assets/images/test/ex_bad.png';
+  static const String deleteFileIcon = 'assets/images/auth/delete_file_icon.svg';
+  static const String upload =
+      'assets/images/auth/upload.svg';
+  static const String download = 'assets/images/auth/download.svg';
+
 }

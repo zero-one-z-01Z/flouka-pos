@@ -145,11 +145,11 @@ class AuthProvider extends ChangeNotifier {
         stats: [
           StatItemEntity(
             label: LanguageProvider.translate('global', 'this_month'),
-            value: '${userEntity.vendorStatistics?.sales?.thisMonth} \$',
+            value: '${userEntity.vendorStatistics?.sales?.thisMonth} ${LanguageProvider.translate('global', 'currency')}',
           ),
           StatItemEntity(
             label: LanguageProvider.translate('global', 'last_month'),
-            value: '${userEntity.vendorStatistics?.sales?.lastMonth} \$',
+            value: '${userEntity.vendorStatistics?.sales?.lastMonth} ${LanguageProvider.translate('global', 'currency')}',
           ),
         ],
       ),
@@ -240,6 +240,7 @@ class AuthProvider extends ChangeNotifier {
           }
       ),
     ];
+    notifyListeners();
   }
 
   void rebuild() {
@@ -373,7 +374,7 @@ class AuthProvider extends ChangeNotifier {
     Map<String, dynamic> data = {};
     loading();
     if(updateActive){
-      data['active'] =! (userEntity?.active ?? false)?1:0 ;
+      data['available'] =! (userEntity?.active ?? false)?1:0 ;
     }else{
     }
     final result = await userUseCase.updateProfile(data);
@@ -384,6 +385,11 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       },
     );
+  }
+
+  void updateUser(UserEntity r) {
+    userEntity = r;
+    notifyListeners();
   }
 
 }

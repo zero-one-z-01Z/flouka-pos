@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
+import '../../../language/presentation/provider/language_provider.dart';
 import 'section_title_widget.dart';
 
 class VariantFormWidget extends StatelessWidget {
@@ -38,7 +39,7 @@ class VariantFormWidget extends StatelessWidget {
                   "Price",
                   "price",
                   controller: priceController,
-                  prefix: "\$",
+                  prefix: LanguageProvider.translate('global', 'currency'),
                 ),
               ),
               SizedBox(width: 2.w),

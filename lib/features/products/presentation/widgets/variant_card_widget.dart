@@ -2,6 +2,7 @@ import 'package:flouka_pos/features/products/domain/entity/variant_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
+import '../../../language/presentation/provider/language_provider.dart';
 
 class VariantCardWidget extends StatelessWidget {
   final VariantEntity variant;
@@ -28,7 +29,7 @@ class VariantCardWidget extends StatelessWidget {
             children: [
               _buildCardRow("SKU", variant.sku, isBlue: true),
               SizedBox(height: 0.5.h),
-              _buildCardRow("Price", ": ${variant.price}\$"),
+              _buildCardRow("Price", ": ${variant.price} ${LanguageProvider.translate('global', 'currency')}"),
               SizedBox(height: 0.5.h),
               _buildCardRow("Stock", ": ${variant.stock}"),
               SizedBox(height: 0.5.h),

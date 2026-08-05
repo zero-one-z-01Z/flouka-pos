@@ -74,13 +74,13 @@ class ProductItemWidget extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "\$${product.price}",
+                  "${LanguageProvider.translate('global', 'currency')} ${product.price}",
                   style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w600),
                 ),
                 if (product.price != null) ...[
                   SizedBox(width: 2.w),
                   Text(
-                    "\$${product.price}",
+                    "${LanguageProvider.translate('global', 'currency')} ${product.price}",
                     style: TextStyle(
                       fontSize: 10.sp,
                       color: AppColor.tertiaryColor,

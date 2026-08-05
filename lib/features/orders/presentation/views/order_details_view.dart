@@ -68,14 +68,15 @@ class OrderDetailsView extends StatelessWidget {
                                       spacing: 2.w,
                                       children: [
                                         Expanded(
+                                          flex: 2,
                                           child: OrderCardWidget(
                                             withButton: false,
                                             orderEntity: orderDetailsProvider.orderEntity!,
                                           ),
                                         ),
-                                        const Expanded(child: DeliveryAddressWidget()),
+                                        const Expanded(flex: 2,child: DeliveryAddressWidget()),
                                         if(!messageProvider.isShowChat)
-                                        const Expanded(child: PriceDetailesList()),
+                                        const Expanded(flex: 1,child: PriceDetailesList()),
 
                                       ],
                                     ),

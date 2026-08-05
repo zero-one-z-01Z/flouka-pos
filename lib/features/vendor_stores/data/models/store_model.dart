@@ -18,6 +18,9 @@ class StoreModel extends StoreEntity {
     super.address,
     super.token,
     super.createdAt,
+    super.areaId,
+    super.cityId,
+    super.neighborhoodId,
   });
 
   factory StoreModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +38,9 @@ class StoreModel extends StoreEntity {
       address: json['address'],
       token: json['token'],
       createdAt: json['created_at'],
+      areaId: convertStringToIntNull(json['area_id']),
+      neighborhoodId: convertStringToIntNull(json['neighborhood_id']),
+      cityId: convertStringToIntNull(json['city_id']),
     );
   }
 

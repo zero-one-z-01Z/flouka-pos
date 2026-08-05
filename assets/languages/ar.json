@@ -20,6 +20,7 @@
     "retail_stores": "متاجر التجزئة",
     "popular_categories": "الفئات الشائعة"
   },
+
   "chat": {
     "chat": "محادثة",
     "online": "متصل",
@@ -93,6 +94,12 @@
     "filter": "تصفية"
   },
   "global": {
+    "currency": "TND",
+    "this_month": "هذا الشهر",
+    "last_month": "الشهر السابق",
+    "cities": "المدن",
+    "areas": "المناطق",
+    "neighborhood": "الحي",
     "price": "السعر",
     "discount": "الخصم",
     "company": "شركة",
@@ -324,6 +331,10 @@
     "select_brand": "يرجى اختيار العلامة التجارية"
   },
   "inputs": {
+
+    "cities": "المدن",
+    "areas": "المناطق",
+    "neighborhood": "الحي",
     "bank_account": "رقم الحساب البنكي",
     "account_type": "نوع الحساب",
     "store_name": "اسم المتجر",

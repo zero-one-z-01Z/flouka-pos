@@ -24,6 +24,7 @@ class OrderEntity {
   final OrderUser? user;
   final VendorOrderEntity vendorOrders;
 
+
   OrderEntity({
     required this.id,
     required this.userId,
@@ -48,11 +49,13 @@ class OrderUser{
   final String name;
   final String image;
   final String phone;
+  final String fullPhone;
   OrderUser({
     required this.id,
     required this.name,
     required this.image,
     required this.phone,
+    required this.fullPhone,
   });
 
 }

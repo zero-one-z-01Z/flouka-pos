@@ -143,6 +143,16 @@ int convertStringToInt(dynamic value) {
   }
   return 0;
 }
+int? convertStringToIntNull(dynamic value) {
+  if (value == null) {
+    return null;
+  } else if (value is int) {
+    return value;
+  } else if (int.tryParse(value) != null) {
+    return int.parse(value);
+  }
+  return 0;
+}
 
 num? convertDataToNum(dynamic value) {
   if (value == null) {

@@ -37,6 +37,8 @@ class UserModel extends UserEntity {
     if(json.containsKey('store')&&json['store']!=null){
       storeModel = StoreModel.fromJson(json['store']);
     }
+
+
     return UserModel(
       id: json['id'],
       name: json['name'],
@@ -45,7 +47,7 @@ class UserModel extends UserEntity {
       logo: json['logo'],
       cover: json['cover'],
       bio: json['bio'],
-      active: convertDataToBool(json['active']),
+      active: convertDataToBool(json['available']),
       otp: json['otp'],
       otpExpiredAt: json['otp_expired_at'],
       productsCount: json['products_count'],

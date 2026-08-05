@@ -18,6 +18,7 @@ import '../../../../core/widgets/validation_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/otp_provider.dart';
 import '../providers/register_provider.dart';
+import '../widgets/file_picker/document_pick_file_widget.dart';
 import '../widgets/image_picker_field.dart';
 import '../widgets/register_step_indicator.dart';
 import 'otp_widget.dart';
@@ -27,6 +28,7 @@ class RegisterPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthProvider>();
     final provider = context.watch<RegisterProvider>();
     final accountType = context.read<AccountTypeProvider>();
     final otpProvider = context.read<OtpProvider>();
@@ -71,80 +73,167 @@ class RegisterPage2 extends StatelessWidget {
                       inputs: provider.registerPage2TextFields,
                     ),
                     SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Column(
+                    //         children: [
+                    //           ImagePickerField(
+                    //             label: "front_id_card",
+                    //             selectedImage: provider.showFrontIdCardImage(),
+                    //             onImageSelected: (file) {
+                    //               provider.selectFrontIdCardImage();
+                    //             },
+                    //           ),
+                    //           if(!AuthProvider.isLogin())...[
+                    //             SizedBox(height: 0.5.h,),
+                    //             ValidationWidget(conditions: [
+                    //               {"value": provider.frontIdCard == null,
+                    //                 "text": LanguageProvider.translate("validation", "front_id_card")}
+                    //             ]),
+                    //           ],
+                    //
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 3.w),
+                    //     Expanded(
+                    //       child: Column(
+                    //         children: [
+                    //           ImagePickerField(
+                    //             label: "back_id_card",
+                    //             selectedImage: provider.showBackIdCardImage(),
+                    //             onImageSelected: (file) {
+                    //               provider.selectBackIdCardImage();
+                    //             },
+                    //           ),
+                    //           if(!AuthProvider.isLogin())...[
+                    //             SizedBox(height: 0.5.h,),
+                    //             ValidationWidget(conditions: [
+                    //               {"value": provider.backIdCard == null,
+                    //                 "text": LanguageProvider.translate("validation", "back_id_card")}
+                    //             ]),
+                    //           ],
+                    //
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 3.w),
+                    //     if(accountType.value()=='company')...[
+                    //       Expanded(
+                    //         child: Column(
+                    //           children: [
+                    //             ...[
+                    //               ImagePickerField(
+                    //                 label: "business_license",
+                    //                 selectedImage: provider.showBusinessLicenseImage(),
+                    //                 onImageSelected: (file) {
+                    //                   provider.selectBusinessLicenseImage();
+                    //                 },
+                    //               ),
+                    //               if(!AuthProvider.isLogin())...[
+                    //                 SizedBox(height: 0.5.h,),
+                    //                 ValidationWidget(conditions: [
+                    //                   {"value": provider.businessLicense == null,
+                    //                     "text": LanguageProvider.translate("validation", "business_license")}
+                    //                 ]),
+                    //               ],
+                    //             ]
+                    //
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       SizedBox(width: 3.w),
+                    //     ],
+                    //   ],
+                    // ),
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.h),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImagePickerField(
+                              DocumentPickFileWidget(
                                 label: "front_id_card",
-                                selectedImage: provider.showFrontIdCardImage(),
-                                onImageSelected: (file) {
-                                  provider.selectFrontIdCardImage();
-                                },
+                                file: provider.frontIdCard,
+                                url: auth.userEntity?.frontIdCard,
+                                onFileSelected: (file) => provider.selectFrontIdCardImage(file),
+                                onFileRemoved: () => provider.removeFrontIdCard(),
                               ),
-                              if(!AuthProvider.isLogin())...[
-                                SizedBox(height: 0.5.h,),
+                              if (!AuthProvider.isLogin()) ...[
+                                SizedBox(height: 0.5.h),
                                 ValidationWidget(conditions: [
                                   {"value": provider.frontIdCard == null,
                                     "text": LanguageProvider.translate("validation", "front_id_card")}
                                 ]),
                               ],
-
                             ],
                           ),
-                        ),
-                        SizedBox(width: 3.w),
-                        Expanded(
-                          child: Column(
+                          SizedBox(height: 2.h),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImagePickerField(
+                              DocumentPickFileWidget(
                                 label: "back_id_card",
-                                selectedImage: provider.showBackIdCardImage(),
-                                onImageSelected: (file) {
-                                  provider.selectBackIdCardImage();
-                                },
+                                url: auth.userEntity?.backIdCard,
+                                file: provider.backIdCard,
+                                onFileSelected: (file) => provider.selectBackIdCardImage(file),
+                                onFileRemoved: () => provider.removeBackIdCard(),
                               ),
-                              if(!AuthProvider.isLogin())...[
-                                SizedBox(height: 0.5.h,),
+                              if (!AuthProvider.isLogin()) ...[
+                                SizedBox(height: 0.5.h),
                                 ValidationWidget(conditions: [
                                   {"value": provider.backIdCard == null,
                                     "text": LanguageProvider.translate("validation", "back_id_card")}
                                 ]),
                               ],
-
                             ],
                           ),
-                        ),
-                        SizedBox(width: 3.w),
-                        if(accountType.value()=='company')...[
-                          Expanded(
-                            child: Column(
-                              children: [
-                                ...[
-                                  ImagePickerField(
-                                    label: "business_license",
-                                    selectedImage: provider.showBusinessLicenseImage(),
-                                    onImageSelected: (file) {
-                                      provider.selectBusinessLicenseImage();
-                                    },
-                                  ),
-                                  if(!AuthProvider.isLogin())...[
-                                    SizedBox(height: 0.5.h,),
-                                    ValidationWidget(conditions: [
-                                      {"value": provider.businessLicense == null,
-                                        "text": LanguageProvider.translate("validation", "business_license")}
-                                    ]),
-                                  ],
-                                ]
-
+                          SizedBox(height: 2.h),
+                          if (accountType.value() == 'company')Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              DocumentPickFileWidget(
+                                label: "business_license",
+                                url: auth.userEntity?.businessLicense,
+                                file: provider.businessLicense,
+                                onFileSelected: (file) => provider.selectBusinessLicenseImage(file),
+                                onFileRemoved: () => provider.removeBusinessLicense(),
+                              ),
+                              if (!AuthProvider.isLogin()) ...[
+                                SizedBox(height: 0.5.h),
+                                ValidationWidget(conditions: [
+                                  {"value": provider.businessLicense == null,
+                                    "text": LanguageProvider.translate("validation", "business_license")}
+                                ]),
                               ],
-                            ),
+                            ],
                           ),
-                          SizedBox(width: 3.w),
+                          SizedBox(height: 2.h),
                         ],
-                      ],
+                      ),
                     ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: ,
+                    //     ),
+                    //     SizedBox(width: 3.w),
+                    //     Expanded(
+                    //       child:
+                    //     ),
+                    //     SizedBox(width: 3.w),
+                    //     if (accountType.value() == 'company') ...[
+                    //       Expanded(
+                    //         child:
+                    //       ),
+                    //       SizedBox(width: 3.w),
+                    //     ],
+                    //   ],
+                    // ),
                     if(!AuthProvider.isLogin())...[
                       SizedBox(height: 2.h),
                       const OtpWidget(),
@@ -199,8 +288,9 @@ class RegisterPage2 extends StatelessWidget {
                     width: 30.w,
                     borderRadius: 12.sp,
                     onTap: () {
+
                       if(provider.registerForm2Key.currentState!.validate()&&
-                      otpProvider.otpController.text.length==4 &&
+                      (otpProvider.otpController.text.length==4||AuthProvider.isLogin()) &&
                       provider.frontIdCard != null &&
                       provider.backIdCard != null
                       ){

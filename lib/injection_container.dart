@@ -61,6 +61,10 @@ import 'features/vendor_stores/data/data_source/vendor_stores_remote_data_source
 import 'features/vendor_stores/data/repos/vendor_stores_repo_impl.dart';
 import 'features/vendor_stores/domain/repo/vendor_store_repo.dart';
 import 'features/vendor_stores/domain/user_case/vendor_stores_use_case.dart';
+import 'features/zone/data/datasource/city_remote.dart';
+import 'features/zone/data/repository/city_repo_impl.dart';
+import 'features/zone/domain/repository/city_repo.dart';
+import 'features/zone/domain/usecase/city_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -139,6 +143,11 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<SettingsRemoteDataSource>(SettingsRemoteDataSource(sl.get()));
   sl.registerSingleton<SettingsRepo>(SettingsRepoImpl(sl.get()));
   sl.registerSingleton<SettingsUseCases>(SettingsUseCases(sl.get()));
+
+  //city
+  sl.registerSingleton<CityRemoteDataSource>(CityRemoteDataSource(sl.get()));
+  sl.registerSingleton<CityRepo>(CityRepoImpl(sl.get()));
+  sl.registerSingleton<CityUseCases>(CityUseCases(sl.get()));
 
 
 }

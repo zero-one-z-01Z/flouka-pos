@@ -1,4 +1,7 @@
 import 'package:flouka_pos/features/products/presentation/providers/product_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/area_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/city_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/neighborhood_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'features/auth/presentation/providers/account_type_provider.dart';
@@ -90,6 +93,9 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OffersProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => OffersOperationsProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => PopularCategoryProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => CityProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => AreaProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => NeighborhoodProvider(sl.get())),
       ],
       child: child,
     );

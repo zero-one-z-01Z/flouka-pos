@@ -12,6 +12,7 @@ import 'package:flouka_pos/features/categories/presentation/providers/brands_pro
 import 'package:flouka_pos/features/categories/presentation/providers/subcategory_provider.dart';
 import 'package:flouka_pos/features/home/presentation/providers/home_provider.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
+import 'package:flouka_pos/features/products/presentation/providers/product_options_provider.dart';
 import 'package:flouka_pos/features/products/presentation/views/add_variant_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -312,6 +313,7 @@ class AddProductProvider extends ChangeNotifier {
   void afterSuccess(){
     reset();
     HomeProvider homeProvider =Provider.of<HomeProvider>(Constants.globalContext(), listen: false);
+    Provider.of<ProductOptionsProvider>(Constants.globalContext(), listen: false).getVendorProductsOption();
     ProductsProvider productsProvider =Provider.of<ProductsProvider>(Constants.globalContext(), listen: false);
     NavigationEntity navigation= homeProvider.navigationList.firstWhere((nav) => nav.title == "Products",);
     homeProvider.setAddProductNavigation(navigation);

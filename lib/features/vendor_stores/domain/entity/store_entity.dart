@@ -3,6 +3,9 @@ import 'package:equatable/equatable.dart';
 class StoreEntity {
   final int id;
   final int vendorId;
+  final int? areaId;
+  final int? cityId;
+  final int? neighborhoodId;
   final String? name;
   final String? phone;
   final String? userName;
@@ -29,6 +32,9 @@ class StoreEntity {
     this.address,
     this.token,
     this.createdAt,
+    this.areaId,
+    this.cityId,
+    this.neighborhoodId,
   });
 }
 

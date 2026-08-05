@@ -15,6 +15,9 @@ import 'package:flouka_pos/core/helper_function/text_form_field_validation.dart'
 import 'package:flouka_pos/features/auth/presentation/providers/account_type_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/otp_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/area_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/city_provider.dart';
+import 'package:flouka_pos/features/zone/presentation/providers/neighborhood_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flouka_pos/features/auth/domain/entities/user_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,7 +44,7 @@ class RegisterProvider extends ChangeNotifier {
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>(); // page 1
   final GlobalKey<FormState> registerForm2Key = GlobalKey<FormState>(); // page 2
 
-  UserEntity? userEntity;
+
   final AuthUseCase userUseCase;
 
   // ── Step tracking ──────────────────────────────────────────────────────────
@@ -50,9 +53,131 @@ class RegisterProvider extends ChangeNotifier {
   LatLng? latlng;
 
   void nextStep() async{
-    if(currentStep == 1 && !AuthProvider.isLogin()){
-      OtpProvider otpProvider = Provider.of(Constants.globalContext(),listen: false);
-      await otpProvider.sendOtp(isReg: true);
+    if(currentStep == 1){
+      if(!AuthProvider.isLogin()){
+        OtpProvider otpProvider = Provider.of(Constants.globalContext(),listen: false);
+        await otpProvider.sendOtp(isReg: true);
+      }
+      AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+      CityProvider cityProvider = Provider.of(Constants.globalContext(),listen: false);
+      AreaProvider areaProvider = Provider.of(Constants.globalContext(),listen: false);
+      NeighborhoodProvider neighborhoodProvider = Provider.of(Constants.globalContext(),listen: false);
+      final accountType = Constants.globalContext().read<AccountTypeProvider>();
+      cityProvider.clear();
+      areaProvider.clear();
+      neighborhoodProvider.clear();
+      print("userEntity?.address");
+      print(authProvider.userEntity?.address);
+      registerPage2TextFields = [
+        TextFieldModel(
+          key: 'address',
+          label: 'address',
+          width: 25.w,
+          controller: TextEditingController(text: authProvider.userEntity?.address),
+          validator: (value) =>validateAddress(value) ,
+        ),
+        TextFieldModel(
+            key: 'open_date',
+            label: 'open_date',
+            controller: TextEditingController(text: authProvider.userEntity?.openDate),
+            readOnly: true,
+            width: 25.w,
+            validator: (value) => validateOpenDate(value),
+            onTap: (){
+              selectDate(dateTime: authProvider.userEntity?.openDate==null?null:
+              DateTime.parse(authProvider.userEntity!.openDate!),firstDate: DateTime(1900)).then((value){
+                if(value !=null){
+                  registerPage2TextFields.firstWhere((element) => element.key=="open_date",)
+                      .controller.text = convertDateToStringYMD(value);
+                }
+              });
+            }
+        ),
+        TextFieldModel(
+          key: 'admin_name',
+          label: 'admin_name',
+          width: 25.w,
+          controller: TextEditingController(text: authProvider.userEntity?.adminName),
+          validator: (value) => validatePhone(value),
+        ),
+        TextFieldModel(
+          key: 'admin_phone',
+          label: 'admin_phone',
+          width: 25.w,
+          validator: (value) => validatePhone(value),
+
+          controller: TextEditingController(text: authProvider.userEntity?.adminPhone),
+        ),
+        TextFieldModel(
+          key: 'national_id',
+          label: 'national_id',
+          controller: TextEditingController(text: authProvider.userEntity?.nationalId),
+          width: 25.w,
+          validator: (v) =>validateId(v),
+        ),
+        TextFieldModel(
+          key: 'bank_account',
+          label: 'bank_account',
+          controller: TextEditingController(text: authProvider.userEntity?.bankNumber),
+          width: 25.w,
+          validator: (v) =>validateBankAccount(v),
+
+        ),
+        if(accountType.value()=='individual')...[
+          TextFieldModel(
+              key: 'city',
+              label: 'cities',
+              controller: TextEditingController(text: cityProvider.displayedName()),
+              readOnly: true,
+              width: 25.w,
+              onTap: (){
+                showDropDownDialog(cityProvider).then((value){
+                  cityProvider = Provider.of(Constants.globalContext(),listen: false);
+                  int index = registerPage2TextFields.indexWhere((e)=>e.key=='city');
+                  print([index,cityProvider.displayedName()]);
+                  if(index!=-1){
+                    registerPage2TextFields[index].controller.text = cityProvider.displayedName();
+                    notifyListeners();
+                  }
+                });
+              }
+          ),
+          TextFieldModel(
+              key: 'area',
+              label: 'areas',
+              controller: TextEditingController(text: areaProvider.displayedName()),
+              readOnly: true,
+              width: 25.w,
+              onTap: (){
+                showDropDownDialog(areaProvider).then((value){
+                  areaProvider = Provider.of(Constants.globalContext(),listen: false);
+                  int index = registerPage2TextFields.indexWhere((e)=>e.key=='area');
+                  if(index!=-1){
+                    registerPage2TextFields[index].controller.text = areaProvider.displayedName();
+                    notifyListeners();
+                  }
+                });
+              }
+          ),
+          TextFieldModel(
+              key: 'neighborhood',
+              label: 'neighborhood',
+              controller: TextEditingController(text: neighborhoodProvider.displayedName()),
+              readOnly: true,
+              width: 25.w,
+              onTap: (){
+                showDropDownDialog(neighborhoodProvider).then((value){
+                  neighborhoodProvider = Provider.of(Constants.globalContext(),listen: false);
+                  int index = registerPage2TextFields.indexWhere((e)=>e.key=='neighborhood');
+                  if(index!=-1){
+                    registerPage2TextFields[index].controller.text = neighborhoodProvider.displayedName();
+                    notifyListeners();
+                  }
+                });
+              }
+          ),
+        ],
+      ];
 
     }
     if (currentStep < 3) {
@@ -100,7 +225,19 @@ class RegisterProvider extends ChangeNotifier {
       data['lng'] = latlng!.longitude;
     }
     for (var element in registerPage2TextFields) {
-      data[element.key] = element.controller.text;
+      if(!['city','area','neighborhood'].contains(element.key)){
+        data[element.key] = element.controller.text;
+      }
+    }
+    AccountTypeProvider accountTypeProvider = Provider.of(Constants.globalContext(),listen: false);
+
+    if(accountTypeProvider.value()=='individual'){
+      CityProvider cityProvider = Provider.of(Constants.globalContext(),listen: false);
+      AreaProvider areaProvider = Provider.of(Constants.globalContext(),listen: false);
+      NeighborhoodProvider neighborhoodProvider = Provider.of(Constants.globalContext(),listen: false);
+      data['neighborhood_id'] = neighborhoodProvider.value();
+      data['area_id'] = areaProvider.value();
+      data['city_id'] = cityProvider.value();
     }
 
     if (logo != null) {
@@ -170,6 +307,9 @@ class RegisterProvider extends ChangeNotifier {
             (l) {
           showToast(l.message ?? 'Registration failed');
         }, (r) {
+
+              AuthProvider authProvider = Constants.globalContext().read();
+              authProvider.updateUser(r);
         successDialog(then: (){
           navPU();
         });
@@ -206,8 +346,32 @@ class RegisterProvider extends ChangeNotifier {
     if(userEntity!=null){
       if(userEntity!.storeEntity?.lat!=null){
         latlng = LatLng(userEntity.storeEntity!.lat!, userEntity.storeEntity!.lng!);
+        if (userEntity!.storeEntity!.areaId != null) {
+          CityProvider cityProvider = Provider.of(Constants.globalContext(),listen: false);
+          AreaProvider areaProvider = Provider.of(Constants.globalContext(),listen: false);
+          NeighborhoodProvider neighborhoodProvider = Provider.of(Constants.globalContext(),listen: false);
+          final accountType = Constants.globalContext().read<AccountTypeProvider>();
+          cityProvider.clear();
+          areaProvider.clear();
+          neighborhoodProvider.clear();
+
+          cityProvider.cityEntity = cityProvider.cities.firstWhere(
+                (element) => element.id == userEntity!.storeEntity!.cityId,
+          );
+          await areaProvider.getArea(id: cityProvider.cityEntity!.id, fromAddress: true);
+          areaProvider.areaEntity = areaProvider.areas.firstWhere(
+                (element) => element.id == userEntity!.storeEntity!.areaId,
+          );
+          await neighborhoodProvider.getNeighborhood(id: areaProvider.areaEntity!.id, fromAddress: true);
+          neighborhoodProvider.neighborhood = neighborhoodProvider.neighborhoods.firstWhere(
+                (element) => element.id == userEntity!.storeEntity!.neighborhoodId,
+          );
+        }
       }
       accountTypeProvider.onTap(userEntity!.accountType);
+
+
+
     }else{
       loading();
       print('1');
@@ -293,62 +457,11 @@ class RegisterProvider extends ChangeNotifier {
       //   },
       // ),
     ];
-    registerPage2TextFields = [
-      TextFieldModel(
-        key: 'address',
-        label: 'Address',
-        width: 25.w,
-        controller: TextEditingController(text: userEntity?.address),
-        validator: (value) =>validateAddress(value) ,
-      ),
-      TextFieldModel(
-          key: 'open_date',
-          label: 'open_date',
-          controller: TextEditingController(text: userEntity?.openDate),
-          readOnly: true,
-          width: 25.w,
-          validator: (value) => validateOpenDate(value),
-          onTap: (){
-            selectDate(dateTime: userEntity?.openDate==null?null:
-            DateTime.parse(userEntity!.openDate!),firstDate: DateTime(1900)).then((value){
-              if(value !=null){
-                registerPage2TextFields.firstWhere((element) => element.key=="open_date",)
-                    .controller.text = convertDateToStringYMD(value);
-              }
-            });
-          }
-      ),
-      TextFieldModel(
-        key: 'admin_name',
-        label: 'admin_name',
-        width: 25.w,
-        controller: TextEditingController(text: userEntity?.adminName),
-        validator: (value) => validatePhone(value),
-      ),
-      TextFieldModel(
-        key: 'admin_phone',
-        label: 'admin_phone',
-        width: 25.w,
-        validator: (value) => validatePhone(value),
-
-        controller: TextEditingController(text: userEntity?.adminPhone),
-      ),
-      TextFieldModel(
-        key: 'national_id',
-        label: 'national_id',
-        controller: TextEditingController(text: userEntity?.nationalId),
-        width: 25.w,
-        validator: (v) =>validateId(v),
-      ),
-      TextFieldModel(
-        key: 'bank_account',
-        label: 'bank_account',
-        controller: TextEditingController(text: userEntity?.bankNumber),
-        width: 25.w,
-        validator: (v) =>validateBankAccount(v),
-
-      ),
-    ];
+    logo = null;
+    cover = null;
+    frontIdCard = null;
+    backIdCard = null;
+    businessLicense = null;
     navP(const RegisterView());
   }
 
@@ -368,9 +481,10 @@ class RegisterProvider extends ChangeNotifier {
 
   XFile? logo;
   XFile? cover;
-  XFile? frontIdCard;
-  XFile? backIdCard;
-  XFile? businessLicense;
+  File? frontIdCard;
+  File? backIdCard;
+  File? businessLicense;
+
 
 
   // bool logoUpdated = false;
@@ -405,6 +519,7 @@ class RegisterProvider extends ChangeNotifier {
       return const AssetImage(Images.floukaLogo);
     }
   }
+
   showBackIdCardImage() {
     AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
     if (authProvider.userEntity?.backIdCard != null ||backIdCard != null) {
@@ -417,7 +532,6 @@ class RegisterProvider extends ChangeNotifier {
       return const AssetImage(Images.floukaLogo);
     }
   }
-
   showFrontIdCardImage() {
     AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
     if (authProvider.userEntity?.frontIdCard != null ||frontIdCard != null) {
@@ -430,7 +544,6 @@ class RegisterProvider extends ChangeNotifier {
       return const AssetImage(Images.floukaLogo);
     }
   }
-
   showBusinessLicenseImage() {
     AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
     if (authProvider.userEntity?.businessLicense != null ||businessLicense != null) {
@@ -451,24 +564,58 @@ class RegisterProvider extends ChangeNotifier {
       updateLogo(image);
     }
   }
+  // Future selectFrontIdCardImage() async {
+  //   FocusScope.of(Constants.globalContext()).unfocus();
+  //   XFile? image = await chooseImage();
+  //   if (image != null) {
+  //     updateFrontIdCard(image);
+  //   }
+  // }
+  // Future selectBackIdCardImage() async {
+  //   FocusScope.of(Constants.globalContext()).unfocus();
+  //   XFile? image = await chooseImage();
+  //   if (image != null) {
+  //     updateBackIdCard(image);
+  //   }
+  // }
+  // Future selectBusinessLicenseImage() async {
+  //   FocusScope.of(Constants.globalContext()).unfocus();
+  //   XFile? image = await chooseImage();
+  //   if (image != null) {
+  //     updateBusinessLicense(image);
+  //   }
+  // }
 
-  Future selectFrontIdCardImage() async {
-    FocusScope.of(Constants.globalContext()).unfocus();
-    XFile? image = await chooseImage();
-    if (image != null) {
-      updateFrontIdCard(image);
-    }
+
+  void selectFrontIdCardImage(File file) {
+    frontIdCard = file;
+    notifyListeners();
   }
 
-  Future selectBackIdCardImage() async {
-    FocusScope.of(Constants.globalContext()).unfocus();
-    XFile? image = await chooseImage();
-    if (image != null) {
-      updateBackIdCard(image);
-    }
+  void selectBackIdCardImage(File file) {
+    backIdCard = file;
+    notifyListeners();
   }
 
+  void selectBusinessLicenseImage(File file) {
+    businessLicense = file;
+    notifyListeners();
+  }
 
+  void removeFrontIdCard() {
+    frontIdCard = null;
+    notifyListeners();
+  }
+
+  void removeBackIdCard() {
+    backIdCard = null;
+    notifyListeners();
+  }
+
+  void removeBusinessLicense() {
+    businessLicense = null;
+    notifyListeners();
+  }
   Future selectCoverImage() async {
     FocusScope.of(Constants.globalContext()).unfocus();
     XFile? image = await chooseImage();
@@ -477,36 +624,30 @@ class RegisterProvider extends ChangeNotifier {
     }
   }
 
-  Future selectBusinessLicenseImage() async {
-    FocusScope.of(Constants.globalContext()).unfocus();
-    XFile? image = await chooseImage();
-    if (image != null) {
-      updateBusinessLicense(image);
-    }
-  }
+
   void updateLogo(XFile image) {
     // logoUpdated = true;
     this.logo = image;
     notifyListeners();
   }
 
-  void updateFrontIdCard(XFile image) {
-    // frontIdCardUpdated = true;
-    this.frontIdCard = image;
-    notifyListeners();
-  }
-
-  void updateBackIdCard(XFile image) {
-    // backIdCardUpdated = true;
-    this.backIdCard = image;
-    notifyListeners();
-  }
-
-  void updateBusinessLicense(XFile image) {
-    // businessLicenseUpdate = true;
-    this.businessLicense = image;
-    notifyListeners();
-  }
+  // void updateFrontIdCard(XFile image) {
+  //   // frontIdCardUpdated = true;
+  //   this.frontIdCard = image;
+  //   notifyListeners();
+  // }
+  //
+  // void updateBackIdCard(XFile image) {
+  //   // backIdCardUpdated = true;
+  //   this.backIdCard = image;
+  //   notifyListeners();
+  // }
+  //
+  // void updateBusinessLicense(XFile image) {
+  //   // businessLicenseUpdate = true;
+  //   this.businessLicense = image;
+  //   notifyListeners();
+  // }
 
   void updateCover(XFile image) {
     // coverUpdated = true;

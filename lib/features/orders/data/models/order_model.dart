@@ -34,7 +34,7 @@ class OrderUserModel extends OrderUser {
     required super.id,
     required super.name,
     required super.image,
-    required super.phone,
+    required super.phone, required super.fullPhone,
   });
 
   factory OrderUserModel.fromJson(Map<String, dynamic> json) {
@@ -42,7 +42,7 @@ class OrderUserModel extends OrderUser {
       id: json['id'],
       name: json['name']??"",
       image: json['image'],
-      phone: json['phone']??"",
+      phone: json['phone']??"", fullPhone: json['full_phone'],
     );
   }
 }

@@ -55,7 +55,7 @@ class ProductPreviewOverlay extends StatelessWidget {
                 ),
               ),
               Text(
-                "\$${product.price}",
+                "${LanguageProvider.translate('global', 'currency')} ${product.price}",
                 style:
                 TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold),
               ),

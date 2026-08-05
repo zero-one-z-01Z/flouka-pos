@@ -76,6 +76,7 @@ class VendorStatisticsModel extends VendorStatisticsEntity {
     super.orders,
     super.sales,
     super.products,
+    super.wallet,
   });
 
   factory VendorStatisticsModel.fromJson(Map<String, dynamic> json) {
@@ -88,6 +89,9 @@ class VendorStatisticsModel extends VendorStatisticsEntity {
           : null,
       products: json['products'] != null
           ? ProductsStatisticsModel.fromJson(json['products'])
+          : null,
+      wallet: json['wallet'] != null
+          ? WalletSummaryModel.fromJson(json['wallet'])
           : null,
     );
   }
@@ -137,6 +141,20 @@ class ProductsStatisticsModel extends ProductsStatisticsEntity {
     return ProductsStatisticsModel(
       best: json['best'] !=null ? json['best']['name'] : null,
       worst: json['worst'] !=null ? json['worst']['name'] : null,
+    );
+  }
+}
+class WalletSummaryModel extends WalletSummaryEntity {
+  WalletSummaryModel({required super.wallet, required super.pending,
+    required super.withdraw, required super.total});
+
+
+  factory WalletSummaryModel.fromJson(Map<String, dynamic> json) {
+    return WalletSummaryModel(
+      wallet: convertDataToNum(json['wallet'])??0,
+      pending: convertDataToNum(json['pending'])??0,
+      total:  convertDataToNum(json['total'])??0,
+      withdraw:  convertDataToNum(json['withdraw'])??0,
     );
   }
 }

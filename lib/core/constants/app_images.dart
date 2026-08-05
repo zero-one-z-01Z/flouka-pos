@@ -37,6 +37,7 @@ abstract class Images {
   static const String addVideo = 'assets/images/navigation/add_video.svg';
   static const String offers = 'assets/images/home/offers.svg';
   static const String coupons = 'assets/images/navigation/coupons.svg';
+  static const String wallet = 'assets/images/navigation/wallet.svg';
   static const String home = 'assets/images/home/home.svg';
 
   //products

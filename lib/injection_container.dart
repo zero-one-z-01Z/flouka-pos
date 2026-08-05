@@ -5,6 +5,14 @@ import 'package:flouka_pos/features/chat/domain/use_cases/chat_usecases.dart';
 import 'package:flouka_pos/features/notification/data/data_sources/remote.dart';
 import 'package:flouka_pos/features/notification/data/repositories/notification_repo_impl.dart';
 import 'package:flouka_pos/features/notification/domain/use_cases/notification_usecaese.dart';
+import 'package:flouka_pos/features/wallet/data/data_source/wallet_remote_data_source.dart';
+import 'package:flouka_pos/features/wallet/data/repos/wallet_repo_impl.dart';
+import 'package:flouka_pos/features/wallet/domain/repo/wallet_repo.dart';
+import 'package:flouka_pos/features/wallet/domain/user_case/wallet_use_case.dart';
+import 'package:flouka_pos/features/withdraw/data/data_source/withdraw_remote_data_source.dart';
+import 'package:flouka_pos/features/withdraw/data/repos/withdraw_repo_impl.dart';
+import 'package:flouka_pos/features/withdraw/domain/repo/withdraw_repo.dart';
+import 'package:flouka_pos/features/withdraw/domain/user_case/withdraw_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'core/helper_function/api.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
@@ -149,6 +157,15 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<CityRepo>(CityRepoImpl(sl.get()));
   sl.registerSingleton<CityUseCases>(CityUseCases(sl.get()));
 
+  //withdraw
+  sl.registerSingleton<WithdrawRemoteDataSource>(WithdrawRemoteDataSource(sl.get()));
+  sl.registerSingleton<WithdrawRepo>(WithdrawRepoImpl(sl.get()));
+  sl.registerSingleton<WithdrawUseCase>(WithdrawUseCase(sl.get()));
+
+  //wallet
+  sl.registerSingleton<WalletRemoteDataSource>(WalletRemoteDataSource(sl.get()));
+  sl.registerSingleton<WalletRepo>(WalletRepoImpl(sl.get()));
+  sl.registerSingleton<WalletUseCase>(WalletUseCase(sl.get()));
 
 }
 

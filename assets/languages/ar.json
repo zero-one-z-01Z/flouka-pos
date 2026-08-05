@@ -32,6 +32,8 @@
     "popular_categories": "الفئات الشائعة",
     "sections": "الأقسام",
     "coupons": "الكوبونات",
+    "withdraw": "سحب الاموال",
+    "wallet": "المحفظة",
     "categories": "الفئات",
     "stories": "القصص",
     "orders": "الطلبات",
@@ -265,6 +267,8 @@
     "refunded": "تم استرداد المبلغ",
     "draft": "غير منشور",
     "pending": "في انتظار الموافقة",
+    "failed": "فشل",
+    "show_image": "عرض الصوره",
     "out_of_stock": "غير متوفر في المخزون",
     "rejected": "تم رفض الموافقة",
     "more_details": "المزيد من التفاصيل",
@@ -331,7 +335,7 @@
     "select_brand": "يرجى اختيار العلامة التجارية"
   },
   "inputs": {
-
+    "amount": "القيمة",
     "cities": "المدن",
     "areas": "المناطق",
     "neighborhood": "الحي",
@@ -408,6 +412,7 @@
     "today": "اليوم"
   },
   "buttons": {
+    "add_withdraw": "اضف طلب سحب",
     "cancel": "إلغاء",
     "order_processing": "جاري معالجة الطلب",
     "order_ready_to_ship": "الطلب جاهز للشحن",
@@ -546,5 +551,15 @@
     "max": "الحد الأقصى مطلوب",
     "select_store": "يرجى اختيار متجر",
     "count": "عدد مرات استخدام الكوبون مطلوب"
+  },
+  "wallet_operations": {
+    "charge": "شحن رصيد",
+    "buy": "شراء",
+    "refund": "استرجاع",
+    "withdraw": "طلب سحب",
+    "earn": "أرباح",
+    "for_admin": "رسوم إدارية",
+    "withdraw_balance_complete": "تم السحب",
+    "withdraw_balance_canceled": "تم إلغاء السحب"
   }
 }

@@ -60,11 +60,13 @@ class VendorStatisticsEntity {
   final OrdersStatisticsEntity? orders;
   final SalesStatisticsEntity? sales;
   final ProductsStatisticsEntity? products;
+  final WalletSummaryEntity? wallet;
 
   const VendorStatisticsEntity({
     this.orders,
     this.sales,
     this.products,
+    this.wallet,
   });
 }
 
@@ -103,3 +105,17 @@ class ProductsStatisticsEntity {
     this.worst,
   });
 }
+class WalletSummaryEntity {
+  final num wallet;
+  final num pending;
+  final num withdraw;
+  final num total;
+
+  const WalletSummaryEntity({
+    required this.wallet,
+    required this.pending,
+    required this.withdraw,
+    required this.total,
+  });
+}
+

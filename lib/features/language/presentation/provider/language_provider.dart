@@ -49,6 +49,10 @@ class LanguageProvider extends ChangeNotifier {
     var prefs = await SharedPreferences.getInstance();
     _appLocale = language;
     await prefs.setString('language_code', language.languageCode);
+    ApiHandel.getInstance.updateHeader(
+      sharedPreferences.getString('token') ?? "",
+      language: language.languageCode,
+    );
     notifyListeners();
     afterChangeLanguage();
   }

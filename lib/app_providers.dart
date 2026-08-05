@@ -1,4 +1,6 @@
 import 'package:flouka_pos/features/products/presentation/providers/product_provider.dart';
+import 'package:flouka_pos/features/wallet/presentation/providers/wallet_provider.dart';
+import 'package:flouka_pos/features/withdraw/presentation/providers/withdraw_operations_provider.dart';
 import 'package:flouka_pos/features/zone/presentation/providers/area_provider.dart';
 import 'package:flouka_pos/features/zone/presentation/providers/city_provider.dart';
 import 'package:flouka_pos/features/zone/presentation/providers/neighborhood_provider.dart';
@@ -43,6 +45,7 @@ import 'features/tickets/presentation/provider/tickets_provider.dart';
 import 'features/vendor_stores/presentation/providers/store_operations_provider.dart';
 import 'features/vendor_stores/presentation/providers/store_options_provider.dart';
 import 'features/vendor_stores/presentation/providers/vendor_stores_provider.dart';
+import 'features/withdraw/presentation/providers/withdraw_provider.dart';
 import 'injection_container.dart';
 
 class AppProviders extends StatelessWidget {
@@ -96,6 +99,9 @@ class AppProviders extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CityProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => AreaProvider(sl.get())),
         ChangeNotifierProvider(create: (_) => NeighborhoodProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => WithdrawProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => WithdrawOperationsProvider(sl.get())),
+        ChangeNotifierProvider(create: (_) => WalletProvider(sl.get())),
       ],
       child: child,
     );

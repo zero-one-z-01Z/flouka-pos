@@ -1,5 +1,7 @@
 import 'package:flouka_pos/features/offers/presentation/views/offers_view.dart';
 import 'package:flouka_pos/features/products/presentation/views/add_product_view.dart';
+import 'package:flouka_pos/features/wallet/presentation/views/wallet_view.dart';
+import 'package:flouka_pos/features/withdraw/presentation/views/withdraw_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_app_bat.dart';
@@ -76,6 +78,8 @@ class HomeView extends StatelessWidget {
         return const ReelsView();
       case 'offers':
         return const OffersView();
+      case 'withdraw':
+        return const WithdrawView();
       case 'popular_categories':
         return const PopularCategoryView();
       case 'sections':
@@ -88,6 +92,8 @@ class HomeView extends StatelessWidget {
         return const CouponsView();
       case 'support':
         return const TicketsPage();
+      case 'wallet':
+        return const WalletView();
 
       default:
         return const OverviewTab();

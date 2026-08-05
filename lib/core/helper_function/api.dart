@@ -125,6 +125,7 @@ class ApiHandel {
       }
       log('error1');
       log(path.toString());
+      log(response.data);
       return Left(dioException(response));
     } on DioException catch (e) {
       log(e.response?.data.toString() ?? "");
@@ -163,6 +164,7 @@ class ApiHandel {
       }
       log('error1');
       log(path.toString());
+      log(response.data.toString());
       return Left(dioException(response));
     } on DioException catch (e) {
       log(e.response?.data.toString() ?? "");

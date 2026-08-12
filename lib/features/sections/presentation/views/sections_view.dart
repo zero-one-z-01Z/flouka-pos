@@ -10,6 +10,7 @@ import '../../../../core/widgets/empty_animation.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/sections_provider.dart';
 import '../widgets/select_product_to_popular_widget.dart';
+import 'package:flouka_pos/core/config/app_color.dart';
 
 class SectionsView extends StatelessWidget {
   const SectionsView({super.key});
@@ -18,7 +19,7 @@ class SectionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final SectionsProvider popularCategoryProvider = Provider.of<SectionsProvider>(context,);
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColor.canvas,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 2.h),
         child: Row(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,

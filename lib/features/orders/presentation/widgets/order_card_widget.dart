@@ -1,148 +1,163 @@
-import 'package:flouka_pos/core/constants/app_images.dart';
+import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/helper_function/convert.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_widgets.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
-import 'package:flouka_pos/core/widgets/button_widget.dart';
-import 'package:flouka_pos/core/widgets/svg_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-import '../../../../core/config/app_color.dart';
 import '../../domain/entity/order_entity.dart';
 import '../providers/order_details_provider.dart';
 
 class OrderCardWidget extends StatelessWidget {
   final OrderEntity orderEntity;
   final bool withButton;
-  const OrderCardWidget({super.key, required this.orderEntity, required this.withButton});
+  final bool compact;
+  const OrderCardWidget({
+    super.key,
+    required this.orderEntity,
+    required this.withButton,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final OrderDetailsProvider orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
-    return InkWell(
-      onTap: () {
-        if(withButton){
-          orderDetailsProvider.goToOrderDetailsView(orderEntity.id);
-        }
+    final OrderDetailsProvider orderDetailsProvider =
+        Provider.of<OrderDetailsProvider>(context, listen: false);
+    final statusText = LanguageProvider.translate(
+      'global',
+      orderEntity.vendorOrders.status.text,
+    );
+    final canAct = withButton &&
+        orderEntity.vendorOrders.status == VendorOrderStatus.pending;
 
-      },
-      child: Container(
-        color: Colors.white,
-        width: 23.w,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Order Details
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'Order ID'),
-              orderEntity.id.toString(),
-            ),
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'customer_name'),
-              orderEntity.user?.name ?? '',
-            ),
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'total_price'),
-              orderEntity.total.toString(),
-            ),
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'payment_method'),
-              orderEntity.paymentMethod,
-            ),
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'order_time'),
-              convertDateTimeToStringDMY(DateTime.parse(orderEntity.createdAt)),
-            ),
-            // _buildDetailRow(
-            //   LanguageProvider.translate('global', 'items_count'),
-            //   orderEntity.vendorOrders?.length.toString()??'0',
-            // ),
-            _buildDetailRow(
-              LanguageProvider.translate('global', 'Address'),
-              orderEntity.address.address,
-            ),
-
-            // Order Status
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(flex: 2,
-                  child: Text("${LanguageProvider.translate('global', 'order_status')} :",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
+    return Material(
+      color: AppColor.surface,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: withButton
+            ? () => orderDetailsProvider.goToOrderDetailsView(orderEntity.id)
+            : null,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: compact ? double.infinity : null,
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColor.hairline),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '#FLK-${orderEntity.id}',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.ink,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColor.canvas,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      statusText.toUpperCase(),
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w800,
+                        color: orderEntity.vendorOrders.status.color,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                orderEntity.user?.name ?? 'Client',
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColor.ink,
                 ),
-                SizedBox(width: 1.w),
-                Expanded(flex: 3,
-                  child: Text(
-                    LanguageProvider.translate('global', orderEntity.vendorOrders.status.text),
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: orderEntity.vendorOrders.status.color,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${orderEntity.address.address} · ${convertDateTimeToStringDMY(DateTime.parse(orderEntity.createdAt))}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.lato(
+                  fontSize: 12,
+                  color: AppColor.textMuted,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                '${orderEntity.total} DT · ${orderEntity.paymentMethod}',
+                style: GoogleFonts.bricolageGrotesque(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: AppColor.ink,
+                ),
+              ),
+              if (canAct) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          orderDetailsProvider.goToOrderDetailsView(orderEntity.id);
+                          // reject after load via dialog from details; quick path:
+                          Future.delayed(const Duration(milliseconds: 400), () {
+                            orderDetailsProvider.rejectOrderDialog();
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF8E2A20),
+                          side: const BorderSide(color: AppColor.hairline),
+                          minimumSize: const Size(0, 44),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          'Refuser',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: VendorPrimaryCta(
+                        label: 'Confirmer',
+                        onTap: () {
+                          orderDetailsProvider
+                              .goToOrderDetailsView(orderEntity.id);
+                          Future.delayed(const Duration(milliseconds: 400), () {
+                            if (orderDetailsProvider.canUpdateStock()) {
+                              orderDetailsProvider.updateOrderStock();
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            // if (withButton)...[
-            //   // const Divider(color: Colors.grey, thickness: 0.5),
-            //   SizedBox(height: 2.h),
-            //   ButtonWidget(
-            //     height: 4.h,
-            //     borderRadius: 8,
-            //     onTap: () {
-            //
-            //     },
-            //     text: LanguageProvider.translate('global', 'more_details'),
-            //     textStyle: TextStyle(
-            //       fontSize: 10.sp,
-            //       color: Colors.white,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            //   SizedBox(height: 2.h),
-            // ],
-
-          ],
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Text(
-                "${label} : ",
-                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(width: 1.w),
-            Expanded(
-              flex: 3,
-              child: Text(
-                " ${LanguageProvider.translate('global', value)}",
-                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        const Divider(color: Colors.grey, thickness: 0.5),
-      ],
     );
   }
 }

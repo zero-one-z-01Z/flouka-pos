@@ -1,84 +1,83 @@
+import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
-import '../../../home/presentation/providers/home_provider.dart';
 import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/auth_provider.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final AuthProvider authProvider = Provider.of(context);
-    final HomeProvider homeProvider = Provider.of(context);
+    final compact = MediaQuery.sizeOf(context).width < 800;
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
+      backgroundColor: AppColor.canvas,
       appBar: AppBar(
-        backgroundColor: Colors.white.withValues(alpha: 0.6),
+        backgroundColor: AppColor.surface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         title: Text(
-          'POS SYSTEM V 0.1',
-          style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
+          'Flouka Vendeur',
+          style: GoogleFonts.bricolageGrotesque(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColor.ink,
+          ),
         ),
-        actions: [
-          const LanguageWidget(),
+        actions: const [
+          LanguageWidget(),
         ],
       ),
       body: SizedBox(
-        height: 960,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 37.w),
-              child: Form(
-                key: authProvider.loginFormKey,
-                child: Column(
-                  children: [
-                    SizedBox(height: 30.h),
-                    Image.asset(Images.floukaLogo, width: 15.w),
-                    SizedBox(height: 3.h),
-                    ListTextFieldWidget(
-                      color: Colors.white,
-                      inputs: authProvider.loginTextFieldList,
-                    ),
-                    SizedBox(height: 2.h),
-                    ButtonWidget(
-                      borderRadius: 12.sp,
-                      onTap: () async {
-                        await authProvider.login();
-                      },
-                      text: LanguageProvider.translate('buttons', 'Login'),
-                    ),
-                    SizedBox(height: 2.h),
-                    if(!authProvider.isStore)
-                      const HaveAccountSection(isLogin: true),
-                  ],
+        height: double.infinity,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: compact ? 6.w : 30.w),
+          child: Form(
+            key: authProvider.loginFormKey,
+            child: Column(
+              children: [
+                SizedBox(height: compact ? 10.h : 14.h),
+                Image.asset(Images.floukaLogo, width: compact ? 40.w : 15.w),
+                const SizedBox(height: 24),
+                Text(
+                  LanguageProvider.translate('buttons', 'Login'),
+                  style: GoogleFonts.bricolageGrotesque(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.ink,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                ListTextFieldWidget(
+                  color: AppColor.surface,
+                  inputs: authProvider.loginTextFieldList,
+                ),
+                const SizedBox(height: 16),
+                ButtonWidget(
+                  borderRadius: 14,
+                  color: AppColor.gold,
+                  textStyle: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w800,
+                    color: AppColor.ink,
+                  ),
+                  onTap: () async {
+                    await authProvider.login();
+                  },
+                  text: LanguageProvider.translate('buttons', 'Login'),
+                ),
+                const SizedBox(height: 16),
+                if (!authProvider.isStore) const HaveAccountSection(isLogin: true),
+              ],
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Image.asset(
-                fit: BoxFit.fill,
-                Images.bottomCircles,
-                width: 37.w,
-                height: 50.h,
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Image.asset(Images.topCircles, width: 25.w),
-            ),
-
-          ],
+          ),
         ),
       ),
     );

@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
 import '../config/app_color.dart';
 import '../helper_function/image.dart';
+import 'package:flouka_pos/core/config/app_color.dart';
 
 /// A reusable widget for uploading a single product image
 /// Displays the image preview with Browse and Replace buttons
@@ -26,25 +27,28 @@ class UploadImageWidget extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(2.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FA),
+        color: AppColor.canvas,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Preview Section
           if (image != null)
             Center(
-              child: Container(
-                width: 25.w,
-                height: 20.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                  image: DecorationImage(
-                    image: FileImage(File(image!.path)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: 25.w,
+                  height: 20.w,
+                  child: Image.file(
+                    File(image!.path),
                     fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: Colors.white,
+                      alignment: Alignment.center,
+                      child: Icon(Icons.broken_image_outlined, size: 24.sp),
+                    ),
                   ),
                 ),
               ),
@@ -73,12 +77,9 @@ class UploadImageWidget extends StatelessWidget {
               ),
             ),
           SizedBox(height: 2.h),
-
-          // Action Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Browse Button
               OutlinedButton.icon(
                 onPressed: () async {
                   XFile? selectedImage = await chooseImage();
@@ -105,7 +106,6 @@ class UploadImageWidget extends StatelessWidget {
               ),
               if (image != null) ...[
                 SizedBox(width: 2.w),
-                // Replace Button
                 OutlinedButton.icon(
                   onPressed: () async {
                     XFile? selectedImage = await chooseImage();

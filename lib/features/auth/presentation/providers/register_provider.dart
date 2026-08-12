@@ -32,6 +32,7 @@ import '../../../../core/helper_function/loading.dart';
 import '../../../../core/helper_function/location.dart';
 import '../../../../core/models/text_field_model.dart';
 import '../../../../core/helper_function/navigation.dart';
+import '../../../../core/helper_function/prefs.dart';
 import '../../../../core/widgets/button_widget.dart';
 import '../../../../core/widgets/text_field_widget.dart';
 import '../../domain/usecases/user_usecases.dart';
@@ -54,10 +55,7 @@ class RegisterProvider extends ChangeNotifier {
 
   void nextStep() async{
     if(currentStep == 1){
-      if(!AuthProvider.isLogin()){
-        OtpProvider otpProvider = Provider.of(Constants.globalContext(),listen: false);
-        await otpProvider.sendOtp(isReg: true);
-      }
+      // OTP is sent when reaching the last page (phone verification last).
       AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
       CityProvider cityProvider = Provider.of(Constants.globalContext(),listen: false);
       AreaProvider areaProvider = Provider.of(Constants.globalContext(),listen: false);
@@ -66,6 +64,7 @@ class RegisterProvider extends ChangeNotifier {
       cityProvider.clear();
       areaProvider.clear();
       neighborhoodProvider.clear();
+      unawaited(cityProvider.getCities());
       print("userEntity?.address");
       print(authProvider.userEntity?.address);
       registerPage2TextFields = [
@@ -202,6 +201,20 @@ class RegisterProvider extends ChangeNotifier {
   final List<String> accountTypes = ["company", "personal"];
 
   String? selectedAccountType;
+  bool acceptedTerms = false;
+
+  void setAcceptedTerms(bool value) {
+    acceptedTerms = value;
+    notifyListeners();
+  }
+
+  TextFieldModel field(String key) {
+    for (final list in [registerTextFieldList, registerPage2TextFields]) {
+      final i = list.indexWhere((e) => e.key == key);
+      if (i != -1) return list[i];
+    }
+    throw StateError('Unknown register field $key');
+  }
 
   void setAccountType(String type) {
     selectedAccountType = type;
@@ -281,7 +294,8 @@ class RegisterProvider extends ChangeNotifier {
         }, (r) {
           // nextStep();
         successDialog(msg: LanguageProvider.translate('auth', 'account_under_review'),then: (){
-          navPU();
+          sharedPreferences.setBool('isStore', false);
+          Constants.globalContext().read<AuthProvider>().loginSuccess(r);
         });
         },
       );
@@ -339,6 +353,7 @@ class RegisterProvider extends ChangeNotifier {
   void goToRegisterView() async{
     latlng = null;
     currentStep = 1;
+    acceptedTerms = false;
     AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
     AccountTypeProvider accountTypeProvider = Provider.of(Constants.globalContext(),listen: false);
     accountTypeProvider.clear();
@@ -373,11 +388,7 @@ class RegisterProvider extends ChangeNotifier {
 
 
     }else{
-      loading();
-      print('1');
-      latlng = await determinePosition();
-      print('2');
-      navPop();
+      accountTypeProvider.onTap('individual');
     }
     registerTextFieldList = [
       TextFieldModel(

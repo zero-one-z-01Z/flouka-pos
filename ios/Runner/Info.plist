@@ -43,5 +43,17 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Flouka utilise la caméra pour les photos produit, reels et tickets.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Flouka accède à vos photos pour publier des produits et médias.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Flouka enregistre des images dans votre photothèque si nécessaire.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Flouka utilise le micro pour enregistrer des reels vidéo.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Flouka utilise la localisation pour l’adresse magasin et la livraison.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Flouka utilise la localisation pour l’adresse magasin et la livraison.</string>
 </dict>
 </plist>

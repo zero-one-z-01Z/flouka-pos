@@ -47,7 +47,7 @@ class UserModel extends UserEntity {
       logo: json['logo'],
       cover: json['cover'],
       bio: json['bio'],
-      active: convertDataToBool(json['available']),
+      active: convertDataToBool(json['active'] ?? json['available']),
       otp: json['otp'],
       otpExpiredAt: json['otp_expired_at'],
       productsCount: json['products_count'],
@@ -61,13 +61,35 @@ class UserModel extends UserEntity {
       bankNumber: json['bank_number'],
       adminName: json['admin_name'],
       adminPhone: json['admin_phone'],
-      vendorStatistics: json['statistics'] != null
-          ? VendorStatisticsModel.fromJson(json['statistics'])
-          : null,
+      vendorStatistics: _parseVendorStatistics(json),
       businessLicense: json['business_license'],
       token: json['token'],
       storeEntity: storeModel,
     );
+  }
+
+  /// Staging often returns `wallet: 0` (scalar) at root and no `statistics.wallet` map.
+  static VendorStatisticsModel? _parseVendorStatistics(Map<String, dynamic> json) {
+    final rawStats = json['statistics'];
+    final Map<String, dynamic> stats = rawStats is Map
+        ? Map<String, dynamic>.from(rawStats)
+        : <String, dynamic>{};
+
+    final rawWallet = stats['wallet'] ?? json['wallet'];
+    if (rawWallet is Map) {
+      stats['wallet'] = Map<String, dynamic>.from(rawWallet);
+    } else if (rawWallet != null) {
+      final balance = convertDataToNum(rawWallet) ?? 0;
+      stats['wallet'] = {
+        'wallet': balance,
+        'pending': 0,
+        'withdraw': 0,
+        'total': balance,
+      };
+    }
+
+    if (stats.isEmpty) return null;
+    return VendorStatisticsModel.fromJson(stats);
   }
 }
 
@@ -80,6 +102,21 @@ class VendorStatisticsModel extends VendorStatisticsEntity {
   });
 
   factory VendorStatisticsModel.fromJson(Map<String, dynamic> json) {
+    WalletSummaryModel? walletSummary;
+    final rawWallet = json['wallet'];
+    if (rawWallet is Map) {
+      walletSummary =
+          WalletSummaryModel.fromJson(Map<String, dynamic>.from(rawWallet));
+    } else if (rawWallet != null) {
+      final balance = convertDataToNum(rawWallet) ?? 0;
+      walletSummary = WalletSummaryModel(
+        wallet: balance,
+        pending: 0,
+        withdraw: 0,
+        total: balance,
+      );
+    }
+
     return VendorStatisticsModel(
       orders: json['orders'] != null
           ? OrdersStatisticsModel.fromJson(json['orders'])
@@ -90,9 +127,7 @@ class VendorStatisticsModel extends VendorStatisticsEntity {
       products: json['products'] != null
           ? ProductsStatisticsModel.fromJson(json['products'])
           : null,
-      wallet: json['wallet'] != null
-          ? WalletSummaryModel.fromJson(json['wallet'])
-          : null,
+      wallet: walletSummary,
     );
   }
 }

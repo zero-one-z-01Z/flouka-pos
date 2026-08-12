@@ -1,8 +1,8 @@
 import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/features/products/presentation/providers/add_variant_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../language/presentation/provider/language_provider.dart';
 import '../../domain/entity/variant_entity.dart';
@@ -13,44 +13,57 @@ class VariantWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AddVariantProvider addVariantProvider = Provider.of(context);
-    return SizedBox(width: 16.w,
-      child: Stack(
+    final addVariantProvider = Provider.of<AddVariantProvider>(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
+      decoration: BoxDecoration(
+        color: AppColor.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColor.hairline),
+      ),
+      child: Row(
         children: [
-          Container(width: 16.w,
-            padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 1.h).copyWith(top: 5.h),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6)
-            ),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text("SKU : ${variant.sku}",
-                maxLines: 1,
-                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
-              ),
-              Text("${LanguageProvider.translate('inputs', 'name')} : ${variant.name}",maxLines: 1,
-                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
-              ),
-                Text("${LanguageProvider.translate('inputs', 'price')} : ${variant.price}",maxLines: 1,
-                  style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
-                ),
-                if(variant.offerPrice!=null && variant.offerPrice! > 0)
-                  Text("${LanguageProvider.translate('inputs', 'offer_price')} : ${variant.offerPrice}",maxLines: 1,
-                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
+                Text(
+                  variant.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColor.ink,
                   ),
-            ],),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'SKU ${variant.sku.isEmpty ? '—' : variant.sku} · ${variant.price} DT'
+                  '${(variant.offerPrice != null && variant.offerPrice! > 0) ? ' · promo ${variant.offerPrice} DT' : ''}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.lato(
+                    fontSize: 12,
+                    color: AppColor.textMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
-          Row(mainAxisAlignment:MainAxisAlignment.end,children: [
-            IconButton(onPressed: (){
-              addVariantProvider.selectToEdit(variant: variant);
-            }, icon: Icon(Icons.edit,color: AppColor.primaryColor,size: 2.w,)),
-            IconButton(onPressed: (){
-              addVariantProvider.deleteVariantDialog(id: variant.id);
-            }, icon: Icon(Icons.delete,color: Colors.red,size: 2.w,)),
-
-          ],),
+          IconButton(
+            tooltip: LanguageProvider.translate('buttons', 'edit'),
+            onPressed: () =>
+                addVariantProvider.selectToEdit(variant: variant),
+            icon: const Icon(Icons.edit_rounded, color: AppColor.sidebar),
+          ),
+          IconButton(
+            tooltip: LanguageProvider.translate('buttons', 'delete'),
+            onPressed: () =>
+                addVariantProvider.deleteVariantDialog(id: variant.id),
+            icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFF8E2A20)),
+          ),
         ],
       ),
     );

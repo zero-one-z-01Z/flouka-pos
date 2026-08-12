@@ -1,62 +1,50 @@
-import 'package:flouka_pos/core/config/app_styles.dart';
 import 'package:flouka_pos/core/widgets/button_widget.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_color.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/add_product_provider.dart';
-import 'add_product_tax_section.dart';
-import 'add_product_stock_section.dart';
-import 'add_product_action_buttons.dart';
-import 'add_product_text_field.dart';
 import 'tags_widget.dart';
 
 class AddProductBasicDetailsSection extends StatelessWidget {
-  const AddProductBasicDetailsSection({super.key,});
+  const AddProductBasicDetailsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     final AddProductProvider provider = Provider.of(context);
     return Container(
-      padding: EdgeInsets.all(3.w),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: AppColor.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColor.hairline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            LanguageProvider.translate('product', 'basic_details'),
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
-            ),
+          VendorSectionHeader(
+            title: LanguageProvider.translate('product', 'basic_details'),
           ),
-          SizedBox(height: 2.h),
-
+          const SizedBox(height: 16),
           ListTextFieldWidget(
             inputs: provider.addProductTextFields,
           ),
-
-          SizedBox(height: 2.h),
-          if(provider.tags.isNotEmpty)
-          const TagsWidget(),
-          ButtonWidget(color: AppColor.primaryColor.withOpacity(0.7),onTap: (){
-            provider.showAddWidget();
-          }, text: "add_tags"),
-          SizedBox(height: 2.h),
-          const AddProductActionButtons(),
-          SizedBox(height: 2.h),
+          const SizedBox(height: 16),
+          if (provider.tags.isNotEmpty) const TagsWidget(),
+          ButtonWidget(
+            color: AppColor.gold,
+            textStyle: GoogleFonts.plusJakartaSans(
+              fontWeight: FontWeight.w700,
+              color: AppColor.ink,
+            ),
+            onTap: () {
+              provider.showAddWidget();
+            },
+            text: 'add_tags',
+          ),
         ],
       ),
     );

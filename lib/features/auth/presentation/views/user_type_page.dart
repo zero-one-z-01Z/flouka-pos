@@ -1,125 +1,145 @@
 import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/widgets/svg_widget.dart';
-import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/button_widget.dart';
-import '../../../../core/widgets/list_text_field_widget.dart';
-import '../../../home/presentation/providers/home_provider.dart';
 import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/auth_provider.dart';
 
 class UserTypePage extends StatelessWidget {
   const UserTypePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final AuthProvider authProvider = Provider.of(context);
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: const Color(0xff00A8E1).withValues(alpha: 0.05),
-          appBar: AppBar(
-            backgroundColor: Colors.white.withValues(alpha: 0.6),
-            title: Text(
-              'POS SYSTEM V 0.1',
-              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
-            ),
-            actions: [
-              const LanguageWidget(),
-            ],
+    final compact = MediaQuery.sizeOf(context).width < 800;
+    return Scaffold(
+      backgroundColor: AppColor.canvas,
+      appBar: AppBar(
+        backgroundColor: AppColor.surface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          'Flouka Vendeur',
+          style: GoogleFonts.bricolageGrotesque(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColor.ink,
           ),
-          body: SingleChildScrollView(
-            child: Column(
+        ),
+        actions: const [
+          LanguageWidget(),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: compact ? 6.w : 28.w),
+        child: Column(
+          children: [
+            SizedBox(height: compact ? 12.h : 18.h),
+            Text(
+              LanguageProvider.translate('auth', 'vendor'),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.bricolageGrotesque(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: AppColor.ink,
+              ),
+            ),
+            const SizedBox(height: 28),
+            Row(
               children: [
-                SizedBox(height: 22.h),
-                Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        authProvider.changeUserType(isStore: true);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 1.5.h,horizontal: 3.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: authProvider.isStore ? AppColor.primaryColor : Colors.grey.shade200,
-                      ),
-                      child: Column(
-                        children: [
-                          SvgWidget(svg: Images.store,width:  5.w,
-                          color:authProvider.isStore ? Colors.white :const Color(0xff444444),fit: BoxFit.cover,),
-                          SizedBox(height: 1.h,),
-                          Text(LanguageProvider.translate("auth", "store"),
-                            style: TextStyleClass.smallStyle(color:authProvider.isStore ? Colors.white : const Color(0xff444444)).copyWith(
-                              fontWeight: FontWeight.bold
-                            ),),
-                          SizedBox(height: 1.h,),
-
-                        ],
-                      ),
-                                          ),
-                    ),
-                    SizedBox(width: 2.w,),
-                    InkWell(
-                      onTap: (){
-                        authProvider.changeUserType(isStore: false);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 1.5.h,horizontal: 3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: authProvider.isStore ? Colors.grey.shade200 : AppColor.primaryColor,
-                        ),
-                        child: Column(
-                          children: [
-                            SvgWidget(svg: Images.user,width:  5.w,
-                            color:authProvider.isStore ? const Color(0xff444444) : Colors.white,fit: BoxFit.cover),
-                            SizedBox(height: 1.h,),
-                            Text(LanguageProvider.translate("auth", "vendor"),
-                              style: TextStyleClass.smallStyle(color:authProvider.isStore ? const Color(0xff444444) : Colors.white).copyWith(
-                                fontWeight: FontWeight.bold
-                              ),),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: _TypeCard(
+                    selected: authProvider.isStore,
+                    label: LanguageProvider.translate('auth', 'store'),
+                    svg: Images.store,
+                    onTap: () => authProvider.changeUserType(isStore: true),
+                  ),
                 ),
-                SizedBox(height: 4.h),
-                ButtonWidget(
-                  borderRadius: 15,
-                  width: 28.w,
-                  onTap: ()  {
-                     authProvider.goToLoginView();
-                  },
-                  text: "confirm",
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _TypeCard(
+                    selected: !authProvider.isStore,
+                    label: LanguageProvider.translate('auth', 'vendor'),
+                    svg: Images.user,
+                    onTap: () => authProvider.changeUserType(isStore: false),
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 28),
+            ButtonWidget(
+              borderRadius: 14,
+              color: AppColor.gold,
+              textStyle: GoogleFonts.plusJakartaSans(
+                fontWeight: FontWeight.w800,
+                color: AppColor.ink,
+              ),
+              onTap: () {
+                authProvider.goToLoginView();
+              },
+              text: 'confirm',
+            ),
+          ],
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: IgnorePointer(
-            child: Image.asset(
-              fit: BoxFit.fill,
-              Images.bottomCircles,
-              width: 37.w,
-              height: 50.h,
+      ),
+    );
+  }
+}
+
+class _TypeCard extends StatelessWidget {
+  const _TypeCard({
+    required this.selected,
+    required this.label,
+    required this.svg,
+    required this.onTap,
+  });
+
+  final bool selected;
+  final String label;
+  final String svg;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: selected ? AppColor.sidebar : AppColor.surface,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: selected ? AppColor.sidebar : AppColor.hairline,
             ),
           ),
+          child: Column(
+            children: [
+              SvgWidget(
+                svg: svg,
+                width: 36,
+                color: selected ? AppColor.gold : AppColor.ink,
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                label,
+                style: GoogleFonts.plusJakartaSans(
+                  fontWeight: FontWeight.w800,
+                  color: selected ? AppColor.gold : AppColor.ink,
+                ),
+              ),
+            ],
+          ),
         ),
-        Positioned(
-          top: 0,
-          left: 0,
-          child: IgnorePointer(child: Image.asset(Images.topCircles, width: 25.w)),
-        ),
-      ],
+      ),
     );
   }
 }

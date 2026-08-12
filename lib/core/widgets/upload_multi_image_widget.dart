@@ -1,7 +1,5 @@
-import 'dart:io';
-import 'dart:ui' as ui;
+import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:camera/camera.dart';
 import 'package:flouka_pos/core/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,14 +7,17 @@ import 'package:sizer/sizer.dart';
 import '../../features/language/presentation/provider/language_provider.dart';
 import '../config/app_color.dart';
 import '../helper_function/image.dart';
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flouka_pos/core/config/app_color.dart';
 
-/// Client-side quality rules. Tune to your catalog needs.
+/// Client-side quality rules. Soft tips for sellers — do not block common phone photos.
 class ImageQualityRules {
-  static const int minWidth = 800;
-  static const int minHeight = 800;
-  static const int minSizeBytes = 20 * 1024; // 20 KB
+  static const int minWidth = 200;
+  static const int minHeight = 200;
+  static const int minSizeBytes = 2 * 1024; // 2 KB
   static const int maxSizeBytes = 8 * 1024 * 1024; // 8 MB
-  static const List<String> allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+  static const List<String> allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif'];
 }
 
 /// EN / AR / FR copy for the tips row + best-practices modal.
@@ -28,7 +29,7 @@ class _T {
       'tip_row': 'Better photos = more sales. Follow our photo guide.',
       'learn_more': 'Learn more',
       'modal_title': 'Photo guide',
-      'rule_res': 'Minimum resolution 800×800px',
+      'rule_res': 'Minimum resolution 200×200px (800×800 recommended)',
       'rule_ratio': 'Use a square (1:1) or 4:5 aspect ratio',
       'rule_bg': 'Plain, uncluttered background (white/light preferred)',
       'rule_angles': 'Add 3–5 photos: front, back, side, close-up detail',
@@ -38,17 +39,17 @@ class _T {
       'good_desc': 'Sharp, well-lit, clean background, product fills frame',
       'bad_desc': 'Blurry, dark, cluttered background, cropped product',
       'got_it': 'Got it',
-      'err_ext': 'Unsupported format. Use JPG, PNG or WEBP.',
+      'err_ext': 'Unsupported format. Use JPG, PNG, WEBP or GIF.',
       'err_size_min': 'Image file is too small / low quality.',
       'err_size_max': 'Image file is too large (max 8MB).',
-      'err_dim': 'Image resolution is too low (min 800×800px).',
+      'err_dim': 'Image resolution is too low (min 200×200px).',
       'skipped': 'skipped',
     },
     'ar': {
       'tip_row': 'الصور الأفضل = مبيعات أكتر. اتبع دليل التصوير بتاعنا.',
       'learn_more': 'اعرف أكتر',
       'modal_title': 'دليل التصوير',
-      'rule_res': 'أقل دقة مسموحة 800×800 بكسل',
+      'rule_res': 'أقل دقة مسموحة 200×200 بكسل (يفضل 800×800)',
       'rule_ratio': 'استخدم نسبة مربعة (1:1) أو (4:5)',
       'rule_bg': 'خلفية بسيطة وغير مزدحمة (يفضل أبيض/فاتح)',
       'rule_angles': 'ارفع من 3 إلى 5 صور: أمامية، خلفية، جانبية، تفاصيل قريبة',
@@ -58,17 +59,17 @@ class _T {
       'good_desc': 'واضحة، إضاءة كويسة، خلفية نظيفة، المنتج يملأ الإطار',
       'bad_desc': 'ضبابية، مظلمة، خلفية مزدحمة، المنتج مقصوص',
       'got_it': 'تمام',
-      'err_ext': 'صيغة غير مدعومة. استخدم JPG أو PNG أو WEBP.',
+      'err_ext': 'صيغة غير مدعومة. استخدم JPG أو PNG أو WEBP أو GIF.',
       'err_size_min': 'حجم الصورة صغير جداً / جودة منخفضة.',
       'err_size_max': 'حجم الصورة كبير جداً (الحد الأقصى 8 ميجا).',
-      'err_dim': 'دقة الصورة منخفضة جداً (الحد الأدنى 800×800).',
+      'err_dim': 'دقة الصورة منخفضة جداً (الحد الأدنى 200×200).',
       'skipped': 'تم تجاهلها',
     },
     'fr': {
       'tip_row': 'De meilleures photos = plus de ventes. Suivez notre guide photo.',
       'learn_more': 'En savoir plus',
       'modal_title': 'Guide photo',
-      'rule_res': 'Résolution minimale 800×800px',
+      'rule_res': 'Résolution minimale 200×200px (800×800 recommandé)',
       'rule_ratio': 'Utilisez un ratio carré (1:1) ou 4:5',
       'rule_bg': 'Fond simple et épuré (blanc/clair de préférence)',
       'rule_angles': 'Ajoutez 3 à 5 photos : face, dos, côté, gros plan',
@@ -78,10 +79,10 @@ class _T {
       'good_desc': 'Nette, bien éclairée, fond propre, produit bien cadré',
       'bad_desc': 'Floue, sombre, fond encombré, produit coupé',
       'got_it': 'Compris',
-      'err_ext': 'Format non supporté. Utilisez JPG, PNG ou WEBP.',
+      'err_ext': 'Format non supporté. Utilisez JPG, PNG, WEBP ou GIF.',
       'err_size_min': "Fichier image trop petit / qualité faible.",
       'err_size_max': 'Fichier image trop volumineux (max 8MB).',
-      'err_dim': 'Résolution trop faible (min 800×800px).',
+      'err_dim': 'Résolution trop faible (min 200×200px).',
       'skipped': 'ignorée',
     },
   };
@@ -140,8 +141,12 @@ class UploadMultiImageWidget extends StatelessWidget {
     final List<String> reasons = [];
 
     for (final file in picked) {
-      final ext = file.path.split('.').last.toLowerCase();
-      if (!ImageQualityRules.allowedExtensions.contains(ext)) {
+      final name = (file.name.isNotEmpty ? file.name : file.path).toLowerCase();
+      final ext = name.contains('.') ? name.split('.').last : '';
+      final mime = (file.mimeType ?? '').toLowerCase();
+      final okExt = ImageQualityRules.allowedExtensions.contains(ext) ||
+          mime.startsWith('image/');
+      if (!okExt) {
         reasons.add('${file.name}: ${_T.t('err_ext', lang)}');
         continue;
       }
@@ -160,8 +165,11 @@ class UploadMultiImageWidget extends StatelessWidget {
           reasons.add('${file.name}: ${_T.t('err_size_max', lang)}');
           continue;
         }
-        if (width < ImageQualityRules.minWidth ||
-            height < ImageQualityRules.minHeight) {
+        // Soft dim check — only reject tiny/corrupt-looking frames.
+        if (width > 0 &&
+            height > 0 &&
+            (width < ImageQualityRules.minWidth ||
+                height < ImageQualityRules.minHeight)) {
           reasons.add('${file.name}: ${_T.t('err_dim', lang)}');
           continue;
         }
@@ -350,7 +358,7 @@ class UploadMultiImageWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(1.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FA),
+        color: AppColor.canvas,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
       ),
@@ -450,6 +458,14 @@ class UploadMultiImageWidget extends StatelessWidget {
                 }
 
                 // Image Thumbnail with Delete
+                final item = images[i];
+                final localPath = item is XFile
+                    ? item.path
+                    : (item is File ? item.path : null);
+                final networkUrl = item is XFile
+                    ? null
+                    : (item?.image is String ? item.image as String : null);
+
                 return InkWell(
                   onTap: () => deleteImage(i),
                   child: Container(
@@ -460,20 +476,30 @@ class UploadMultiImageWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white,
                       border:
-                      Border.all(color: const Color(0xFFE0E0E0), width: 1),
-                      image: (images[i] is XFile)
-                          ? DecorationImage(
-                        image: FileImage(File(images[i].path)),
-                        fit: BoxFit.cover,
-                      )
-                          : DecorationImage(
-                        image: CachedNetworkImageProvider(
-                            images[i].image),
-                        fit: BoxFit.cover,
-                      ),
+                          Border.all(color: const Color(0xFFE0E0E0), width: 1),
                     ),
+                    clipBehavior: Clip.antiAlias,
                     child: Stack(
+                      fit: StackFit.expand,
                       children: [
+                        if (localPath != null && localPath.isNotEmpty)
+                          Image.file(
+                            File(localPath),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(Icons.broken_image_outlined),
+                            ),
+                          )
+                        else if (networkUrl != null && networkUrl.isNotEmpty)
+                          CachedNetworkImage(
+                            imageUrl: networkUrl,
+                            fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => const Center(
+                              child: Icon(Icons.broken_image_outlined),
+                            ),
+                          )
+                        else
+                          const Center(child: Icon(Icons.image_outlined)),
                         Positioned(
                           top: 0.5.w,
                           right: 0.5.w,

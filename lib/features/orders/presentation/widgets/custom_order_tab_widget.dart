@@ -1,4 +1,6 @@
+import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,14 +17,24 @@ class CustomOrderTabWidget extends StatelessWidget {
     final isSelected = ordersProvider.selectedTab == tab;
     return GestureDetector(
       onTap: () {
-        ordersProvider.changeSelectedTab(tab,isHome: isHome);
+        ordersProvider.changeSelectedTab(tab, isHome: isHome);
       },
-      child: Text(
-        tab,
-        style: TextStyle(
-          fontSize: 13.sp,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          color: isSelected ? const Color(0xFF2196F3) : Colors.black54,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 0.8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColor.selectedRowTint : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? AppColor.gold.withValues(alpha: 0.55) : AppColor.hairline,
+          ),
+        ),
+        child: Text(
+          tab,
+          style: GoogleFonts.lato(
+            fontSize: 12.sp,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? AppColor.ink : AppColor.textMuted,
+          ),
         ),
       ),
     );

@@ -21,12 +21,15 @@ class OrdersProvider extends ChangeNotifier implements PaginationClass{
     dataToUse['page'] = pageIndex;
     dataToUse['status[]'] = getOrdersByStatus();
     final result = await orderUseCase.getOrders(dataToUse);
-    result.fold((l) => showToast(l.message ?? "Error loading products"), (r) {
+    result.fold((l) {
+      showToast(l.message ?? "Error loading orders");
+      data ??= [];
+      paginationFinished = true;
+    }, (r) {
       pageIndex++;
       data ??= [];
       data!.addAll(r);
       if (r.isEmpty) paginationFinished = true;
-      notifyListeners();
     });
 
     paginationStarted = false;
@@ -102,12 +105,14 @@ class OrdersProvider extends ChangeNotifier implements PaginationClass{
     dataToUse['page']= 1;
     dataToUse['status[]'] = getOrdersByStatus();
     final result = await orderUseCase.getOrders(dataToUse);
-    result.fold((l) => showToast(l.message ?? "Error loading products"), (r) {
-      homeOrders =[];
+    result.fold((l) {
+      showToast(l.message ?? "Error loading orders");
+      homeOrders = [];
+    }, (r) {
+      homeOrders = [];
       homeOrders?.addAll(r);
-      notifyListeners();
-
     });
+    notifyListeners();
   }
 
   void cancelOrderStatus(int id) {

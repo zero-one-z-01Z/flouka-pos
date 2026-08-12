@@ -104,6 +104,13 @@ class HomeProvider extends ChangeNotifier {
           Provider.of<OffersProvider>(Constants.globalContext(), listen: false).refresh();
 
         }),
+        NavigationEntity(title: "wallet", svgImage: Images.wallet, onTap: (){
+          Provider.of<WalletProvider>(Constants.globalContext(), listen: false).refresh();
+        }),
+        NavigationEntity(title: "withdraw", svgImage: Images.wallet, onTap: (){
+          Provider.of<WithdrawOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
+          Provider.of<WithdrawProvider>(Constants.globalContext(), listen: false).refresh();
+        }),
         if(auth.userEntity!.accountType=='company')NavigationEntity(title: "vendor_stores", svgImage: Images.home, onTap: (){
           Provider.of<StoreOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<VendorStoresProvider>(Constants.globalContext(), listen: false).refresh();
@@ -111,13 +118,6 @@ class HomeProvider extends ChangeNotifier {
         NavigationEntity(title: "coupons", svgImage: Images.coupons, onTap: (){
           Provider.of<CouponsOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
           Provider.of<CouponsProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
-        NavigationEntity(title: "wallet", svgImage: Images.wallet, onTap: (){
-          Provider.of<WalletProvider>(Constants.globalContext(), listen: false).refresh();
-        }),
-        NavigationEntity(title: "withdraw", svgImage: Images.wallet, onTap: (){
-          Provider.of<WithdrawOperationsProvider>(Constants.globalContext(), listen: false).addTextField();
-          Provider.of<WithdrawProvider>(Constants.globalContext(), listen: false).refresh();
         }),
         // if(sharedPreferences.getBool('isStore')??false)NavigationEntity(title: "tickets", svgImage: Images.support, onTap: (){
         //   Provider.of<TicketsProvider>(Constants.globalContext(), listen: false).goToTicketsPage();

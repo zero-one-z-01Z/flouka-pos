@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flouka_pos/core/constants/constants.dart';
@@ -15,6 +14,7 @@ import 'package:flouka_pos/features/language/presentation/provider/language_prov
 import 'package:flouka_pos/features/products/presentation/providers/product_options_provider.dart';
 import 'package:flouka_pos/features/products/presentation/views/add_variant_view.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -161,7 +161,9 @@ class AddProductProvider extends ChangeNotifier {
   Future<Map<String,dynamic>> productData()async{
     Map<String,dynamic> data={};
     for(var field in addProductTextFields){
-      data[field.key]=field.controller.text;
+      final text = field.controller.text;
+      if (field.key == 'sku' && text.trim().isEmpty) continue;
+      data[field.key]=text;
     }
     for(int i =0;i<productImages.length;i++){
       if(productImages[i] is XFile){
@@ -173,8 +175,10 @@ class AddProductProvider extends ChangeNotifier {
     }
     BrandsProvider brandsProvider = Provider.of<BrandsProvider>(Constants.globalContext(), listen: false);
     SubcategoryProvider subcategoryProvider = Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false);
-    data['brand_id']= brandsProvider.selected()?.id;
-    data['category_id']= subcategoryProvider.selected()?.id;
+    final brandId = brandsProvider.selected()?.id;
+    if (brandId != null) data['brand_id'] = brandId;
+    final categoryId = subcategoryProvider.selected()?.id;
+    if (categoryId != null) data['category_id'] = categoryId;
 
 
     return data;
@@ -201,12 +205,16 @@ class AddProductProvider extends ChangeNotifier {
     CategoryProvider categoryProvider =Provider.of<CategoryProvider>(Constants.globalContext(), listen: false);
     SubcategoryProvider subcategoryProvider =Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false);
     BrandsProvider brandsProvider =Provider.of<BrandsProvider>(Constants.globalContext(), listen: false);
-    if(product.category!.parentId!=null){
+    if(product.category?.parentId!=null){
       categoryProvider.setCategory(product.category!.parentId!);
       await subcategoryProvider.refresh(categoryProvider.selectedCategory!);
       subcategoryProvider.setCategory(product.category!);
       await brandsProvider.setCategory(product.category!.id.toString());
-      brandsProvider.setBrand(product.brand!);
+      if (product.brand != null) brandsProvider.setBrand(product.brand!);
+    } else if (product.category != null) {
+      categoryProvider.setCategory(product.category!.id);
+      await brandsProvider.setCategory(product.category!.id.toString());
+      if (product.brand != null) brandsProvider.setBrand(product.brand!);
     }
     tags.clear();
     for(var tag in (product.tags??[])){

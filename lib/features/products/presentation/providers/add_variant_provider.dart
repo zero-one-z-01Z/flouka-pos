@@ -51,19 +51,19 @@ class AddVariantProvider extends ChangeNotifier implements ProviderStructureMode
     variantInputs=[
       TextFieldModel(key: 'name',label: 'name',
           validator: (val)=> validateName(val),
-          controller:TextEditingController(text: variant?.name??""),width: 30.w),
-      TextFieldModel(key: 'sku',label: 'sku',validator: (val)=> validateSku(val),
-          controller:TextEditingController(text: variant?.sku??""),width: 30.w),
+          controller:TextEditingController(text: variant?.name??"")),
+      TextFieldModel(key: 'sku',label: 'sku',validator: (val)=> null,
+          controller:TextEditingController(text: variant?.sku??"")),
       TextFieldModel(key: 'price',label: 'price',validator: (val)=> validatePrice(val),
-          controller:TextEditingController(text: variant?.price.toString()??""),width: 30.w),
+          controller:TextEditingController(text: variant?.price.toString()??"")),
       TextFieldModel(key: 'offer_price',validator: (val)=> null,
           label: LanguageProvider.translate("product", "discounted_price"),
-          controller:TextEditingController(text: variant?.offerPrice.toString()??""),width: 30.w),
+          controller:TextEditingController(text: variant?.offerPrice.toString()??"")),
       if(authProvider.userEntity!.accountType=='individual')TextFieldModel(
         label: LanguageProvider.translate('product', 'stock'),
         controller: TextEditingController(text: stock?.toString() ?? ""),
         validator: (val) => validateStock(val),
-        key: 'stock',width: 30.w,
+        key: 'stock',
       ),
     ];
 
@@ -124,7 +124,14 @@ class AddVariantProvider extends ChangeNotifier implements ProviderStructureMode
       return [];
     }
     return List.generate(data![index].values.length, (i){
-      return {'name':data![index].values[i].value,'id':data![index].values[i].id};
+      final v = data![index].values[i];
+      return {
+        'name': v.value,
+        'id': v.id,
+        'code': v.code,
+        'hex': v.hex,
+        'active': false,
+      };
     });
   }
   List<Map<String, dynamic>> attributes=[];
@@ -188,7 +195,9 @@ class AddVariantProvider extends ChangeNotifier implements ProviderStructureMode
   Future<Map<String,dynamic>> productData()async{
     Map<String,dynamic> data={};
     for(var field in variantInputs){
-      data[field.key]=field.controller.text;
+      final text = field.controller.text;
+      if (field.key == 'sku' && text.trim().isEmpty) continue;
+      data[field.key]=text;
     }
     for(int i =0;i<productImages.length;i++){
       if(productImages[i] is XFile){

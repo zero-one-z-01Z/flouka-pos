@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -16,20 +18,31 @@ class PaymentOnlinePage extends StatefulWidget {
 }
 
 class _PaymentOnlinePageState extends State<PaymentOnlinePage> {
-  WebViewController controller = WebViewController();
-  // bool hasNavigated = false; // Flag to prevent multiple navigations
+  WebViewController? controller;
+
+  String get _paymentUrl =>
+      '${Constants.baseUri}payment/${widget.total}/${widget.type}';
+
+  Future<void> _openExternal() async {
+    final uri = Uri.parse(_paymentUrl);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   @override
   void initState() {
     super.initState();
+
+    if (kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _openExternal());
+      return;
+    }
 
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
+          onProgress: (int progress) {},
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
@@ -38,17 +51,14 @@ class _PaymentOnlinePageState extends State<PaymentOnlinePage> {
           onNavigationRequest: (NavigationRequest request) {
             String url = request.url;
             if (url.contains('status=failed') && !url.contains('callback')) {
-              // hasNavigated = true; // Set the flag
               navPop('field');
               return NavigationDecision.prevent;
-              // controller.loadRequest(Uri.parse("about:blank")); // Clear WebView
-            } else if (url.contains('status=paid') && !url.contains('callback')) {
-              // hasNavigated = true; // Set the flag
+            } else if (url.contains('status=paid') &&
+                !url.contains('callback')) {
               debugPrint('paid');
               debugPrint(url);
               navPop('paid');
               return NavigationDecision.prevent;
-              // controller.loadRequest(Uri.parse("about:blank")); // Clear WebView
             }
 
             return NavigationDecision.navigate;
@@ -56,7 +66,7 @@ class _PaymentOnlinePageState extends State<PaymentOnlinePage> {
         ),
       )
       ..loadRequest(
-        Uri.parse('${Constants.baseUri}payment/${widget.total}/${widget.type}'),
+        Uri.parse(_paymentUrl),
         headers: {
           'Authorization':
               '${ApiHandel.getInstance.dio.options.headers['Authorization']}',
@@ -67,17 +77,36 @@ class _PaymentOnlinePageState extends State<PaymentOnlinePage> {
 
   @override
   Widget build(BuildContext context) {
-    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
     return SafeArea(
       top: false,
       child: Scaffold(
-        // backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
           title: Text(LanguageProvider.translate("global", "payment_page")),
-          // backgroundColor: AppColor.defaultColor,
-          // foregroundColor: Colors.white,
         ),
-        body: WebViewWidget(controller: controller),
+        body: kIsWeb
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.payment, size: 40),
+                      const SizedBox(height: 12),
+                      Text(
+                        _paymentUrl,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      const SizedBox(height: 16),
+                      FilledButton(
+                        onPressed: _openExternal,
+                        child: const Text('Open payment in browser'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : WebViewWidget(controller: controller!),
       ),
     );
   }

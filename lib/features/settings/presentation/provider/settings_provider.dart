@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/dialog/snack_bar.dart';
 import '../../../../../core/helper_function/navigation.dart';
+import '../../../../core/helper_function/kyc.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../auth/presentation/views/kyc_docs_view.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../../../notification/presentation/provider/notifications_provider.dart';
 import '../../../tickets/presentation/provider/tickets_provider.dart';
@@ -21,6 +23,16 @@ class SettingsProvider extends ChangeNotifier {
   SettingsProvider(this.settingsUseCases);
 
   List<ProfileSettingsEntity> get settingsList => [
+    ProfileSettingsEntity(
+      text: "kyc_docs",
+      color: const Color(0xff0E3B2E),
+      badge: !isKycDocsComplete(
+        Provider.of<AuthProvider>(Constants.globalContext(), listen: false).userEntity,
+      ),
+      onTap: () {
+        navP(const KycDocsView());
+      },
+    ),
     ProfileSettingsEntity(
       text: "notification",
       color: const Color(0xff11BD57),

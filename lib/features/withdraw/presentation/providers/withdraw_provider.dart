@@ -35,12 +35,16 @@ class WithdrawProvider extends ChangeNotifier implements ProviderStructureModel<
     Map<String,dynamic> dataToUse = {};
     dataToUse['page'] = pageIndex;
     final result = await withdrawUseCase.getVendorWithdraws(dataToUse);
-    result.fold((l) => showToast(l.message ?? "Error loading products"), (r) {
+    result.fold((l) {
+      showToast(l.message ?? "Error loading withdraws");
+      // Staging may not expose get_withdraw yet — show empty UI instead of spinner.
+      data ??= [];
+      paginationFinished = true;
+    }, (r) {
       pageIndex++;
       data ??= [];
       data!.addAll(r);
       if (r.isEmpty) paginationFinished = true;
-      notifyListeners();
     });
 
     paginationStarted = false;

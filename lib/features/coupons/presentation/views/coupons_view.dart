@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/config/app_styles.dart';
+import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_widgets.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import '../../../../core/constants/app_lotties.dart';
 import '../../../../core/widgets/empty_animation.dart';
 import '../providers/coupons_operations_provider.dart';
@@ -14,114 +15,195 @@ import '../widgets/add_coupon_widget.dart';
 class CouponsView extends StatelessWidget {
   const CouponsView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final CouponsProvider couponsProvider = Provider.of<CouponsProvider>(context,);
-    final CouponsOperationsProvider couponsOperationsProvider = Provider.of<CouponsOperationsProvider>(context,);
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 2.h),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(flex: 2,
-              child: Builder(builder: (context) {
-                if(couponsProvider.data == null) {
-                  return Padding(
-                    padding: EdgeInsets.only(top: 20.h),
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if(couponsProvider.data!.isEmpty) {
-                  return const Center(child: EmptyAnimation(title: "", gif: Lotties.noSearch));
-                }
-                return Wrap(
-                  runSpacing: 2.w,
-                  spacing: 2.w,
-                  children: List.generate(couponsProvider.data!.length, (index) {
-                    return Container(width: 20.w,
-                      padding:const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Row(crossAxisAlignment: CrossAxisAlignment.end,
+  Widget _list(
+    BuildContext context,
+    CouponsProvider couponsProvider,
+    CouponsOperationsProvider ops,
+  ) {
+    if (couponsProvider.data == null) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColor.sidebar),
+      );
+    }
+    if (couponsProvider.data!.isEmpty) {
+      return const Center(
+        child: EmptyAnimation(title: '', gif: Lotties.noSearch),
+      );
+    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cols = constraints.maxWidth > 700 ? 2 : 1;
+        const gap = 12.0;
+        final w = cols == 1
+            ? constraints.maxWidth
+            : (constraints.maxWidth - gap) / 2;
+        return SingleChildScrollView(
+          child: Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            children: List.generate(couponsProvider.data!.length, (index) {
+              final coupon = couponsProvider.data![index];
+              return Container(
+                width: w,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: AppColor.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColor.hairline),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(flex: 6,
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,spacing: 1.h,
-                              children: [
-                                Text("${LanguageProvider.translate("inputs", "coupon_name")} : ${couponsProvider.data![index].name}",
-                                  maxLines: 1,
-                                  style: TextStyleClass.captionStyle().copyWith(
-                                    fontSize: 12.sp
-                                  ),),
-                                Text("${LanguageProvider.translate("inputs", "coupon_code")} : ${couponsProvider.data![index].coupon}",
-                                  maxLines: 1,
-                                  style: TextStyleClass.captionStyle().copyWith(
-                                      fontSize: 12.sp
-                                  ),),
-                                Text("${LanguageProvider.translate("inputs", "coupon_type")} : ${LanguageProvider.translate("global", "${couponsProvider.data![index].type}")}",
-                                  maxLines: 1,
-                                  style: TextStyleClass.captionStyle().copyWith(
-                                      fontSize: 12.sp
-                                  ),),
-                                Text("${LanguageProvider.translate("inputs", "count")} : ${couponsProvider.data![index].count}",
-                                  maxLines: 1,
-                                  style: TextStyleClass.captionStyle().copyWith(
-                                      fontSize: 12.sp
-                                  ),),
-
-                                if(couponsProvider.data![index].min != null && couponsProvider.data![index].min! >0
-                                    &&couponsProvider.data![index].type == "fixed")
-                                Text("${LanguageProvider.translate("inputs", "min")} : ${couponsProvider.data![index].min}",
-                                  maxLines: 1,
-                                  style: TextStyleClass.captionStyle().copyWith(
-                                      fontSize: 12.sp
-                                  ),),
-
-                                if(couponsProvider.data![index].max != null && couponsProvider.data![index].max! >0
-                                    &&couponsProvider.data![index].type == "percentage")
-                                  Text("${LanguageProvider.translate("inputs", "max")} : ${couponsProvider.data![index].max}",
-                                    maxLines: 1,
-                                    style: TextStyleClass.captionStyle().copyWith(
-                                        fontSize: 12.sp
-                                    ),),
-
-                                Text("${LanguageProvider.translate("global", "stores_selections")} : ",
-                                  style: TextStyleClass.captionStyle(),),
-                                Text("${couponsProvider.data![index].stores.map((e) => e.name).join("\n")}",
-                                  style: TextStyleClass.captionStyle(color: AppColor.primaryColor).copyWith(
-                                    fontSize: 12.sp
-                                  ),),
-
-                              ],
+                          Text(
+                            '${LanguageProvider.translate('inputs', 'coupon_name')} : ${coupon.name}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyleClass.captionStyle(),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${LanguageProvider.translate('inputs', 'coupon_code')} : ${coupon.coupon}',
+                            maxLines: 1,
+                            style: TextStyleClass.captionStyle(),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${LanguageProvider.translate('inputs', 'coupon_type')} : ${LanguageProvider.translate('global', '${coupon.type}')}',
+                            maxLines: 1,
+                            style: TextStyleClass.captionStyle(),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${LanguageProvider.translate('inputs', 'count')} : ${coupon.count}',
+                            maxLines: 1,
+                            style: TextStyleClass.captionStyle(),
+                          ),
+                          if (coupon.min != null &&
+                              coupon.min! > 0 &&
+                              coupon.type == 'fixed')
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Text(
+                                '${LanguageProvider.translate('inputs', 'min')} : ${coupon.min}',
+                                maxLines: 1,
+                                style: TextStyleClass.captionStyle(),
+                              ),
                             ),
+                          if (coupon.max != null &&
+                              coupon.max! > 0 &&
+                              coupon.type == 'percentage')
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Text(
+                                '${LanguageProvider.translate('inputs', 'max')} : ${coupon.max}',
+                                maxLines: 1,
+                                style: TextStyleClass.captionStyle(),
+                              ),
+                            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            LanguageProvider.translate(
+                              'global',
+                              'stores_selections',
+                            ),
+                            style: TextStyleClass.captionStyle(),
                           ),
-                          InkWell(
-                            onTap: (){
-                              couponsOperationsProvider.selectToEdit(coupon: couponsProvider.data![index]);
-                            },
-                            child: Icon(Icons.edit,size: 1.5.w,color: AppColor.primaryColor,),
-                          ),
-                          SizedBox(width: 0.5.w,),
-                          InkWell(
-                            onTap: (){
-                              couponsOperationsProvider.deleteCouponDialog(id: couponsProvider.data![index].id);
-                            },
-                            child: Icon(Icons.delete,size: 1.5.w,color: Colors.red,),
+                          Text(
+                            coupon.stores.map((e) => e.name).join('\n'),
+                            style: TextStyleClass.captionStyle(
+                              color: AppColor.sidebar,
+                            ),
                           ),
                         ],
                       ),
-                    );
-                  }),
-                );
-              }),
+                    ),
+                    IconButton(
+                      onPressed: () => ops.selectToEdit(coupon: coupon),
+                      icon: const Icon(Icons.edit_outlined, size: 18),
+                      color: AppColor.sidebar,
+                    ),
+                    IconButton(
+                      onPressed: () =>
+                          ops.deleteCouponDialog(id: coupon.id),
+                      icon: const Icon(Icons.delete_outline, size: 18),
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CouponsProvider couponsProvider =
+        Provider.of<CouponsProvider>(context);
+    final CouponsOperationsProvider ops =
+        Provider.of<CouponsOperationsProvider>(context);
+    final compact = Constants.isCompactShell(context);
+
+    return Scaffold(
+      backgroundColor: AppColor.canvas,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              compact ? 16 : 20,
+              16,
+              compact ? 16 : 20,
+              0,
             ),
-            if(couponsProvider.data != null)
-            const Expanded(child: AddCouponWidget()),
-          ],
-        ),
+            child: Text(
+              LanguageProvider.translate('navbar', 'coupons'),
+              style: GoogleFonts.bricolageGrotesque(
+                fontSize: compact ? 22 : 18,
+                fontWeight: FontWeight.w800,
+                color: AppColor.ink,
+              ),
+            ),
+          ),
+          Expanded(
+            child: compact
+                ? ListView(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.45,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                          child: _list(context, couponsProvider, ops),
+                        ),
+                      ),
+                      if (couponsProvider.data != null)
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
+                          child: AddCouponWidget(),
+                        ),
+                    ],
+                  )
+                : MasterDetailScaffold(
+                    master: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 12, 16),
+                      child: _list(context, couponsProvider, ops),
+                    ),
+                    detail: couponsProvider.data == null
+                        ? const SizedBox.shrink()
+                        : const Padding(
+                            padding: EdgeInsets.fromLTRB(12, 12, 20, 16),
+                            child: AddCouponWidget(),
+                          ),
+                    showDetail: couponsProvider.data != null,
+                  ),
+          ),
+        ],
       ),
     );
   }

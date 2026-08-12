@@ -46,6 +46,7 @@
     "vendor_stores": "Magasins vendeurs",
     "support": "Support",
     "video": "Reels",
+    "plus": "Plus",
     "messages": "Messages",
     "performance": "Performance"
   },
@@ -63,7 +64,9 @@
     "shop_by": "Acheter par"
   },
   "auth": {
-    "account_under_review": "Informations soumises avec succès, veuillez attendre que l'administrateur examine votre compte",
+    "account_under_review": "Compte créé. Vous pouvez travailler tout de suite — la boutique sera en ligne après KYC et contrôle des produits.",
+    "boutique_under_review": "Votre boutique n'est pas encore en ligne. Un administrateur validera votre identité et vos produits.",
+    "under_review": "En revue",
     "update_profile": "Mettre à jour le profil",
     "Forgot password": "Mot de passe oublié",
     "vendor": "Vendeur",
@@ -87,7 +90,29 @@
     "no_fees": "Pas de frais, livraison gratuite et un excellent service client. Nous livrerons votre commande dans les 2 jours ouvrables sans poser de questions !",
     "Ask me again later": "Demandez-moi plus tard",
     "select_account_type": "Veuillez sélectionner un type de compte",
-    "upload_image": "Télécharger une image"
+    "upload_image": "Télécharger une image",
+    "full_name": "Nom complet",
+    "phone_verify_later": "Le numéro est obligatoire. La vérification WhatsApp se fera à la dernière étape. Un code sera aussi envoyé par e-mail.",
+    "otp_email_hint": "Code envoyé par e-mail. La vérification WhatsApp arrivera bientôt sur ce même numéro.",
+    "password_min": "8 caractères minimum",
+    "type_individual_hint": "Je vends occasionnellement",
+    "type_vendor_hint": "J'ai une boutique ou un stock",
+    "seller_type": "Vendeur",
+    "reg_step1": "Étape 1 sur 3 · Informations du compte",
+    "reg_step2": "Étape 2 sur 3 · Localisation",
+    "reg_step3": "Étape 3 sur 3 · Vérification du téléphone",
+    "governorate": "Gouvernorat",
+    "delegation": "Délégation",
+    "address_placeholder": "Rue, numéro",
+    "accept_terms": "J'accepte les conditions d'utilisation et la politique de confidentialité de Flouka.",
+    "create_my_account": "Créer mon compte",
+    "kyc_docs_title": "Vérification d'identité (KYC)",
+    "kyc_docs_hint_individual": "Ajoutez le numéro de CIN et les photos recto / verso. La boutique est publiée après revue admin.",
+    "kyc_docs_hint_company": "Ajoutez la CIN du représentant légal et la patente / extrait RNE.",
+    "kyc_missing_eyebrow": "PIÈCES MANQUANTES",
+    "kyc_missing": "Ajoutez votre carte d'identité nationale pour compléter la vérification KYC.",
+    "kyc_missing_company": "Ajoutez la CIN et la patente / RNE pour compléter la vérification KYC.",
+    "kyc_add_docs": "Ajouter les documents"
   },
   "filters": {
     "new": "Nouveau",
@@ -96,6 +121,7 @@
   },
   "global": {
     "pending_withdraw": "En attente",
+    "kyc_docs_saved": "Documents enregistrés",
     "currency": "TND",
     "this_month": "Ce mois-ci",
     "last_month": "Le mois dernier",
@@ -118,6 +144,7 @@
     "best_worst_products": "Meilleurs et pires produits",
     "ready_to_ship": "Prêt à expédier",
     "add_variant": "Ajouter une variante",
+    "edit_variant": "Modifier la variante",
     "support": "Support",
     "selected_tags": "Hashtags sélectionnés",
     "video": "Voir la vidéo",
@@ -332,6 +359,7 @@
     "upload_product_images": "Télécharger les images du produit",
     "upload_variant_images": "Télécharger les images des variantes",
     "select_variant_images": "Veuillez sélectionner les images des variantes",
+    "variant_details": "Détails de la variante",
     "select_all": "Veuillez sélectionner tous les attributs",
     "select_product_images": "Veuillez sélectionner les images du produit",
     "select_category_subcategory": "Veuillez sélectionner la catégorie et la sous-catégorie",
@@ -401,7 +429,7 @@
     "bank_number": "Numéro de banque",
     "admin_name": "Nom de l'administrateur",
     "admin_phone": "Téléphone de l'administrateur",
-    "business_license": "Licence commerciale"
+    "business_license": "Patente / extrait RNE"
   },
   "time": {
     "ago": "il y a",
@@ -454,6 +482,9 @@
     "charge_wallet": "Recharger le portefeuille",
     "apply": "Appliquer",
     "next_step": "Prochaine étape",
+    "create_my_account": "Créer mon compte",
+    "verify": "Vérifier",
+    "back": "Retour",
     "reset": "Réinitialiser",
     "PAY NOW": "Payer maintenant",
     "accept": "Accepter",
@@ -477,7 +508,8 @@
     "terms": "Conditions",
     "delete_account": "Supprimer le compte",
     "delete": "Supprimer",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "kyc_docs": "Pièces d'identité (KYC)"
   },
   "ticket": {
     "ticket_number": "Numéro de ticket : *id*",

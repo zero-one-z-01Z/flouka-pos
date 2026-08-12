@@ -1,14 +1,15 @@
+import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/views/register_page1.dart';
 import 'package:flouka_pos/features/auth/presentation/views/register_page2.dart';
+import 'package:flouka_pos/features/auth/presentation/views/register_page3.dart';
+import 'package:flouka_pos/features/auth/presentation/views/register_signup_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
-import '../../../../injection_container.dart';
 import '../../../language/presentation/widget/language_widget.dart';
 import '../providers/register_provider.dart';
-import 'register_page3.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -25,50 +26,78 @@ class _RegisterBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<RegisterProvider>();
+    final signup = !AuthProvider.isLogin();
 
     Widget page;
-    switch (provider.currentStep) {
-      case 1:
-        page = const RegisterPage1();
-        break;
-      case 2:
-        page = const RegisterPage2();
-        break;
-      case 3:
-        page = const RegisterPage3();
-        break;
-      default:
-        page = const RegisterPage1();
+    if (signup) {
+      switch (provider.currentStep) {
+        case 1:
+          page = const SignupPage1();
+          break;
+        case 2:
+          page = const SignupPage2();
+          break;
+        default:
+          page = const SignupOtpPage();
+      }
+    } else {
+      switch (provider.currentStep) {
+        case 1:
+          page = const RegisterPage1();
+          break;
+        case 2:
+          page = const RegisterPage2();
+          break;
+        case 3:
+          page = const RegisterPage3();
+          break;
+        default:
+          page = const RegisterPage1();
+      }
     }
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: const Color(0xff00A8E1).withOpacity(0.05),
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white.withOpacity(0.6),
-            title: Text(
-              'POS SYSTEM V 0.1',
-              style: TextStyleClass.smallStyle().copyWith(fontSize: 12.sp),
-            ),
-            actions: [
-              const LanguageWidget(),
-            ],
+    if (signup) {
+      return Scaffold(
+        backgroundColor: AppColor.canvas,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: AppColor.canvas,
+          title: Image.asset(
+            Images.floukaLogo,
+            height: 32,
+            fit: BoxFit.contain,
+            alignment: Alignment.centerLeft,
           ),
-          body: page,
+          actions: const [LanguageWidget()],
         ),
-        Positioned(
-          top: 0,
-          left: 0,
-          child: IgnorePointer(child: Image.asset(Images.topCircles, width: 25.w)),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+            child: page,
+          ),
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: IgnorePointer(child: Image.asset(Images.bottomCircles, width: 25.w)),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: AppColor.canvas,
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: AppColor.surface,
+        title: Text(
+          'Flouka Vendeur',
+          style: GoogleFonts.bricolageGrotesque(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColor.ink,
+          ),
         ),
-      ],
+        actions: const [
+          LanguageWidget(),
+        ],
+      ),
+      body: page,
     );
   }
 }

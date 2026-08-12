@@ -4,7 +4,6 @@ import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/account_type_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flouka_pos/features/auth/presentation/widgets/have_account_section.dart';
-import 'package:flouka_pos/features/auth/presentation/widgets/otp_field_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ import '../../../../core/config/app_styles.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/list_text_field_widget.dart';
 import '../../../../core/widgets/validation_widget.dart';
+import '../../../../core/widgets/web_safe_google_map.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../providers/otp_provider.dart';
 import '../providers/register_provider.dart';
@@ -234,10 +234,6 @@ class RegisterPage2 extends StatelessWidget {
                     //     ],
                     //   ],
                     // ),
-                    if(!AuthProvider.isLogin())...[
-                      SizedBox(height: 2.h),
-                      const OtpWidget(),
-                    ],
                     SizedBox(height: 2.h),
                   ],
                 ),
@@ -246,7 +242,7 @@ class RegisterPage2 extends StatelessWidget {
               if(accountType.value()!='company')SizedBox(width: double.infinity,height: 40.h,
                 child: Stack(
                   children: [
-                    GoogleMap(
+                    WebSafeGoogleMap(
                       initialCameraPosition: CameraPosition(
                         target: provider.latlng??const LatLng(36.806389, 10.181667),
                         zoom: 14,
@@ -269,6 +265,14 @@ class RegisterPage2 extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
 
+              if (!AuthProvider.isLogin()) ...[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 17.w),
+                  child: const OtpWidget(),
+                ),
+                SizedBox(height: 3.h),
+              ],
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -287,22 +291,26 @@ class RegisterPage2 extends StatelessWidget {
                   ButtonWidget(
                     width: 30.w,
                     borderRadius: 12.sp,
-                    onTap: () {
-
-                      if(provider.registerForm2Key.currentState!.validate()&&
-                      (otpProvider.otpController.text.length==4||AuthProvider.isLogin()) &&
-                      provider.frontIdCard != null &&
-                      provider.backIdCard != null
-                      ){
-                        if(provider.businessLicense == null && accountType.value()=='company'){
-                          return ;
-                        }
-                        if(AuthProvider.isLogin()){
-                          provider.updateProfile();
-                        }else{
-                          provider.register();
-                        }
+                    onTap: () async {
+                      if (!(provider.registerForm2Key.currentState?.validate() ?? false)) {
+                        return;
                       }
+                      if (provider.frontIdCard == null || provider.backIdCard == null) {
+                        return;
+                      }
+                      if (provider.businessLicense == null && accountType.value() == 'company') {
+                        return;
+                      }
+                      if (AuthProvider.isLogin()) {
+                        provider.updateProfile();
+                        return;
+                      }
+                      // Phone OTP is the last step: send code once, then submit with it.
+                      if (otpProvider.otpController.text.length != 4) {
+                        await otpProvider.sendOtp(isReg: true);
+                        return;
+                      }
+                      provider.register();
                     },
                     widget: Padding(
                       padding: EdgeInsets.all(1.w),

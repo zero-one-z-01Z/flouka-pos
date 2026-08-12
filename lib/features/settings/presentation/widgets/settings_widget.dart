@@ -1,8 +1,6 @@
+import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
-import '../../../../../core/config/app_styles.dart';
-import '../../../../core/config/app_color.dart';
-import '../../../../core/widgets/svg_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../../domain/entities/profile_settings_entity.dart';
 
@@ -14,50 +12,59 @@ class SettingsWidget extends StatelessWidget {
   });
   final ProfileSettingsEntity settingsEntity;
   final bool isLast;
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: (100.w/2)-10.w,
-      child: Column(
-        children: [
-          InkWell(
-            onTap: settingsEntity.onTap,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 1.w),
-              padding: EdgeInsets.symmetric(horizontal: 1.w),
-              child: Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      LanguageProvider.translate(
-                        "settings",
-                        settingsEntity.text,
-                      ),
-                      style: TextStyleClass.smallStyle(),
+    return Column(
+      children: [
+        InkWell(
+          onTap: settingsEntity.onTap,
+          borderRadius: BorderRadius.circular(isLast ? 16 : 0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    LanguageProvider.translate(
+                      'settings',
+                      settingsEntity.text,
                     ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                      color: Colors.grey,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.ink,
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                if (settingsEntity.badge)
+                  Container(
+                    margin: const EdgeInsetsDirectional.only(end: 10),
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: AppColor.gold,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 22,
+                  color: AppColor.textMuted,
+                ),
+              ],
             ),
           ),
-          if (!isLast)
-            Divider(thickness: 0.15.h,color: const Color(0xffEFEFEF),),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Container(color: const Color(0xffEFEFEF), height: 0.15.h),
-            //     ),
-            //   ],
-            // ),
-        ],
-      ),
+        ),
+        if (!isLast)
+          const Divider(
+            height: 1,
+            thickness: 1,
+            indent: 16,
+            endIndent: 16,
+            color: AppColor.hairline,
+          ),
+      ],
     );
   }
 }

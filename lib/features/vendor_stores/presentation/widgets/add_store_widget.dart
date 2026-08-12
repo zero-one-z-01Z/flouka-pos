@@ -1,5 +1,6 @@
 import 'package:flouka_pos/core/widgets/button_widget.dart';
 import 'package:flouka_pos/core/widgets/list_text_field_widget.dart';
+import 'package:flouka_pos/core/widgets/web_safe_google_map.dart';
 import 'package:flouka_pos/features/vendor_stores/presentation/providers/store_operations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,7 @@ class AddStoreWidget extends StatelessWidget {
           SizedBox(width: double.infinity,height: 20.h,
             child: Stack(
               children: [
-                GoogleMap(
-                  // style: storeOperationsProvider.mapStyleString,
+                WebSafeGoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: storeOperationsProvider.center??const LatLng(36.806389, 10.181667),
                     zoom: storeOperationsProvider.zoom,

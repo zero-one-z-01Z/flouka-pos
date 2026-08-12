@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
@@ -38,20 +40,44 @@ class ApiHandel {
         validateStatus: (status) => true,
         headers: {
           "lang": lang ?? "fr",
-          'Content-Type': 'application/json',
-          "Authorization": {'Bearer $token'},
+          // Avoid forcing Content-Type on every request — it turns GETs into
+          // non-simple CORS requests in Chrome (preflight).
+          if (token != null && token!.isNotEmpty) "Authorization": "Bearer $token",
         },
       ),
     );
-    await Future.wait([
-      for (var i in LanguageProvider.languages) Dio().get('${Constants.baseUri}app_languages/vendor/${i.languageCode}.json'),
-    ]).then((value) {
+    try {
+      final value = await Future.wait([
+        for (var i in LanguageProvider.languages)
+          Dio(
+            BaseOptions(validateStatus: (status) => true),
+          ).get('${Constants.baseUri}app_languages/vendor/${i.languageCode}.json'),
+      ]);
       Map data = {};
       for (int i = 0; i < LanguageProvider.languages.length; i++) {
-        data[LanguageProvider.languages[i].languageCode] = value[i].data;
+        final body = value[i].data;
+        if (value[i].statusCode == 200 && body is Map) {
+          data[LanguageProvider.languages[i].languageCode] = body;
+        }
       }
-      languages = data;
-    });
+      if (data.length == LanguageProvider.languages.length) {
+        languages = data;
+        return;
+      }
+    } catch (e, st) {
+      debugPrint('Remote vendor languages failed (CORS/network): $e\n$st');
+    }
+    await _loadLanguagesFromAssets();
+  }
+
+  Future<void> _loadLanguagesFromAssets() async {
+    final data = <String, dynamic>{};
+    for (final locale in LanguageProvider.languages) {
+      final code = locale.languageCode;
+      final raw = await rootBundle.loadString('assets/languages/$code.json');
+      data[code] = jsonDecode(raw);
+    }
+    languages = data;
   }
 
   Map languages = {};
@@ -68,9 +94,8 @@ class ApiHandel {
       baseUrl: Constants.domain,
       // baseUrl: Constants.domain,
       headers: {
-        "Authorization": {'Bearer $token'},
+        if (token.isNotEmpty) "Authorization": "Bearer $token",
         "lang": lang ?? "fr",
-        'Content-Type': 'application/json',
       },
     );
   }

@@ -45,7 +45,14 @@ class CategoryAttributesProvider extends ChangeNotifier implements ProviderStruc
       return [];
     }
     return List.generate(data![index].values.length, (i){
-      return {'name':data![index].values[i].value,'id':data![index].values[i].id};
+      final v = data![index].values[i];
+      return {
+        'name': v.value,
+        'id': v.id,
+        'code': v.code,
+        'hex': v.hex,
+        'active': false,
+      };
     });
   }
 

@@ -1,22 +1,38 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'app_color.dart';
+
+String get _displayFont => GoogleFonts.bricolageGrotesque().fontFamily ?? 'Cairo';
+String get _bodyFont => GoogleFonts.lato().fontFamily ?? 'Cairo';
 
 ThemeData defaultTheme = ThemeData(
   useMaterial3: false,
   primaryColor: AppColor.primaryColor,
+  colorScheme: ColorScheme.light(
+    primary: AppColor.primaryColor,
+    secondary: AppColor.gold,
+    surface: AppColor.surface,
+    onPrimary: Colors.white,
+    onSecondary: AppColor.ink,
+    onSurface: AppColor.ink,
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.transparent,
   ),
   unselectedWidgetColor: Colors.white,
-  scaffoldBackgroundColor: AppColor.backgroundColor,
+  scaffoldBackgroundColor: AppColor.canvas,
   checkboxTheme: checkboxThemeData,
   dividerColor: Colors.transparent,
   radioTheme: radioThemeData,
   appBarTheme: appBarTheme,
-  fontFamily: "Cairo",
+  fontFamily: _bodyFont,
+  textTheme: GoogleFonts.latoTextTheme().apply(
+    bodyColor: AppColor.ink,
+    displayColor: AppColor.ink,
+  ),
   splashColor: Colors.transparent,
 );
 
@@ -26,13 +42,12 @@ AppBarTheme appBarTheme = AppBarTheme(
   centerTitle: true,
   foregroundColor: AppColor.primaryColor,
   elevation: 0,
-  iconTheme: const IconThemeData(color: Colors.black),
+  iconTheme: const IconThemeData(color: AppColor.ink),
   systemOverlayStyle: barColor(),
-  titleTextStyle: TextStyle(
-    fontFamily: "Cairo",
-    fontWeight: FontWeight.bold,
+  titleTextStyle: GoogleFonts.bricolageGrotesque(
+    fontWeight: FontWeight.w700,
     fontSize: 16.sp,
-    color: Colors.black,
+    color: AppColor.ink,
   ),
 );
 
@@ -40,9 +55,9 @@ EdgeInsets globalPadding = EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h);
 
 CheckboxThemeData checkboxThemeData = CheckboxThemeData(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-  side: const BorderSide(width: 1.5, color: Colors.white),
-  fillColor: WidgetStateProperty.all(Colors.white),
-  checkColor: WidgetStateProperty.all(AppColor.primaryColor),
+  side: const BorderSide(width: 1.5, color: AppColor.hairline),
+  fillColor: WidgetStateProperty.all(AppColor.gold),
+  checkColor: WidgetStateProperty.all(AppColor.ink),
   overlayColor: WidgetStateProperty.all(
     AppColor.primaryColor.withValues(alpha: 0.1),
   ),
@@ -57,11 +72,14 @@ RadioThemeData radioThemeData = RadioThemeData(
 TabBarTheme tabBarTheme = TabBarTheme(
   labelColor: AppColor.primaryColor,
   indicatorSize: TabBarIndicatorSize.label,
-  unselectedLabelColor: Colors.grey,
+  unselectedLabelColor: AppColor.textMuted,
 );
 
+bool get _isAndroidNative =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
 SystemUiOverlayStyle barColor() {
-  if (Platform.isAndroid) {
+  if (_isAndroidNative) {
     return const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
@@ -73,7 +91,7 @@ SystemUiOverlayStyle barColor() {
 }
 
 SystemUiOverlayStyle lightBarColor() {
-  if (Platform.isAndroid) {
+  if (_isAndroidNative) {
     return const SystemUiOverlayStyle(
       systemNavigationBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.transparent,
@@ -84,3 +102,27 @@ SystemUiOverlayStyle lightBarColor() {
   }
   return SystemUiOverlayStyle.light;
 }
+
+/// Display headline style (Bricolage).
+TextStyle vendeurDisplay({
+  double fontSize = 18,
+  FontWeight fontWeight = FontWeight.w700,
+  Color color = AppColor.ink,
+}) =>
+    GoogleFonts.bricolageGrotesque(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      letterSpacing: -0.02 * fontSize,
+    );
+
+TextStyle vendeurBody({
+  double fontSize = 13,
+  FontWeight fontWeight = FontWeight.w400,
+  Color color = AppColor.ink,
+}) =>
+    GoogleFonts.lato(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+    );

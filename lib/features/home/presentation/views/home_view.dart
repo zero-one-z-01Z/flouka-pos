@@ -4,6 +4,9 @@ import 'package:flouka_pos/features/wallet/presentation/views/wallet_view.dart';
 import 'package:flouka_pos/features/withdraw/presentation/views/withdraw_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_bottom_nav.dart';
 import '../../../../core/widgets/custom_app_bat.dart';
 import '../../../coupons/presentation/views/coupons_view.dart';
 import '../../../popular_categories/presentation/views/popular_category_view.dart';
@@ -14,6 +17,7 @@ import '../../../story/presentation/views/stories_view.dart';
 import '../../../tickets/presentation/pages/tickets_page.dart';
 import '../../../vendor_stores/presentation/views/vendor_stores_view.dart';
 import '../providers/home_provider.dart';
+import '../widgets/kyc_docs_banner.dart';
 import '../widgets/navigation_rail_widget.dart';
 import 'tabs/order_tab.dart';
 import 'tabs/overview_tab.dart';
@@ -26,37 +30,39 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeProvider homeProvider = Provider.of(context);
+    final compact = Constants.isCompactShell(context);
+    final content = Column(
+      children: [
+        CustomAppBar(showMenu: false, compact: compact),
+        const KycDocsBanner(),
+        Expanded(
+          child: _buildTabContent(
+            homeProvider.selectedNavigation.title,
+          ),
+        ),
+      ],
+    );
+
     return Scaffold(
-      backgroundColor: const Color(0xfff8f9fd),
+      backgroundColor: AppColor.canvas,
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
-        child: Row(mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const NavigationRailWidget(),
-            Expanded(
-              child: Column(
+        child: compact
+            ? content
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const CustomAppBar(),
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Main Content Area
-                        Expanded(
-                          child: _buildTabContent(
-                            homeProvider.selectedNavigation.title,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const NavigationRailWidget(),
+                  Expanded(child: content),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
+      bottomNavigationBar: compact
+          ? VendorBottomNav(
+              onPlusTap: () => VendorPlusSheet.show(context),
+            )
+          : null,
     );
   }
 

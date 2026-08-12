@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import '../../../../../core/helper_function/convert.dart';
 import '../../domain/entities/settings_entity.dart';
@@ -20,13 +20,14 @@ class SettingsModel extends SettingsEntity {
   });
 
   factory SettingsModel.fromJson(Map data) {
+    final isIos = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
     return SettingsModel(
       id: convertStringToInt(data["id"]),
       version: convertStringToInt(
-        data[Platform.isIOS ? 'user_ios_version' : 'user_version'],
+        data[isIos ? 'user_ios_version' : 'user_version'],
       ),
       mustUpdate: convertDataToBool(
-        data[Platform.isIOS ? "must_update_user_ios" : 'must_update_user'],
+        data[isIos ? "must_update_user_ios" : 'must_update_user'],
       ),
       phone: data["phone"] ?? "",
       email: data["email"] ?? "",

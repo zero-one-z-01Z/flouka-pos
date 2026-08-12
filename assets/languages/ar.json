@@ -47,6 +47,7 @@
     "vendor_stores": "متاجر البائعين",
     "support": "الدعم",
     "video": "ريلز",
+    "plus": "المزيد",
     "messages": "الرسائل",
     "performance": "الأداء"
   },
@@ -64,7 +65,9 @@
     "shop_by": "تسوق حسب"
   },
   "auth": {
-    "account_under_review": "تم إرسال المعلومات بنجاح، انتظر حتى يقوم المسؤول بمراجعة حسابك",
+    "account_under_review": "تم إنشاء الحساب. يمكنك العمل مباشرة — المتجر يُنشر بعد التحقق من الهوية ومراجعة المنتجات.",
+    "boutique_under_review": "متجرك ليس منشوراً بعد. ستتحقق الإدارة من هويتك ومنتجاتك.",
+    "under_review": "قيد المراجعة",
     "update_profile": "تحديث الملف الشخصي",
     "Forgot password": "نسيت كلمة المرور",
     "vendor": "بائع",
@@ -88,7 +91,29 @@
     "no_fees": "بدون رسوم، شحن مجاني وخدمة عملاء رائعة. سنوصل طلبك خلال يومي عمل دون طرح أي أسئلة!",
     "Ask me again later": "اسألني لاحقاً",
     "select_account_type": "يرجى اختيار نوع الحساب",
-    "upload_image": "تحميل الصورة"
+    "upload_image": "تحميل الصورة",
+    "full_name": "الاسم الكامل",
+    "phone_verify_later": "رقم الهاتف إلزامي. التحقق عبر واتساب في الخطوة الأخيرة. يُرسل الرمز أيضاً بالبريد.",
+    "otp_email_hint": "تم إرسال الرمز بالبريد. التحقق عبر واتساب لهذا الرقم قريباً.",
+    "password_min": "8 أحرف على الأقل",
+    "type_individual_hint": "أبيع من حين لآخر",
+    "type_vendor_hint": "لدي متجر أو مخزون",
+    "seller_type": "بائع",
+    "reg_step1": "الخطوة 1 من 3 · بيانات الحساب",
+    "reg_step2": "الخطوة 2 من 3 · الموقع",
+    "reg_step3": "الخطوة 3 من 3 · تأكيد الهاتف",
+    "governorate": "الولاية",
+    "delegation": "المعتمدية",
+    "address_placeholder": "الشارع، الرقم",
+    "accept_terms": "أوافق على شروط الاستخدام وسياسة الخصوصية لفلوكة.",
+    "create_my_account": "إنشاء حسابي",
+    "kyc_docs_title": "التحقق من الهوية (KYC)",
+    "kyc_docs_hint_individual": "أضف رقم بطاقة التعريف الوطنية وصورتَي الوجه والظهر. المتجر يُنشر بعد مراجعة الإدارة.",
+    "kyc_docs_hint_company": "أضف بطاقة التعريف للممثل القانوني وبراءة / السجل الوطني للمؤسسات (RNE).",
+    "kyc_missing_eyebrow": "مستندات ناقصة",
+    "kyc_missing": "أضف بطاقة التعريف الوطنية لإكمال التحقق.",
+    "kyc_missing_company": "أضف بطاقة التعريف وبراءة / RNE لإكمال التحقق.",
+    "kyc_add_docs": "إضافة المستندات"
   },
   "filters": {
     "new": "أداة جديدة",
@@ -97,6 +122,7 @@
   },
   "global": {
     "pending_withdraw": "معلقه",
+    "kyc_docs_saved": "تم حفظ المستندات",
     "currency": "TND",
     "this_month": "هذا الشهر",
     "last_month": "الشهر السابق",
@@ -119,6 +145,7 @@
     "best_worst_products": "أفضل وأسوأ المنتجات",
     "ready_to_ship": "جاهز للشحن",
     "add_variant": "إضافة خيار",
+    "edit_variant": "تعديل الخيار",
     "support": "الدعم",
     "selected_tags": "الهاشتاجات المحددة",
     "video": "عرض الفيديو",
@@ -333,6 +360,7 @@
     "upload_product_images": "تحميل صور المنتج",
     "upload_variant_images": "تحميل صور الخيارات",
     "select_variant_images": "يرجى اختيار صور الخيارات",
+    "variant_details": "تفاصيل الخيار",
     "select_all": "يرجى اختيار جميع الخصائص",
     "select_product_images": "يرجى اختيار صور المنتج",
     "select_category_subcategory": "يرجى اختيار الفئة والفئة الفرعية",
@@ -403,7 +431,7 @@
     "bank_number": "رقم البنك",
     "admin_name": "اسم المسؤول",
     "admin_phone": "هاتف المسؤول",
-    "business_license": "رخصة العمل"
+    "business_license": "براءة / سجل RNE"
   },
   "time": {
     "ago": "مضى",
@@ -456,6 +484,9 @@
     "charge_wallet": "شحن المحفظة",
     "apply": "تطبيق",
     "next_step": "الخطوة التالية",
+    "create_my_account": "إنشاء حسابي",
+    "verify": "تحقق",
+    "back": "رجوع",
     "reset": "إعادة تعيين",
     "PAY NOW": "ادفع الآن",
     "accept": "قبول",
@@ -479,7 +510,8 @@
     "terms": "الشروط",
     "delete_account": "حذف الحساب",
     "delete": "حذف",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "kyc_docs": "وثائق الهوية (KYC)"
   },
   "ticket": {
     "ticket_number": "رقم التذكرة: *id*",

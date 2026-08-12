@@ -1,6 +1,8 @@
 abstract class Images {
   // Logo
   static const String floukaLogo = 'assets/images/logo/flouka_logo.png';
+  static const String floukaLogoReverse =
+      'assets/images/logo/flouka_logo_reverse.png';
 
   // Auth
   static const String bottomCircles = 'assets/images/auth/bottom_circles.png';

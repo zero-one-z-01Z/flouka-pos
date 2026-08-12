@@ -118,9 +118,6 @@ String? validateStock(String? value) {
 
 
 String? validateSku(String? value) {
-  if (value!.isEmpty) {
-    return LanguageProvider.translate("validation", "sku_required");
-  }
   return null;
 }
 

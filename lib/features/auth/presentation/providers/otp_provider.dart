@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flouka_pos/features/auth/presentation/providers/register_provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/constants.dart';
@@ -19,43 +20,38 @@ import 'auth_provider.dart';
 
 class OtpProvider extends ChangeNotifier {
   String? hashedCode;
-  int counter = 60*5;
+  int counter = 60 * 5;
   Timer? timer;
   TextEditingController otpController = TextEditingController();
+  bool lastSendOk = false;
+  bool emailed = false;
 
-  Future reSend() async{
+  Future reSend() async {
     startTimer();
-    await sendOtp(isResend: true,isReg: true);
+    await sendOtp(isResend: true, isReg: true);
   }
 
-  void checkCode({required bool login,bool changePhone=false}) async {
-    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
-    // HowKnowUsProvider howKnowUsProvider = Provider.of(Constants.globalContext(),listen: false);
+  void checkCode({required bool login, bool changePhone = false}) async {
+    AuthProvider authProvider =
+        Provider.of(Constants.globalContext(), listen: false);
     Map<String, dynamic> data = {};
     data['code'] = otpController.text;
     data['hashed_code'] = hashedCode;
     data['phone'] = otpNumber;
-    data['token'] = await FirebaseMessaging.instance.getToken() ?? "123";
-    if(!changePhone){
-      if(login){
-        data['register'] =  1 ;
-        // data['password'] =authProvider.regInputs.firstWhere((element) => element.key=="password",).controller.text;
-      }else{
+    data['token'] = kIsWeb
+        ? '123'
+        : (await FirebaseMessaging.instance.getToken() ?? "123");
+    if (!changePhone) {
+      if (login) {
+        data['register'] = 1;
+      } else {
         data['reset_password'] = 1;
       }
     }
-    // loading();
-    // Either<DioException, UserEntity?> confirmCode = await UserUseCases(sl()).checkCode(data);
-    // navPop();
-    // confirmCode.fold((l) {
-    //   showToast(l.message!);
-    // }, (r) async {
-    //   timer?.cancel();
-    // });
   }
 
   void startTimer() {
-    counter = 60*5;
+    counter = 60 * 5;
     timer?.cancel();
     timer = Timer.periodic(const Duration(seconds: 1), (e) {
       if (timer?.isActive ?? false) {
@@ -74,25 +70,59 @@ class OtpProvider extends ChangeNotifier {
   }
 
   String otpNumber = '';
-  Future sendOtp({bool? isResend,bool isReg=false})async{
-    Map<String,dynamic> data = {};
-    if(isReg)loading();
-    RegisterProvider registerProvider = Provider.of(Constants.globalContext(),listen: false);
-    if(isReg){
-      otpNumber = registerProvider.registerTextFieldList.firstWhere((element) => element.key=="phone",).controller.text;
-    }
-    data['phone'] = otpNumber;
-    Either<DioException, String> login = await AuthUseCase(sl()).sendOtp(data);
-    if(isReg) navPop();
-    login.fold((l)  {
-      showToast(l.message??"");
-    }, (r) async {
-      hashedCode = r;
-      startTimer();
-      if(isResend == null) {
-        otpController = TextEditingController();
-      }
-    });
+
+  String _normalizeTnPhone(String raw) {
+    var d = raw.replaceAll(RegExp(r'\D'), '');
+    if (d.startsWith('0')) d = d.substring(1);
+    if (d.isNotEmpty && !d.startsWith('216')) d = '216$d';
+    return d;
   }
 
+  /// Returns true when API accepted the OTP send.
+  Future<bool> sendOtp({bool? isResend, bool isReg = false}) async {
+    lastSendOk = false;
+    emailed = false;
+    Map<String, dynamic> data = {};
+    if (isReg) loading();
+    RegisterProvider registerProvider =
+        Provider.of(Constants.globalContext(), listen: false);
+    if (isReg) {
+      final phoneCtrl = registerProvider.registerTextFieldList
+          .firstWhere((element) => element.key == "phone")
+          .controller;
+      otpNumber = _normalizeTnPhone(phoneCtrl.text);
+      phoneCtrl.text = otpNumber;
+
+      final email = registerProvider.registerTextFieldList
+          .firstWhere((element) => element.key == "email")
+          .controller
+          .text
+          .trim();
+      final name = registerProvider.registerTextFieldList
+          .firstWhere((element) => element.key == "name")
+          .controller
+          .text
+          .trim();
+      data['email'] = email;
+      data['name'] = name;
+    }
+    data['phone'] = otpNumber;
+    Either<DioException, String> login =
+        await AuthUseCase(sl()).sendOtp(data);
+    if (isReg) navPop();
+    login.fold((l) {
+      lastSendOk = false;
+      showToast(l.message ?? "");
+    }, (r) async {
+      lastSendOk = true;
+      emailed = true;
+      hashedCode = r;
+      startTimer();
+      if (isResend == null) {
+        otpController = TextEditingController();
+      }
+      notifyListeners();
+    });
+    return lastSendOk;
+  }
 }

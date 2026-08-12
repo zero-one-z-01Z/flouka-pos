@@ -1,13 +1,14 @@
+import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import '../../../../core/config/app_styles.dart';
-import '../../../../core/constants/app_images.dart';
 import '../../../../core/constants/app_lotties.dart';
 import '../../../../core/widgets/empty_animation.dart';
 import '../../../../core/widgets/loading_animation_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
-import '../../../../core/widgets/svg_widget.dart';
 import '../../../language/presentation/provider/language_provider.dart';
 import '../provider/add_ticket_provider.dart';
 import '../provider/ticket_message_provider.dart';
@@ -18,94 +19,141 @@ import 'ticket_message_page.dart';
 
 class TicketsPage extends StatelessWidget {
   const TicketsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    TicketsProvider ticketsProvider = Provider.of(context);
-    TicketMessageProvider ticketMessageProvider = Provider.of(context);
-    AddTicketProvider addTicketProvider = Provider.of(context);
+    final TicketsProvider ticketsProvider = Provider.of(context);
+    final TicketMessageProvider ticketMessageProvider = Provider.of(context);
+    final AddTicketProvider addTicketProvider = Provider.of(context);
     ticketsProvider.pagination();
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        // appBar: AppBar(title: Text(LanguageProvider.translate("ticket","support_ticket")),),
-        body: SizedBox(width: double.infinity,height:double.infinity,
-          child: Row(
-            children: [
-              Expanded(flex: 2,
-                child: SingleChildScrollView(
-                  controller: ticketsProvider.controller,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Builder(builder: (context) {
-                        if(ticketsProvider.tickets ==null){
-                          return Center(child: LoadingAnimationWidget(gif: Lotties.chats, width: 40.w, height:50.h,topPadding: 0,));
-                        }else if(ticketsProvider.tickets!.isEmpty){
-                          return Center(child: EmptyAnimation(title: "no_ticket",gif: Lotties.noSearch,width: 20.w,));
-                        }
-                        return Row(
-                          children: [
-                            Expanded(flex:3,
-                              child: Container(height: 200.h,
-                                padding:  EdgeInsets.symmetric(horizontal: 1.w),
-                                child: SingleChildScrollView(
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 2.h,),
-                                      Wrap(runSpacing: 0.5.h, children:List.generate(ticketsProvider.tickets!.length,
-                                          (index) => TicketWidget(ticket: ticketsProvider.tickets![index],))),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },),
-                      SizedBox(height: 3.h,),
-                      if(ticketsProvider.paginationStarted) const LoadingWidget(),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 1.w,),
-              if(addTicketProvider.isAddTicket && !ticketMessageProvider.isShowTicket)
-              Expanded(child: AddTicketPage()),
-              if(!addTicketProvider.isAddTicket && ticketMessageProvider.isShowTicket)
-                const Expanded(flex: 1,child:  TicketMessagePage()),
+    final compact = Constants.isCompactShell(context);
+    final showDetail = addTicketProvider.isAddTicket ||
+        ticketMessageProvider.isShowTicket;
 
-            ],
-          ),
+    Widget master = RefreshIndicator(
+      color: AppColor.sidebar,
+      onRefresh: () async => ticketsProvider.refresh(),
+      child: SingleChildScrollView(
+        controller: ticketsProvider.controller,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.fromLTRB(
+          compact ? 16 : 20,
+          12,
+          compact ? 16 : 12,
+          88,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton:ticketsProvider.tickets !=null &&
-            (!addTicketProvider.isAddTicket && !ticketMessageProvider.isShowTicket)  ?
-        Row(mainAxisAlignment: MainAxisAlignment.end,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: (){
-                Provider.of<AddTicketProvider>(context,listen: false).goToAddTicketPage();
-              },
-              child: Container(padding: EdgeInsets.symmetric(horizontal: 1.w,vertical: 1.h),
-                margin: EdgeInsets.symmetric(vertical: 1.h,horizontal: 2.w,),
-                decoration:const BoxDecoration(
-                    image: DecorationImage(image: AssetImage(Images.addTicket,),fit:BoxFit.contain)
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 1.w,),
-                    SvgWidget(svg: Images.addIcon,width: 2.w,),
-                    SizedBox(width: 1.w,),
-                    Text(LanguageProvider.translate("ticket","add_ticket"),
-                      style: TextStyleClass.normalStyle(color: Colors.white),),
-                    SizedBox(width: 1.w,),
-                  ],
-                ),
+            Text(
+              LanguageProvider.translate('ticket', 'support_ticket'),
+              style: GoogleFonts.bricolageGrotesque(
+                fontSize: compact ? 22 : 18,
+                fontWeight: FontWeight.w800,
+                color: AppColor.ink,
               ),
             ),
+            const SizedBox(height: 14),
+            Builder(
+              builder: (context) {
+                if (ticketsProvider.tickets == null) {
+                  return const Center(
+                    child: LoadingAnimationWidget(gif: Lotties.chats),
+                  );
+                }
+                if (ticketsProvider.tickets!.isEmpty) {
+                  return const Center(
+                    child: EmptyAnimation(
+                      title: 'no_ticket',
+                      gif: Lotties.noSearch,
+                    ),
+                  );
+                }
+                return Column(
+                  children: List.generate(
+                    ticketsProvider.tickets!.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: TicketWidget(
+                        ticket: ticketsProvider.tickets![index],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            if (ticketsProvider.paginationStarted) const LoadingWidget(),
           ],
-        ) : const SizedBox(),
+        ),
       ),
+    );
+
+    Widget? detail;
+    if (addTicketProvider.isAddTicket && !ticketMessageProvider.isShowTicket) {
+      detail = AddTicketPage();
+    } else if (!addTicketProvider.isAddTicket &&
+        ticketMessageProvider.isShowTicket) {
+      detail = const TicketMessagePage();
+    }
+
+    return Scaffold(
+      backgroundColor: AppColor.canvas,
+      floatingActionButton: ticketsProvider.tickets != null &&
+              !addTicketProvider.isAddTicket &&
+              !ticketMessageProvider.isShowTicket
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Provider.of<AddTicketProvider>(context, listen: false)
+                    .goToAddTicketPage();
+              },
+              backgroundColor: AppColor.gold,
+              foregroundColor: AppColor.ink,
+              icon: const Icon(Icons.add_rounded),
+              label: Text(
+                LanguageProvider.translate('ticket', 'add_ticket'),
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800),
+              ),
+            )
+          : null,
+      body: compact
+          ? (showDetail && detail != null
+              ? Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: () {
+                          if (addTicketProvider.isAddTicket) {
+                            addTicketProvider.setIsAddTicket(false);
+                          }
+                          if (ticketMessageProvider.isShowTicket) {
+                            ticketMessageProvider.clear();
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_back_rounded),
+                        label: Text(
+                          LanguageProvider.translate('buttons', 'cancel'),
+                          style: TextStyleClass.normalStyle(),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: detail),
+                  ],
+                )
+              : master)
+          : MasterDetailScaffold(
+              master: master,
+              detail: detail ??
+                  Center(
+                    child: Text(
+                      LanguageProvider.translate('ticket', 'support_ticket'),
+                      style: GoogleFonts.plusJakartaSans(
+                        color: AppColor.textMuted,
+                      ),
+                    ),
+                  ),
+              showDetail: true,
+            ),
     );
   }
 }

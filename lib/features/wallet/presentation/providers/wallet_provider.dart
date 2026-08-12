@@ -39,12 +39,14 @@ class WalletProvider extends ChangeNotifier implements ProviderStructureModel<Li
     Map<String,dynamic> dataToUse = {};
     dataToUse['page'] = pageIndex;
     final result = await walletUseCase.getWalletOperations(dataToUse);
-    result.fold((l) => showToast(l.message ?? "Error loading products"), (r) {
+    result.fold((l) {
+      showToast(l.message ?? "Error loading wallet");
+      data ??= [];
+    }, (r) {
       pageIndex++;
       data ??= [];
       data!.addAll(r);
       if (r.isEmpty) paginationFinished = true;
-      notifyListeners();
     });
 
     paginationStarted = false;
@@ -71,9 +73,16 @@ class WalletProvider extends ChangeNotifier implements ProviderStructureModel<Li
   bool paginationStarted=false;
 
   WalletSummaryEntity get wallet {
-   AuthProvider authProvider = Constants.globalContext().read();
-   UserEntity userEntity = authProvider.userEntity!;
-   return userEntity.vendorStatistics!.wallet!;
+    final AuthProvider authProvider = Constants.globalContext().read();
+    final UserEntity? userEntity = authProvider.userEntity;
+    final summary = userEntity?.vendorStatistics?.wallet;
+    if (summary != null) return summary;
+    return const WalletSummaryEntity(
+      wallet: 0,
+      pending: 0,
+      withdraw: 0,
+      total: 0,
+    );
   }
 
   @override

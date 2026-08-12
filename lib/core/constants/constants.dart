@@ -1,16 +1,41 @@
+import 'package:flutter/foundation.dart' show kDebugMode, kReleaseMode;
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUri = "https://floka.zeroonez.com/";
-  static const String domain = '${baseUri}api/';
+  /// Release → HTTPS public API. Debug → staging (seed vendor).
+  static const String _stagingBase = 'http://72.60.191.26:3102/';
+  static const String _prodBase = 'https://api.flouka.app/';
+
+  /// Override with `--dart-define=FLOUKA_API_BASE=http://72.60.191.26:3102/`
+  /// for store-review simulation against staging (release/profile builds).
+  static String get baseUri {
+    const override = String.fromEnvironment('FLOUKA_API_BASE');
+    if (override.isNotEmpty) return override;
+    return kReleaseMode ? _prodBase : _stagingBase;
+  }
+
+  static String get domain => '${baseUri}api/';
+
+  /// Debug-only seed auto-login. Always off in release/profile.
+  static bool get autoLoginForTesting => kDebugMode && !kReleaseMode;
+
+  static const String testVendorPhone = '21610000001';
+  static const String testVendorPassword = 'FloukaSeed1!';
+
   //! for navigation
   static final GlobalKey<NavigatorState> navState = GlobalKey<NavigatorState>();
   static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   static bool isTablet = false;
 
+  /// Persistent sidebar below this width becomes a drawer (phone / narrow web).
+  static const double shellBreakpoint = 800;
+
+  static bool isCompactShell(BuildContext context) =>
+      MediaQuery.sizeOf(context).width < shellBreakpoint;
+
   static const String webSocketLink =
-      'wss://flouka.tn/app/d6jhrf3qa5ssnhnfoymoflouka?protocol=7&client=js&version=8.4.0&flash=false';
+      'wss://flouka.app/app/d6jhrf3qa5ssnhnfoymoflouka?protocol=7&client=js&version=8.4.0&flash=false';
 
   static BuildContext globalContext() {
     return navState.currentContext!;

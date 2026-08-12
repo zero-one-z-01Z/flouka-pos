@@ -1,11 +1,13 @@
+import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/constants/app_lotties.dart';
+import 'package:flouka_pos/core/constants/constants.dart';
+import 'package:flouka_pos/core/widgets/empty_widget.dart';
+import 'package:flouka_pos/core/widgets/loading_animation_widget.dart';
 import 'package:flouka_pos/core/widgets/loading_widget.dart';
+import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-import '../../../../../core/widgets/empty_widget.dart';
-import '../../../../../core/widgets/loading_animation_widget.dart';
-import '../../../../orders/presentation/providers/order_details_provider.dart';
 import '../../../../orders/presentation/providers/orders_provider.dart';
 import '../../../../orders/presentation/widgets/list_order_tabs_widget.dart';
 import '../../../../orders/presentation/widgets/order_card_widget.dart';
@@ -17,42 +19,75 @@ class OrderTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final ordersProvider = Provider.of<OrdersProvider>(context);
     ordersProvider.pagination();
+    final compact = Constants.isCompactShell(context);
+
     return RefreshIndicator(
       onRefresh: () => ordersProvider.refresh(),
       child: SingleChildScrollView(
         controller: ordersProvider.controller,
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 2.w),
+        padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 3.h),
+            const SizedBox(height: 16),
+            Text(
+              LanguageProvider.translate('global', 'orders'),
+              style: GoogleFonts.bricolageGrotesque(
+                fontSize: compact ? 22 : 18,
+                fontWeight: FontWeight.w800,
+                color: AppColor.ink,
+              ),
+            ),
+            const SizedBox(height: 12),
             const ListOrderTabsWidget(),
-            SizedBox(height: 3.h),
+            const SizedBox(height: 16),
             Builder(
               builder: (context) {
-                if (Provider.of<OrdersProvider>(context).data == null) {
+                if (ordersProvider.data == null) {
                   return const Center(
                     child: LoadingAnimationWidget(gif: Lotties.loading),
                   );
                 }
-                if (Provider.of<OrdersProvider>(context).data!.isEmpty) {
+                if (ordersProvider.data!.isEmpty) {
                   return const Center(
                     child: EmptyWidget(image: Lotties.noOrders, title: ''),
                   );
                 }
-                return SizedBox(
-                  width: 100.w,
-                  child: Wrap(
-                    runSpacing: 2.h,spacing: 2.w,
-                    children: List.generate(ordersProvider.data!.length,
-                            (index) => OrderCardWidget(orderEntity: ordersProvider.data![index],withButton: true,)),
-                  ),
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cols = constraints.maxWidth > 1100
+                        ? 3
+                        : constraints.maxWidth > 700
+                            ? 2
+                            : 1;
+                    final gap = 12.0;
+                    final w = cols == 1
+                        ? constraints.maxWidth
+                        : (constraints.maxWidth - gap * (cols - 1)) / cols;
+                    return Wrap(
+                      spacing: gap,
+                      runSpacing: gap,
+                      children: ordersProvider.data!
+                          .map(
+                            (o) => SizedBox(
+                              width: w,
+                              child: OrderCardWidget(
+                                orderEntity: o,
+                                withButton: true,
+                                compact: true,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
                 );
               },
             ),
-            SizedBox(height: 3.h),
-            if(ordersProvider.paginationStarted)const  LoadingWidget(),
-            SizedBox(height: 3.h),
+            const SizedBox(height: 16),
+            if (ordersProvider.paginationStarted) const LoadingWidget(),
+            const SizedBox(height: 24),
           ],
         ),
       ),

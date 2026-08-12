@@ -45,10 +45,14 @@ class SplashProvider extends ChangeNotifier {
 
     final token = sharedPreferences.getString('token');
 
-    /// No token → Login
+    /// No token → auto-login (debug) or user type / login
     if (token == null || token.isEmpty) {
-    authProvider.goToUserTypePage();
-    return;
+      if (Constants.autoLoginForTesting) {
+        final ok = await authProvider.tryAutoLogin();
+        if (ok) return;
+      }
+      authProvider.goToUserTypePage();
+      return;
     }
 
     //
@@ -56,6 +60,10 @@ class SplashProvider extends ChangeNotifier {
       await authProvider.getProfile();
     } catch (_) {
       await sharedPreferences.remove('token');
+      if (Constants.autoLoginForTesting) {
+        final ok = await authProvider.tryAutoLogin();
+        if (ok) return;
+      }
       authProvider.goToLoginView();
     }
   }

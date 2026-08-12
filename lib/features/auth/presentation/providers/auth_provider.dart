@@ -5,9 +5,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flouka_pos/features/home/domain/entity/navigation_entity.dart';
 import 'package:flouka_pos/features/home/presentation/views/home_view.dart';
 import 'package:flouka_pos/features/orders/presentation/providers/orders_provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/config/app_color.dart';
 import '../../../../core/constants/app_images.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/dialog/confirm_dialog.dart';
@@ -105,7 +107,7 @@ class AuthProvider extends ChangeNotifier {
       data['email'] = googleUser!.email;
       data['image'] = googleUser!.photoUrl;
     }
-    data['token'] = await FirebaseMessaging.instance.getToken() ?? "123";
+    data['token'] = await _deviceToken();
     loading();
     final result = await userUseCase.socialLogin(data);
     navPop();
@@ -219,7 +221,7 @@ class AuthProvider extends ChangeNotifier {
           subtitle: LanguageProvider.translate('global', 'add_store'),
           svgImage: Images.appleStore,
           backgroundColor: const Color(0xffe0f8ea),
-          svgBackgroundColor: const Color(0xff00a8e1),
+          svgBackgroundColor: AppColor.gold,
           onTap: (){
             HomeProvider homeProvider = Provider.of(Constants.globalContext(),listen: false);
             NavigationEntity navigation= homeProvider.navigationList.firstWhere((element) => element.title == 'vendor_stores');
@@ -301,7 +303,7 @@ class AuthProvider extends ChangeNotifier {
       title: LanguageProvider.translate('global', 'want_logout'),
       onConfirm: () {
         final result = userUseCase.logout({
-          "token": FirebaseMessaging.instance.getToken(),
+          "token": _deviceToken(),
         });
         successLogout();
       },
@@ -328,7 +330,7 @@ class AuthProvider extends ChangeNotifier {
     if (!loginFormKey.currentState!.validate()) return;
 
     Map<String, dynamic> data = {};
-    data["token"] = await FirebaseMessaging.instance.getToken() ?? "123";
+    data["token"] = await _deviceToken();
 
     for (var element in loginTextFieldList) {
       data[element.key] = element.controller.text.trim();
@@ -345,6 +347,31 @@ class AuthProvider extends ChangeNotifier {
       (r) {
         userEntity = r;
         loginSuccess(r);
+      },
+    );
+  }
+
+  /// Silent vendor login for local/debug testing (staging seed).
+  Future<bool> tryAutoLogin() async {
+    if (!Constants.autoLoginForTesting) return false;
+
+    changeUserType(isStore: false);
+    final data = <String, dynamic>{
+      'phone': Constants.testVendorPhone,
+      'password': Constants.testVendorPassword,
+      'token': await _deviceToken(),
+    };
+
+    final result = await userUseCase.login(data);
+    return result.fold(
+      (l) {
+        showToast(l.message ?? 'Auto login failed');
+        return false;
+      },
+      (r) {
+        userEntity = r;
+        loginSuccess(r);
+        return true;
       },
     );
   }
@@ -390,6 +417,16 @@ class AuthProvider extends ChangeNotifier {
   void updateUser(UserEntity r) {
     userEntity = r;
     notifyListeners();
+  }
+
+  /// FCM device token for API auth; web preview uses fixed `"123"`.
+  static Future<String> _deviceToken() async {
+    if (kIsWeb) return '123';
+    try {
+      return await FirebaseMessaging.instance.getToken() ?? '123';
+    } catch (_) {
+      return '123';
+    }
   }
 
 }

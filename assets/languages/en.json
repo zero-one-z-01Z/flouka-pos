@@ -46,6 +46,7 @@
     "vendor_stores": "Vendor Stores",
     "support": "Support",
     "video": "Reels",
+    "plus": "More",
     "messages": "Messages",
     "performance": "Performance"
   },
@@ -63,7 +64,9 @@
     "shop_by": "Shop by"
   },
   "auth": {
-    "account_under_review": "Information submitted successfully, please wait for the admin to review your account",
+    "account_under_review": "Account created. You can start working now — the shop goes live after KYC and product review.",
+    "boutique_under_review": "Your shop is not live yet. An admin will verify your identity and review your products.",
+    "under_review": "Under review",
     "update_profile": "Update Profile",
     "Forgot password": "Forgot Password",
     "vendor": "Vendor",
@@ -87,7 +90,29 @@
     "no_fees": "No fees, free shipping, and great customer service. We'll deliver your order within 2 business days without asking any questions!",
     "Ask me again later": "Ask me again later",
     "select_account_type": "Please select an account type",
-    "upload_image": "Upload Image"
+    "upload_image": "Upload Image",
+    "full_name": "Full name",
+    "phone_verify_later": "Phone is required. WhatsApp verification happens in the last step. A code is also sent by email.",
+    "otp_email_hint": "Code sent by email. WhatsApp verification on this number is coming soon.",
+    "password_min": "8 characters minimum",
+    "type_individual_hint": "I sell occasionally",
+    "type_vendor_hint": "I have a shop or stock",
+    "seller_type": "Seller",
+    "reg_step1": "Step 1 of 3 · Account details",
+    "reg_step2": "Step 2 of 3 · Location",
+    "reg_step3": "Step 3 of 3 · Phone verification",
+    "governorate": "Governorate",
+    "delegation": "Delegation",
+    "address_placeholder": "Street, number",
+    "accept_terms": "I accept Flouka's terms of use and privacy policy.",
+    "create_my_account": "Create my account",
+    "kyc_docs_title": "Identity verification (KYC)",
+    "kyc_docs_hint_individual": "Add your national ID number and front / back photos. The shop goes live after admin review.",
+    "kyc_docs_hint_company": "Add the legal representative’s ID and the trade license / RNE extract.",
+    "kyc_missing_eyebrow": "MISSING DOCUMENTS",
+    "kyc_missing": "Add your national ID to complete KYC verification.",
+    "kyc_missing_company": "Add the ID and trade license / RNE to complete KYC verification.",
+    "kyc_add_docs": "Add documents"
   },
   "filters": {
     "new": "New",
@@ -96,6 +121,7 @@
   },
   "global": {
     "pending_withdraw": "Pending",
+    "kyc_docs_saved": "Documents saved",
     "currency": "TND",
     "this_month": "This Month",
     "last_month": "Last Month",
@@ -118,6 +144,7 @@
     "best_worst_products": "Best and Worst Products",
     "ready_to_ship": "Ready to Ship",
     "add_variant": "Add Variant",
+    "edit_variant": "Edit variant",
     "support": "Support",
     "selected_tags": "Selected Hashtags",
     "video": "View Video",
@@ -332,6 +359,7 @@
     "upload_product_images": "Upload Product Images",
     "upload_variant_images": "Upload Variant Images",
     "select_variant_images": "Please select variant images",
+    "variant_details": "Variant details",
     "select_all": "Please select all attributes",
     "select_product_images": "Please select product images",
     "select_category_subcategory": "Please select category and subcategory",
@@ -401,7 +429,7 @@
     "bank_number": "Bank Number",
     "admin_name": "Admin Name",
     "admin_phone": "Admin Phone",
-    "business_license": "Business License"
+    "business_license": "Trade license / RNE"
   },
   "time": {
     "ago": "ago",
@@ -454,6 +482,9 @@
     "charge_wallet": "Top Up Wallet",
     "apply": "Apply",
     "next_step": "Next Step",
+    "create_my_account": "Create my account",
+    "verify": "Verify",
+    "back": "Back",
     "reset": "Reset",
     "PAY NOW": "Pay Now",
     "accept": "Accept",
@@ -477,7 +508,8 @@
     "terms": "Terms",
     "delete_account": "Delete Account",
     "delete": "Delete",
-    "logout": "Logout"
+    "logout": "Logout",
+    "kyc_docs": "Identity documents (KYC)"
   },
   "ticket": {
     "ticket_number": "Ticket Number: *id*",

@@ -12,11 +12,15 @@ class ListOrderTabsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final OrdersProvider ordersProvider = Provider.of(context);
 
-    return Row(mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 2.w,
-      children: List.generate(
-        ordersProvider.tabs.length,
-        (index) => CustomOrderTabWidget(tab: ordersProvider.tabs[index],isHome: isHome,),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (var i = 0; i < ordersProvider.tabs.length; i++) ...[
+            if (i > 0) SizedBox(width: 1.w),
+            CustomOrderTabWidget(tab: ordersProvider.tabs[i], isHome: isHome),
+          ],
+        ],
       ),
     );
   }

@@ -1,11 +1,9 @@
+import 'package:flouka_pos/core/config/app_color.dart';
+import 'package:flouka_pos/core/widgets/vendor/vendor_widgets.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
-
-import '../../../../core/config/app_color.dart';
-import '../../../../core/widgets/button_widget.dart';
-import '../../domain/entity/order_entity.dart';
 import '../providers/order_details_provider.dart';
 
 class OrderDetailsHeader extends StatelessWidget {
@@ -14,72 +12,62 @@ class OrderDetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderDetailsProvider = Provider.of<OrderDetailsProvider>(context);
-    print('xxxxxxxxxxxxxxxxxxx ${orderDetailsProvider.buttonMap()}');
-    return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 2.w),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  LanguageProvider.translate('global', 'order_details'),
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: AppColor.primaryColor,
-                    fontWeight: FontWeight.bold,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          LanguageProvider.translate('global', 'order_details'),
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: AppColor.textMuted,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${LanguageProvider.translate('global', 'order_id_label')} : ${orderDetailsProvider.orderEntity?.id}',
+          style: GoogleFonts.bricolageGrotesque(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: AppColor.ink,
+          ),
+        ),
+        if (orderDetailsProvider.canUpdateStock()) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: orderDetailsProvider.rejectOrderDialog,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 44),
+                    foregroundColor: const Color(0xFF8E2A20),
+                    side: const BorderSide(color: AppColor.hairline),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    LanguageProvider.translate('buttons', 'cancel_order'),
+                    style: GoogleFonts.plusJakartaSans(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-                Text(
-                  "${LanguageProvider.translate('global', 'order_id_label')} : ${orderDetailsProvider.orderEntity?.id}",
-                  style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 2,
+                child: VendorPrimaryCta(
+                  label: LanguageProvider.translate('buttons', 'accept_order'),
+                  onTap: orderDetailsProvider.updateOrderStock,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          if(orderDetailsProvider.canUpdateStock())...[
-            Expanded(
-              child: ButtonWidget(
-                color: const Color(0xffa90003),
-                borderRadius: 8,
-                height: 6.h,
-                onTap: () {
-                  orderDetailsProvider.rejectOrderDialog();
-                },
-                text: "cancel_order",
-              ),
-            ),
-            SizedBox(width: 1.5.w),
-            Expanded(flex: 2,
-              child: ButtonWidget(
-                color: AppColor.primaryColor,
-                borderRadius: 8,
-                height: 6.h,
-                onTap: () {
-                  orderDetailsProvider.updateOrderStock();
-                },
-                text: "accept_order",
-              ),
-            ),
-          ],
-
-          if(orderDetailsProvider.buttonMap().isNotEmpty)...[
-            Expanded(flex: 2,
-              child: ButtonWidget(
-                color: Colors.green,
-                borderRadius: 8,
-                height: 6.h,
-                onTap: () {
-                  orderDetailsProvider.buttonMap()['onTap']();
-                },
-                text:orderDetailsProvider.buttonMap()['title'] ,
-              ),
-            ),
-          ]
         ],
-      ),
+      ],
     );
   }
 }

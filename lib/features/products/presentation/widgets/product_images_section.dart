@@ -2,7 +2,6 @@ import 'package:flouka_pos/core/config/app_color.dart';
 import 'package:flouka_pos/core/widgets/drop_down_widget.dart';
 import 'package:flouka_pos/core/widgets/upload_image_widget.dart';
 import 'package:flouka_pos/core/widgets/upload_multi_image_widget.dart';
-import 'package:flouka_pos/core/widgets/validation_widget.dart';
 import 'package:flouka_pos/features/categories/presentation/providers/categories_provider.dart';
 import 'package:flouka_pos/features/categories/presentation/providers/subcategory_provider.dart';
 import 'package:flouka_pos/features/language/presentation/provider/language_provider.dart';
@@ -30,15 +29,9 @@ class ProductImagesSection extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: 3.w, bottom: 2.w, left: 3.w, right: 3.w),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: AppColor.surface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColor.hairline),
             ),
             child: Consumer<AddProductProvider>(
               builder: (context, provider, _) {
@@ -63,11 +56,6 @@ class ProductImagesSection extends StatelessWidget {
                       title: 'upload_product_images',
                       translationSection: 'product',
                     ),
-                    SizedBox(height: 1.h,),
-                    ValidationWidget(conditions: [
-                      {"value": provider.productImages.isEmpty,
-                        "text": LanguageProvider.translate("product", "select_product_images")}
-                    ]),
                     SizedBox(height: 2.h),
 
                     // Categories Section
@@ -80,22 +68,12 @@ class ProductImagesSection extends StatelessWidget {
                     SizedBox(height: 2.h),
                     DropDownWidget(dropDownClass:subcategoryProvider ),
                     SizedBox(height: 1.h,),
-                    ValidationWidget(conditions: [
-                      {"value": subcategoryProvider.selectedSubcategory == null||categoryProvider.selectedCategory == null,
-                        "text": LanguageProvider.translate("product", "select_category_subcategory")}
-                    ]),
-                    SizedBox(height: 1.h,),
                     Text(
                       LanguageProvider.translate('global', 'select_brand'),
                       style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 2.h),
                     DropDownWidget(dropDownClass:brandsProvider ),
-                    SizedBox(height: 1.h,),
-                    ValidationWidget(conditions: [
-                      {"value": brandsProvider.selectedBrand == null,
-                        "text": LanguageProvider.translate("product", "select_brand")}
-                    ]),
 
                   ],
                 );

@@ -30,11 +30,18 @@ import 'product_provider.dart';
 class AddProductProvider extends ChangeNotifier {
   final ProductUseCase productUseCase;
   AddProductProvider(this.productUseCase);
-  List<TextFieldModel>  addProductTextFields = [];
+  List<TextFieldModel> addProductTextFields = [];
+  bool _showRequiredProductErrors = false;
 
-  void initFields({ ProductEntity? product}){
-    if(product == null) this.product =null;
-    AuthProvider authProvider = Provider.of(Constants.globalContext(),listen: false);
+  bool get showRequiredProductErrors => _showRequiredProductErrors;
+
+  void initFields({ProductEntity? product}) {
+    _showRequiredProductErrors = false;
+    if (product == null) this.product = null;
+    AuthProvider authProvider = Provider.of(
+      Constants.globalContext(),
+      listen: false,
+    );
     addProductTextFields = [
       TextFieldModel(
         label: LanguageProvider.translate('product', 'product_title'),
@@ -51,7 +58,9 @@ class AddProductProvider extends ChangeNotifier {
       ),
       TextFieldModel(
         label: LanguageProvider.translate('product', 'cost_price'),
-        controller: TextEditingController(text:product !=null? (product.costPrice?.toString()??"0") : ""),
+        controller: TextEditingController(
+          text: product != null ? (product.costPrice?.toString() ?? "0") : "",
+        ),
         validator: (val) => validateCostPrice(val),
         key: 'offer_price',
       ),
@@ -64,33 +73,46 @@ class AddProductProvider extends ChangeNotifier {
       ),
       TextFieldModel(
         label: LanguageProvider.translate('product', 'discounted_price'),
-        controller: TextEditingController(text: product?.offerPrice?.toString() ?? ""),
+        controller: TextEditingController(
+          text: product?.offerPrice?.toString() ?? "",
+        ),
         validator: (val) => validateOfferPrice(val),
         key: 'offer_price',
       ),
-      if(authProvider.userEntity!.accountType=='individual')TextFieldModel(
-        label: LanguageProvider.translate('product', 'stock'),
-        controller: TextEditingController(text: product?.stock?.quantity?.toString() ?? ""),
-        // validator: (val) => validateStock(val),
-        key: 'stock',
-      ),
+      if (authProvider.userEntity!.accountType == 'individual')
+        TextFieldModel(
+          label: LanguageProvider.translate('product', 'stock'),
+          controller: TextEditingController(
+            text: product?.stock?.quantity.toString() ?? "",
+          ),
+          // validator: (val) => validateStock(val),
+          key: 'stock',
+        ),
       TextFieldModel(
         label: LanguageProvider.translate('product', 'product_sku'),
         controller: TextEditingController(text: product?.sku),
         validator: (val) => validateSku(val),
         key: 'sku',
       ),
-
-
     ];
     productImages.clear();
-    CategoryProvider categoryProvider =Provider.of<CategoryProvider>(Constants.globalContext(), listen: false);
-    SubcategoryProvider subcategoryProvider =Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false);
-    BrandsProvider brandsProvider =Provider.of<BrandsProvider>(Constants.globalContext(), listen: false);
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    SubcategoryProvider subcategoryProvider = Provider.of<SubcategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    BrandsProvider brandsProvider = Provider.of<BrandsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
     categoryProvider.reset();
     subcategoryProvider.reset();
     brandsProvider.reset();
   }
+
   // Additional controllers
   final TextEditingController discountController = TextEditingController();
   final TextEditingController stockController = TextEditingController();
@@ -110,15 +132,14 @@ class AddProductProvider extends ChangeNotifier {
   List<dynamic> get productImages => _productImages;
 
   List<TagEntity> tags = [];
-  void addToList({required TagEntity tag}){
-    if(tags.contains(tag)){
+  void addToList({required TagEntity tag}) {
+    if (tags.contains(tag)) {
       tags.remove(tag);
-    }else{
+    } else {
       tags.add(tag);
     }
     notifyListeners();
   }
-
 
   // Update methods
   void updateTaxIncluded(bool value) {
@@ -149,63 +170,123 @@ class AddProductProvider extends ChangeNotifier {
 
   // Publish product method placeholder
   void publishProduct() {
-    if (formKey.currentState!.validate()) {
-      if(product !=null){
+    final textFieldsValid = formKey.currentState?.validate() ?? false;
+    final requiredProductDataValid = _validateRequiredProductData();
+    if (textFieldsValid && requiredProductDataValid) {
+      if (product != null) {
         updateProduct();
-      }else{
+      } else {
         createProduct();
       }
     }
   }
 
-  Future<Map<String,dynamic>> productData()async{
-    Map<String,dynamic> data={};
-    for(var field in addProductTextFields){
+  bool _validateRequiredProductData() {
+    final categoryProvider = Provider.of<CategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    final subcategoryProvider = Provider.of<SubcategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    final brandsProvider = Provider.of<BrandsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+
+    final errors = <String>[];
+    if (_productImages.isEmpty) {
+      errors.add(
+        LanguageProvider.translate('validation', 'product_images_required'),
+      );
+    }
+    if (categoryProvider.selected() == null) {
+      errors.add(LanguageProvider.translate('validation', 'category_required'));
+    }
+    if (subcategoryProvider.selected() == null) {
+      errors.add(
+        LanguageProvider.translate('validation', 'subcategory_required'),
+      );
+    }
+    if (brandsProvider.selected() == null) {
+      errors.add(LanguageProvider.translate('validation', 'brand_required'));
+    }
+
+    _showRequiredProductErrors = errors.isNotEmpty;
+    notifyListeners();
+    if (errors.isNotEmpty) showToast(errors.join('\n'));
+    return errors.isEmpty;
+  }
+
+  Future<Map<String, dynamic>> productData() async {
+    Map<String, dynamic> data = {};
+    for (var field in addProductTextFields) {
       final text = field.controller.text;
       if (field.key == 'sku' && text.trim().isEmpty) continue;
-      data[field.key]=text;
+      data[field.key] = text;
     }
-    for(int i =0;i<productImages.length;i++){
-      if(productImages[i] is XFile){
-        data['images[$i]']=await MultipartFile.fromFile(productImages[i].path);
+    for (int i = 0; i < productImages.length; i++) {
+      if (productImages[i] is XFile) {
+        data['images[$i]'] = await MultipartFile.fromFile(
+          productImages[i].path,
+        );
       }
     }
-    for(int i =0;i<tags.length;i++){
-      data['tags[$i]']=tags[i].id;
+    for (int i = 0; i < tags.length; i++) {
+      data['tags[$i]'] = tags[i].id;
     }
-    BrandsProvider brandsProvider = Provider.of<BrandsProvider>(Constants.globalContext(), listen: false);
-    SubcategoryProvider subcategoryProvider = Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false);
+    BrandsProvider brandsProvider = Provider.of<BrandsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    SubcategoryProvider subcategoryProvider = Provider.of<SubcategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
     final brandId = brandsProvider.selected()?.id;
     if (brandId != null) data['brand_id'] = brandId;
     final categoryId = subcategoryProvider.selected()?.id;
     if (categoryId != null) data['category_id'] = categoryId;
 
-
     return data;
   }
 
   Future createProduct() async {
-    Map<String,dynamic> data=await productData();
+    Map<String, dynamic> data = await productData();
     loading();
-    Either<DioException, ProductEntity> value = await productUseCase.createProduct(data);
+    Either<DioException, ProductEntity> value = await productUseCase
+        .createProduct(data);
     navPop();
-    value.fold((l) async {
-      showToast(l.message!);
-      }, (r) {
-     successDialog();
-     afterSuccess();
-      notifyListeners();
-    },
+    value.fold(
+      (l) async {
+        showToast(l.message!);
+      },
+      (r) {
+        successDialog();
+        afterSuccess();
+        notifyListeners();
+      },
     );
   }
+
   ProductEntity? product;
-  void selectToEdit({required ProductEntity product}) async{
+  void selectToEdit({required ProductEntity product}) async {
     this.product = product;
     initFields(product: product);
-    CategoryProvider categoryProvider =Provider.of<CategoryProvider>(Constants.globalContext(), listen: false);
-    SubcategoryProvider subcategoryProvider =Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false);
-    BrandsProvider brandsProvider =Provider.of<BrandsProvider>(Constants.globalContext(), listen: false);
-    if(product.category?.parentId!=null){
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    SubcategoryProvider subcategoryProvider = Provider.of<SubcategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    BrandsProvider brandsProvider = Provider.of<BrandsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    if (product.category?.parentId != null) {
       categoryProvider.setCategory(product.category!.parentId!);
       await subcategoryProvider.refresh(categoryProvider.selectedCategory!);
       subcategoryProvider.setCategory(product.category!);
@@ -217,32 +298,46 @@ class AddProductProvider extends ChangeNotifier {
       if (product.brand != null) brandsProvider.setBrand(product.brand!);
     }
     tags.clear();
-    for(var tag in (product.tags??[])){
+    for (var tag in (product.tags ?? [])) {
       tags.add(tag);
     }
     _productImages = [];
-    if(product.images!=null){
+    if (product.images != null) {
       for (var i in product.images!) {
         _productImages.add(i);
       }
     }
-    deletedId =[];
-    HomeProvider homeProvider =Provider.of<HomeProvider>(Constants.globalContext(), listen: false);
-    NavigationEntity navigation= homeProvider.navigationList.firstWhere((nav) => nav.title == "add_products",);
+    deletedId = [];
+    HomeProvider homeProvider = Provider.of<HomeProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    NavigationEntity navigation = homeProvider.navigationList.firstWhere(
+      (nav) => nav.title == "add_products",
+    );
     homeProvider.setAddProductNavigation(navigation);
-
   }
 
-  void reset(){
+  void reset() {
     initFields();
     tags.clear();
     productImages.clear();
-    deletedId =[];
-    Provider.of<BrandsProvider>(Constants.globalContext(), listen: false).reset();
-    Provider.of<CategoryProvider>(Constants.globalContext(), listen: false).reset();
-    Provider.of<SubcategoryProvider>(Constants.globalContext(), listen: false).reset();
+    deletedId = [];
+    Provider.of<BrandsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    ).reset();
+    Provider.of<CategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    ).reset();
+    Provider.of<SubcategoryProvider>(
+      Constants.globalContext(),
+      listen: false,
+    ).reset();
     notifyListeners();
   }
+
   // Form key
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   // Add attributes method placeholder
@@ -253,31 +348,34 @@ class AddProductProvider extends ChangeNotifier {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           content: SizedBox(
-              width: 25.w,
-              height: 65.h,
-              child: const ShowProductsTagsWidget()),
+            width: 25.w,
+            height: 65.h,
+            child: const ShowProductsTagsWidget(),
+          ),
         );
       },
     );
   }
 
-
   Future getProductVendorDetails({required int id}) async {
-    Map<String,dynamic> data={};
-    data['product_id']= id;
+    Map<String, dynamic> data = {};
+    data['product_id'] = id;
     loading();
-    Either<DioException, ProductEntity> value = await productUseCase.getProductVendorDetails(data);
+    Either<DioException, ProductEntity> value = await productUseCase
+        .getProductVendorDetails(data);
     navPop();
-    value.fold((l) async {
-      showToast(l.message!);
-    }, (r) {
-      selectToEdit(product: r);
-    },
+    value.fold(
+      (l) async {
+        showToast(l.message!);
+      },
+      (r) {
+        selectToEdit(product: r);
+      },
     );
   }
 
   List<int> deletedId = [];
-  void addToImages(List<XFile> img){
+  void addToImages(List<XFile> img) {
     List lastImages = [..._productImages];
     for (var i in img) {
       if (lastImages.length < 20) {
@@ -300,59 +398,78 @@ class AddProductProvider extends ChangeNotifier {
   }
 
   Future updateProduct() async {
-    Map<String,dynamic> data=await productData();
-    data['product_id']=product?.id;
-    for(int i=0;i<deletedId.length;i++){
+    Map<String, dynamic> data = await productData();
+    data['product_id'] = product?.id;
+    for (int i = 0; i < deletedId.length; i++) {
       data['deleted_images[$i]'] = "${deletedId[i]}";
     }
     loading();
-    Either<DioException, ProductEntity> value = await productUseCase.updateProduct(data);
+    Either<DioException, ProductEntity> value = await productUseCase
+        .updateProduct(data);
     navPop();
-    value.fold((l) async {
-      showToast(l.message!);
-    }, (r) {
-      successDialog();
-      afterSuccess();
-      notifyListeners();
-    },
+    value.fold(
+      (l) async {
+        showToast(l.message!);
+      },
+      (r) {
+        successDialog();
+        afterSuccess();
+        notifyListeners();
+      },
     );
   }
 
-  void afterSuccess(){
+  void afterSuccess() {
     reset();
-    HomeProvider homeProvider =Provider.of<HomeProvider>(Constants.globalContext(), listen: false);
-    Provider.of<ProductOptionsProvider>(Constants.globalContext(), listen: false).getVendorProductsOption();
-    ProductsProvider productsProvider =Provider.of<ProductsProvider>(Constants.globalContext(), listen: false);
-    NavigationEntity navigation= homeProvider.navigationList.firstWhere((nav) => nav.title == "Products",);
+    HomeProvider homeProvider = Provider.of<HomeProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    Provider.of<ProductOptionsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    ).getVendorProductsOption();
+    ProductsProvider productsProvider = Provider.of<ProductsProvider>(
+      Constants.globalContext(),
+      listen: false,
+    );
+    NavigationEntity navigation = homeProvider.navigationList.firstWhere(
+      (nav) => nav.title == "Products",
+    );
     homeProvider.setAddProductNavigation(navigation);
     productsProvider.refresh();
-
   }
 
-  void deleteProductDialog({required int id}){
-    deleteDialog(onTap: (){
-      deleteProduct(id: id);
-    }, msg: "delete_product");
+  void deleteProductDialog({required int id}) {
+    deleteDialog(
+      onTap: () {
+        deleteProduct(id: id);
+      },
+      msg: "delete_product",
+    );
   }
-
 
   Future deleteProduct({required int id}) async {
-    Map<String,dynamic> data=await productData();
-    data['product_id']=id;
+    Map<String, dynamic> data = await productData();
+    data['product_id'] = id;
     loading();
     Either<DioException, bool> value = await productUseCase.deleteProduct(data);
     navPop();
-    value.fold((l) async {
-      showToast(l.message!);
-    }, (r) {
-      navPop();
+    value.fold(
+      (l) async {
+        showToast(l.message!);
+      },
+      (r) {
+        navPop();
 
-      successDialog();
-      ProductsProvider productsProvider =Provider.of<ProductsProvider>(Constants.globalContext(), listen: false);
-      productsProvider.deleteProduct(id);
-      notifyListeners();
-    },
+        successDialog();
+        ProductsProvider productsProvider = Provider.of<ProductsProvider>(
+          Constants.globalContext(),
+          listen: false,
+        );
+        productsProvider.deleteProduct(id);
+        notifyListeners();
+      },
     );
   }
-
 }

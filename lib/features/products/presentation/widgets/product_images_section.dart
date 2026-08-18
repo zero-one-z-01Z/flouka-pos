@@ -27,7 +27,12 @@ class ProductImagesSection extends StatelessWidget {
         children: [
           // Upload Product Image Section
           Container(
-            padding: EdgeInsets.only(top: 3.w, bottom: 2.w, left: 3.w, right: 3.w),
+            padding: EdgeInsets.only(
+              top: 3.w,
+              bottom: 2.w,
+              left: 3.w,
+              right: 3.w,
+            ),
             decoration: BoxDecoration(
               color: AppColor.surface,
               borderRadius: BorderRadius.circular(14),
@@ -35,12 +40,27 @@ class ProductImagesSection extends StatelessWidget {
             ),
             child: Consumer<AddProductProvider>(
               builder: (context, provider, _) {
+                final showErrors = provider.showRequiredProductErrors;
+                final imagesMissing =
+                    showErrors && provider.productImages.isEmpty;
+                final categoryMissing =
+                    showErrors && categoryProvider.selected() == null;
+                final subcategoryMissing =
+                    showErrors && subcategoryProvider.selected() == null;
+                final brandMissing =
+                    showErrors && brandsProvider.selected() == null;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      LanguageProvider.translate('product', 'upload_product_images'),
-                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+                      LanguageProvider.translate(
+                        'product',
+                        'upload_product_images',
+                      ),
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(height: 2.h),
                     // Multiple Images Upload Widget
@@ -56,25 +76,58 @@ class ProductImagesSection extends StatelessWidget {
                       title: 'upload_product_images',
                       translationSection: 'product',
                     ),
+                    if (imagesMissing)
+                      const _ProductValidationMessage(
+                        translationKey: 'product_images_required',
+                      ),
                     SizedBox(height: 2.h),
 
                     // Categories Section
                     Text(
                       LanguageProvider.translate('global', 'categories'),
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(height: 2.h),
-                    DropDownWidget(dropDownClass:categoryProvider ),
+                    DropDownWidget(
+                      dropDownClass: categoryProvider,
+                      borderColor: categoryMissing ? Colors.red : null,
+                      borderWidth: categoryMissing ? 1.2 : .5,
+                    ),
+                    if (categoryMissing)
+                      const _ProductValidationMessage(
+                        translationKey: 'category_required',
+                      ),
                     SizedBox(height: 2.h),
-                    DropDownWidget(dropDownClass:subcategoryProvider ),
-                    SizedBox(height: 1.h,),
+                    DropDownWidget(
+                      dropDownClass: subcategoryProvider,
+                      borderColor: subcategoryMissing ? Colors.red : null,
+                      borderWidth: subcategoryMissing ? 1.2 : .5,
+                    ),
+                    if (subcategoryMissing)
+                      const _ProductValidationMessage(
+                        translationKey: 'subcategory_required',
+                      ),
+                    SizedBox(height: 1.h),
                     Text(
                       LanguageProvider.translate('global', 'select_brand'),
-                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(height: 2.h),
-                    DropDownWidget(dropDownClass:brandsProvider ),
-
+                    DropDownWidget(
+                      dropDownClass: brandsProvider,
+                      borderColor: brandMissing ? Colors.red : null,
+                      borderWidth: brandMissing ? 1.2 : .5,
+                    ),
+                    if (brandMissing)
+                      const _ProductValidationMessage(
+                        translationKey: 'brand_required',
+                      ),
                   ],
                 );
               },
@@ -106,7 +159,10 @@ class ProductImagesSection extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.5.h),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 2.w,
+              vertical: 1.5.h,
+            ),
             suffixIcon: const Icon(Icons.arrow_drop_down),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -124,6 +180,27 @@ class ProductImagesSection extends StatelessWidget {
           readOnly: true, // Making it look like a dropdown as per UI
         ),
       ],
+    );
+  }
+}
+
+class _ProductValidationMessage extends StatelessWidget {
+  const _ProductValidationMessage({required this.translationKey});
+
+  final String translationKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Text(
+        LanguageProvider.translate('validation', translationKey),
+        style: const TextStyle(
+          color: Colors.red,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 }

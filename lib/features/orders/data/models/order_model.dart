@@ -42,7 +42,7 @@ class OrderUserModel extends OrderUser {
       id: json['id'],
       name: json['name']??"",
       image: json['image'],
-      phone: json['phone']??"", fullPhone: json['full_phone'],
+      phone: json['phone']??"", fullPhone: json['full_phone']??"",
     );
   }
 }
